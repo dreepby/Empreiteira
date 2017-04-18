@@ -9,7 +9,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema Empreiteira
+-- Schema Empreiteira
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `Empreiteira` DEFAULT CHARACTER SET utf8 ;
 USE `Empreiteira` ;
@@ -201,11 +201,12 @@ ENGINE = InnoDB;
 -- Table `Empreiteira`.`Produto_Ambiente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Produto_Ambiente` (
+  `idProduto_Ambiente` INT NOT NULL AUTO_INCREMENT,
   `Produto_idProduto` INT NOT NULL,
   `Ambientes_idAmbientes` INT NOT NULL,
-  PRIMARY KEY (`Produto_idProduto`, `Ambientes_idAmbientes`),
   INDEX `fk_Produto_has_Ambientes_Ambientes1_idx` (`Ambientes_idAmbientes` ASC),
   INDEX `fk_Produto_has_Ambientes_Produto1_idx` (`Produto_idProduto` ASC),
+  PRIMARY KEY (`idProduto_Ambiente`),
   CONSTRAINT `fk_Produto_has_Ambientes_Produto1`
     FOREIGN KEY (`Produto_idProduto`)
     REFERENCES `Empreiteira`.`Produto` (`idProduto`)
