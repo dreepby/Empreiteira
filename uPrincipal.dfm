@@ -13,6 +13,7 @@ object frmPrincipal: TfrmPrincipal
   FormStyle = fsMDIForm
   OldCreateOrder = False
   WindowState = wsMaximized
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
 end

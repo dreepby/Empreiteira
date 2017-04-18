@@ -2,7 +2,9 @@ program Empreiteira;
 
 uses
   Vcl.Forms,
-  uPrincipal in 'uPrincipal.pas' {frmPrincipal};
+  uPrincipal in 'uPrincipal.pas' {frmPrincipal},
+  uClassSingletonConexao in 'uClassSingletonConexao.pas',
+  uClassConexaoBanco in 'uClassConexaoBanco.pas';
 
 {$R *.res}
 
