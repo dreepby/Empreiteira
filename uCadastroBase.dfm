@@ -2,8 +2,8 @@ object frmCadastroBase: TfrmCadastroBase
   Left = 0
   Top = 0
   Caption = 'Cadastro Base'
-  ClientHeight = 243
-  ClientWidth = 472
+  ClientHeight = 321
+  ClientWidth = 505
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,36 +18,29 @@ object frmCadastroBase: TfrmCadastroBase
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 472
-    Height = 243
-    ActivePage = TabSheet2
+    Width = 505
+    Height = 321
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 8
     object TabSheet1: TTabSheet
       Caption = 'Cadastro'
-      ExplicitWidth = 323
-      ExplicitHeight = 174
       object Panel1: TPanel
         Left = 0
-        Top = 174
-        Width = 464
+        Top = 252
+        Width = 497
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 133
-        ExplicitWidth = 323
         object Panel2: TPanel
-          Left = 214
+          Left = 247
           Top = 0
           Width = 250
           Height = 41
           Align = alRight
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitLeft = 73
           object btnSalvar: TBitBtn
             Left = 8
             Top = 8
@@ -121,20 +114,34 @@ object frmCadastroBase: TfrmCadastroBase
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
-      ExplicitWidth = 323
-      ExplicitHeight = 174
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 464
-        Height = 215
-        Align = alClient
+        Width = 323
+        Height = 174
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 233
+        Width = 497
+        Height = 60
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        object BitBtn1: TBitBtn
+          Left = 56
+          Top = 8
+          Width = 115
+          Height = 49
+          Caption = 'Fechar'
+          TabOrder = 0
+        end
       end
     end
   end

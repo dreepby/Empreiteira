@@ -18,6 +18,8 @@ type
     btnFechar: TBitBtn;
     TabSheet2: TTabSheet;
     DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    BitBtn1: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnFecharClick(Sender: TObject);
   private
