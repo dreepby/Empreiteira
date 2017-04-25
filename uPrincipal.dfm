@@ -11,9 +11,24 @@ object frmPrincipal: TfrmPrincipal
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIForm
+  Menu = MainMenu1
   OldCreateOrder = False
   WindowState = wsMaximized
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  object MainMenu1: TMainMenu
+    Left = 232
+    Top = 48
+    object Cadastros1: TMenuItem
+      Caption = 'Cadastros'
+    end
+    object Sobre1: TMenuItem
+      Caption = 'Sobre'
+    end
+  end
+  object ActionList1: TActionList
+    Left = 232
+    Top = 112
+  end
 end
