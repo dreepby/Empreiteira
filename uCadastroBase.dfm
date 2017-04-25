@@ -11,6 +11,7 @@ object frmCadastroBase: TfrmCadastroBase
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
@@ -19,7 +20,7 @@ object frmCadastroBase: TfrmCadastroBase
     Top = 0
     Width = 472
     Height = 243
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     TabOrder = 0
     ExplicitLeft = 8
