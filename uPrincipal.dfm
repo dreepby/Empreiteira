@@ -22,6 +22,9 @@ object frmPrincipal: TfrmPrincipal
     Top = 48
     object Cadastros1: TMenuItem
       Caption = 'Cadastros'
+      object Estados1: TMenuItem
+        Action = actEstados
+      end
     end
     object Sobre1: TMenuItem
       Caption = 'Sobre'
@@ -30,5 +33,9 @@ object frmPrincipal: TfrmPrincipal
   object ActionList1: TActionList
     Left = 232
     Top = 112
+    object actEstados: TAction
+      Caption = 'Estados'
+      OnExecute = actEstadosExecute
+    end
   end
 end
