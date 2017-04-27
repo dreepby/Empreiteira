@@ -36,7 +36,7 @@ end;
 
 function TEstadoControler.Buscar(var AEstado: TEstadoDto): Boolean;
 begin
-  if (trim(AEstado.Nome) <> EmptyStr) then
+if (trim(AEstado.UF) <> EmptyStr) then
     Result := oModelEstado.Ler(AEstado);
 end;
 

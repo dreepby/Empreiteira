@@ -18,6 +18,7 @@ type
     frmExcluir: TBitBtn;
     BitBtn1: TBitBtn;
     btnCadastrar: TBitBtn;
+    DBGrid1: TDBGrid;
   private
     { Private declarations }
   public

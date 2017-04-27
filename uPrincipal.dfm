@@ -2,8 +2,8 @@ object frmPrincipal: TfrmPrincipal
   Left = 0
   Top = 0
   Caption = 'Tela Principal'
-  ClientHeight = 243
-  ClientWidth = 472
+  ClientHeight = 492
+  ClientWidth = 812
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,7 +13,7 @@ object frmPrincipal: TfrmPrincipal
   FormStyle = fsMDIForm
   Menu = MainMenu1
   OldCreateOrder = False
-  WindowState = wsMaximized
+  Position = poDesktopCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13

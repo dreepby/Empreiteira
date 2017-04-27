@@ -113,11 +113,11 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select iduf, Nome, uf  from uf where Nome = '+QuotedStr(AEstado.Nome));
+    oQuery.Open('select iduf, Nome, uf  from uf where UF = '+QuotedStr(AEstado.uf));
     if (not(oQuery.IsEmpty)) then
     begin
       AEstado.IDuf := oQuery.FieldByName('iduf').AsInteger;
-      AEstado.UF := oQuery.FieldByName('uf').AsString;
+      AEstado.Nome := oQuery.FieldByName('Nome').AsString;
       Result := True;
     end;
   finally

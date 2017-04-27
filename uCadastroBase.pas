@@ -9,17 +9,10 @@ uses
 
 type
   TfrmCadastroBase = class(TForm)
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
     Panel1: TPanel;
     Panel2: TPanel;
     btnSalvar: TBitBtn;
-    btnExcluir: TBitBtn;
     btnFechar: TBitBtn;
-    TabSheet2: TTabSheet;
-    DBGrid1: TDBGrid;
-    Panel3: TPanel;
-    BitBtn1: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnFecharClick(Sender: TObject);
   private

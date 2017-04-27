@@ -11,7 +11,9 @@ uses
   uEstadoModel in 'uEstadoModel.pas',
   uEstadoDto in 'uEstadoDto.pas',
   uListaEstado in 'uListaEstado.pas',
-  uListagemBase in 'uListagemBase.pas' {frmListagemBase};
+  uListagemBase in 'uListagemBase.pas' {frmListagemBase},
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
