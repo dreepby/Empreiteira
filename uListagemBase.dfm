@@ -1,6 +1,7 @@
 object frmListagemBase: TfrmListagemBase
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
   Caption = 'Listagem Base'
   ClientHeight = 385
   ClientWidth = 754
@@ -12,6 +13,7 @@ object frmListagemBase: TfrmListagemBase
   Font.Style = []
   OldCreateOrder = False
   Position = poDesktopCenter
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -20,6 +22,8 @@ object frmListagemBase: TfrmListagemBase
     Width = 754
     Height = 57
     Align = alTop
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 0
     object Label1: TLabel
       Left = 32
@@ -41,9 +45,15 @@ object frmListagemBase: TfrmListagemBase
     Width = 754
     Height = 60
     Align = alBottom
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 1
-    ExplicitTop = 506
-    ExplicitWidth = 827
+    object SpeedButton1: TSpeedButton
+      Left = 360
+      Top = 8
+      Width = 23
+      Height = 22
+    end
     object Panel4: TPanel
       Left = 326
       Top = 1
@@ -52,40 +62,129 @@ object frmListagemBase: TfrmListagemBase
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 400
-      ExplicitTop = 0
-      ExplicitHeight = 60
-      object btnFechar: TBitBtn
-        Left = 298
-        Top = 6
-        Width = 82
-        Height = 43
-        Caption = 'Fechar'
-        TabOrder = 0
-      end
-      object frmExcluir: TBitBtn
-        Left = 210
-        Top = 6
-        Width = 82
-        Height = 43
-        Caption = 'Excluir'
-        TabOrder = 1
-      end
-      object BitBtn1: TBitBtn
-        Left = 115
-        Top = 6
-        Width = 89
-        Height = 43
-        Caption = 'Alterar'
-        TabOrder = 2
-      end
-      object btnCadastrar: TBitBtn
-        Left = 16
-        Top = 6
+      ExplicitLeft = 294
+      ExplicitTop = 17
+      object pnAlterar: TPanel
+        Left = 103
+        Top = 4
         Width = 93
         Height = 43
-        Caption = 'Cadastrar'
-        TabOrder = 3
+        Caption = 'Alterar'
+        Color = 57825
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+        object SpeedButton2: TSpeedButton
+          Left = -123
+          Top = -31
+          Width = 117
+          Height = 64
+          Flat = True
+        end
+        object btnAlterar: TSpeedButton
+          Left = -8
+          Top = -23
+          Width = 117
+          Height = 88
+          Flat = True
+          OnMouseEnter = btnAlterarMouseEnter
+          OnMouseLeave = btnAlterarMouseLeave
+        end
+      end
+      object pnExcluir: TPanel
+        Left = 202
+        Top = 4
+        Width = 93
+        Height = 43
+        Caption = 'Excluir'
+        Color = 5156336
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 1
+        object SpeedButton3: TSpeedButton
+          Left = -123
+          Top = -31
+          Width = 117
+          Height = 64
+          Flat = True
+        end
+        object btnExcluir: TSpeedButton
+          Left = -8
+          Top = -13
+          Width = 117
+          Height = 64
+          Flat = True
+          OnMouseEnter = btnExcluirMouseEnter
+          OnMouseLeave = btnExcluirMouseLeave
+        end
+      end
+      object pnFechar: TPanel
+        Left = 301
+        Top = 4
+        Width = 93
+        Height = 43
+        Caption = 'Fechar'
+        Color = 5198809
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 2
+        object SpeedButton4: TSpeedButton
+          Left = -123
+          Top = -31
+          Width = 117
+          Height = 64
+          Flat = True
+        end
+        object btnFechar: TSpeedButton
+          Left = -8
+          Top = -13
+          Width = 117
+          Height = 64
+          Flat = True
+          OnClick = btnFecharClick
+          OnMouseEnter = btnFecharMouseEnter
+          OnMouseLeave = btnFecharMouseLeave
+        end
+      end
+    end
+    object pnCadastrar: TPanel
+      Left = 330
+      Top = 5
+      Width = 93
+      Height = 43
+      Caption = 'Cadastrar'
+      Color = 11251232
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindow
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+      object btnCadastrar: TSpeedButton
+        Left = -12
+        Top = -15
+        Width = 117
+        Height = 64
+        Flat = True
+        OnMouseEnter = btnCadastrarMouseEnter
+        OnMouseLeave = btnCadastrarMouseLeave
       end
     end
   end
@@ -96,9 +195,6 @@ object frmListagemBase: TfrmListagemBase
     Height = 268
     Align = alClient
     TabOrder = 2
-    ExplicitTop = 73
-    ExplicitWidth = 827
-    ExplicitHeight = 433
     object DBGrid1: TDBGrid
       Left = 1
       Top = 1
@@ -112,5 +208,9 @@ object frmListagemBase: TfrmListagemBase
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
     end
+  end
+  object dsTabela: TDataSource
+    Left = 592
+    Top = 200
   end
 end

@@ -10,6 +10,8 @@ uses
 
 type
   TEstadoModel = class
+  private
+    oQueryListarEstados: TFDQuery;
   public
 
     function Inserir(var AEstado: TEstadoDto): Boolean;
@@ -23,6 +25,11 @@ type
     function BuscarID: Integer;
 
     function Ler(var AEstado: TEstadoDto): Boolean;
+
+    procedure ListarEstados(var DsEstado: TDataSource);
+
+    constructor Create;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -89,10 +96,24 @@ begin
   end;
 end;
 
+constructor TEstadoModel.Create;
+begin
+  oQueryListarEstados := TFDQuery.Create(nil);
+end;
+
 function TEstadoModel.Deletar(const AIDUF: Integer): Boolean;
 begin
   Result := TSingletonConexao.GetInstancia.ExecSQL
     ('delete from uf where iduf = ' + IntToStr(AIDUF)) > 0;
+end;
+
+destructor TEstadoModel.Destroy;
+begin
+  oQueryListarEstados.Close;
+
+  if Assigned(oQueryListarEstados) then
+      FreeAndNil(oQueryListarEstados);
+  inherited;
 end;
 
 function TEstadoModel.Inserir(var AEstado: TEstadoDto): Boolean;
@@ -113,10 +134,11 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select iduf, Nome, uf  from uf where UF = '+QuotedStr(AEstado.uf));
+    oQuery.Open('select iduf, Nome, uf  from uf where UF = ' +
+      QuotedStr(AEstado.UF));
     if (not(oQuery.IsEmpty)) then
     begin
-      AEstado.IDuf := oQuery.FieldByName('iduf').AsInteger;
+      AEstado.IdUF := oQuery.FieldByName('iduf').AsInteger;
       AEstado.Nome := oQuery.FieldByName('Nome').AsString;
       Result := True;
     end;
@@ -124,6 +146,13 @@ begin
     if Assigned(oQuery) then
       FreeAndNil(oQuery);
   end;
+end;
+
+procedure TEstadoModel.ListarEstados(var DsEstado: TDataSource);
+begin
+    oQueryListarEstados.Connection := TSingletonConexao.GetInstancia;
+    oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
+    DsEstado.DataSet := oQueryListarEstados;
 end;
 
 end.

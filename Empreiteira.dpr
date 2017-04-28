@@ -13,7 +13,8 @@ uses
   uListaEstado in 'uListaEstado.pas',
   uListagemBase in 'uListagemBase.pas' {frmListagemBase},
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados};
 
 {$R *.res}
 
@@ -21,6 +22,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TfrmListagemBase, frmListagemBase);
   Application.Run;
 end.

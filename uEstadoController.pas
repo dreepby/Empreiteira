@@ -20,6 +20,8 @@ type
 
     function Buscar(var AEstado: TEstadoDto): Boolean;
 
+    procedure ListarEstados(var DsEstado: TDataSource);
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -31,13 +33,17 @@ implementation
 function TEstadoControler.Excluir(var AEstado: TEstadoDto): Boolean;
 begin
   if AEstado.IDuf > 0 then
-    Result := oModelEstado.Deletar(AEstado.IDuf);
+    Result := oModelEstado.Deletar(AEstado.IDuf)
+  else
+    Result := False;
 end;
 
 function TEstadoControler.Buscar(var AEstado: TEstadoDto): Boolean;
 begin
-if (trim(AEstado.UF) <> EmptyStr) then
-    Result := oModelEstado.Ler(AEstado);
+  if (trim(AEstado.UF) <> EmptyStr) then
+    Result := oModelEstado.Ler(AEstado)
+  else
+    Result := False;
 end;
 
 constructor TEstadoControler.Create;
@@ -60,9 +66,13 @@ begin
   AEstado.Nome := EmptyStr;
 end;
 
+procedure TEstadoControler.ListarEstados(var DsEstado: TDataSource);
+begin
+  oModelEstado.ListarEstados(DsEstado);
+end;
+
 function TEstadoControler.Salvar(var AEstado: TEstadoDto): Boolean;
 begin
-  Result := False;
 
   if AEstado.IDuf > 0 then
     Result := oModelEstado.Alterar(AEstado)

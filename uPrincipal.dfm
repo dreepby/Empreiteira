@@ -14,12 +14,19 @@ object frmPrincipal: TfrmPrincipal
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poDesktopCenter
+  WindowState = wsMaximized
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object MainMenu1: TMainMenu
     Left = 232
     Top = 48
+    object Listagem1: TMenuItem
+      Caption = 'Listagem'
+      object Estados2: TMenuItem
+        Action = actListagemEstado
+      end
+    end
     object Cadastros1: TMenuItem
       Caption = 'Cadastros'
       object Estados1: TMenuItem
@@ -36,6 +43,10 @@ object frmPrincipal: TfrmPrincipal
     object actEstados: TAction
       Caption = 'Estados'
       OnExecute = actEstadosExecute
+    end
+    object actListagemEstado: TAction
+      Caption = 'Estados'
+      OnExecute = actListagemEstadoExecute
     end
   end
 end

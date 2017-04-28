@@ -17,8 +17,9 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure btnExcluirClick(Sender: TObject);
     procedure edtUFExit(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
     oEstado: TEstadoDto;
@@ -33,28 +34,6 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TfrmEstados.btnExcluirClick(Sender: TObject);
-begin
-  inherited;
-  if oEstado.IdUF > 0 then
-  begin
-    If MessageDlg('Você tem certeza que deseja excluir o registro?',
-      mtConfirmation, [mbyes, mbno], 0) === mryes then
-    begin
-      if (oControlerEstado.Excluir(oEstado)) then
-        ShowMessage('Excluido com sucesso!!')
-      else
-        ShowMessage('Houve algum na exclusáo!!');
-    end;
-  end
-  else
-    ShowMessage('Nenhum item Selecionado!!');
-
-  oControlerEstado.Limpar(oEstado);
-  edtNome.Text := '';
-  edtUF.Text := '';
-end;
 
 procedure TfrmEstados.btnFecharClick(Sender: TObject);
 begin
@@ -78,7 +57,7 @@ begin
     edtUF.Text := '';
   end
   else
-  ShowMessage('Prencha todos os campos');
+    ShowMessage('Prencha todos os campos');
 end;
 
 procedure TfrmEstados.edtUFExit(Sender: TObject);
@@ -108,8 +87,32 @@ begin
   inherited;
   oEstado := TEstadoDto.Create;
   oControlerEstado := TEstadoControler.Create;
-
   oControlerEstado.Limpar(oEstado);
+end;
+
+procedure TfrmEstados.SpeedButton1Click(Sender: TObject);
+begin
+  inherited;
+  oEstado.UF := edtUF.Text;
+  oEstado.Nome := edtNome.Text;
+  if (Trim(oEstado.UF) <> '') and (Trim(oEstado.Nome) <> '') then
+  begin
+    if (oControlerEstado.Salvar(oEstado)) then
+      ShowMessage('Salvo com sucesso!!')
+    else
+      ShowMessage('Houve algum na inserção!!');
+    oControlerEstado.Limpar(oEstado);
+    edtNome.Text := '';
+    edtUF.Text := '';
+  end
+  else
+    ShowMessage('Prencha todos os campos');
+end;
+
+procedure TfrmEstados.SpeedButton2Click(Sender: TObject);
+begin
+  Close;
+  frmEstados := nil;
 end;
 
 end.

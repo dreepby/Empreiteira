@@ -1,57 +1,80 @@
 inherited frmEstados: TfrmEstados
   Caption = 'Cadastro de Estado'
-  ClientHeight = 239
-  ClientWidth = 411
+  ClientHeight = 216
+  ClientWidth = 438
   Font.Height = -12
   FormStyle = fsMDIChild
   Visible = True
   OnCreate = FormCreate
-  ExplicitWidth = 427
-  ExplicitHeight = 277
+  ExplicitWidth = 444
+  ExplicitHeight = 244
   PixelsPerInch = 96
   TextHeight = 14
   inherited Panel1: TPanel
-    Top = 198
-    Width = 411
-    ExplicitTop = 198
-    ExplicitWidth = 487
-    inherited btnSalvar: TBitBtn
-      Left = 207
-      OnClick = btnSalvarClick
-      ExplicitLeft = 207
+    Top = 175
+    Width = 438
+    ExplicitTop = 175
+    ExplicitWidth = 438
+    inherited Panel3: TPanel
+      Left = 338
+      ExplicitLeft = 338
+      inherited btnSalvar: TSpeedButton
+        Left = -16
+        OnClick = SpeedButton1Click
+        ExplicitLeft = -16
+      end
     end
-    inherited btnFechar: TBitBtn
-      Left = 288
-      ExplicitLeft = 288
+    inherited Panel4: TPanel
+      Left = 260
+      ExplicitLeft = 260
+      inherited btnCancelar: TSpeedButton
+        Left = -16
+        Width = 104
+        OnClick = SpeedButton2Click
+        ExplicitLeft = -16
+        ExplicitWidth = 104
+      end
     end
   end
   inherited Panel2: TPanel
-    Width = 411
-    Height = 198
-    ExplicitLeft = -8
-    ExplicitTop = -6
-    ExplicitWidth = 411
-    ExplicitHeight = 198
+    Width = 438
+    Height = 175
+    ExplicitWidth = 438
+    ExplicitHeight = 175
     object edtNome: TLabeledEdit
-      Left = 40
-      Top = 120
+      Left = 48
+      Top = 96
       Width = 329
-      Height = 22
-      EditLabel.Width = 36
+      Height = 31
+      EditLabel.Width = 32
       EditLabel.Height = 14
-      EditLabel.Caption = 'Nome:'
+      EditLabel.Caption = 'Nome'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
+      TextHint = '   Nome'
     end
     object edtUF: TLabeledEdit
-      Left = 40
-      Top = 56
-      Width = 153
-      Height = 22
+      Left = 48
+      Top = 44
+      Width = 329
+      Height = 31
       CharCase = ecUpperCase
-      EditLabel.Width = 18
+      EditLabel.Width = 14
       EditLabel.Height = 14
-      EditLabel.Caption = 'UF:'
+      EditLabel.Caption = 'UF'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 1
+      TextHint = '   UF'
       OnExit = edtUFExit
     end
   end
