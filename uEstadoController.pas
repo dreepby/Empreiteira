@@ -3,7 +3,7 @@ unit uEstadoController;
 interface
 
 uses
-  System.SysUtils, Data.DB, uEstadoDto, uEstadoModel;
+  System.SysUtils, Data.DB, uEstadoDto, uEstadoModel, uEstados;
 
 type
   TEstadoControler = class
@@ -22,6 +22,9 @@ type
 
     procedure ListarEstados(var DsEstado: TDataSource);
 
+    procedure abrirEstadoUpdate(AEstado: TEstadoDto);
+
+    procedure abrirEstado();
     constructor Create;
     destructor Destroy; override;
   end;
@@ -36,6 +39,24 @@ begin
     Result := oModelEstado.Deletar(AEstado.IDuf)
   else
     Result := False;
+end;
+
+procedure TEstadoControler.abrirEstado();
+begin
+  if (not(Assigned(frmEstados))) then
+    frmEstados := TfrmEstados.Create(nil);
+  // Manda mostrar o formulário
+  frmEstados.Show;
+end;
+
+procedure TEstadoControler.abrirEstadoUpdate(AEstado: TEstadoDto);
+begin
+  if (not(Assigned(frmEstados))) then
+    frmEstados := TfrmEstados.Create(nil);
+  // Manda mostrar o formulário
+  frmEstados.Caption := 'Alteração de Estado';
+  frmEstados.Panel3.Caption := 'Alterar';
+  frmEstados.Show;
 end;
 
 function TEstadoControler.Buscar(var AEstado: TEstadoDto): Boolean;

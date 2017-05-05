@@ -62,15 +62,13 @@ object frmListagemBase: TfrmListagemBase
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 294
-      ExplicitTop = 17
       object pnAlterar: TPanel
         Left = 103
         Top = 4
         Width = 93
         Height = 43
         Caption = 'Alterar'
-        Color = 57825
+        Color = clBlack
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindow
         Font.Height = -13
@@ -92,8 +90,6 @@ object frmListagemBase: TfrmListagemBase
           Width = 117
           Height = 88
           Flat = True
-          OnMouseEnter = btnAlterarMouseEnter
-          OnMouseLeave = btnAlterarMouseLeave
         end
       end
       object pnExcluir: TPanel
@@ -102,7 +98,7 @@ object frmListagemBase: TfrmListagemBase
         Width = 93
         Height = 43
         Caption = 'Excluir'
-        Color = 5156336
+        Color = clBlack
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindow
         Font.Height = -13
@@ -124,8 +120,6 @@ object frmListagemBase: TfrmListagemBase
           Width = 117
           Height = 64
           Flat = True
-          OnMouseEnter = btnExcluirMouseEnter
-          OnMouseLeave = btnExcluirMouseLeave
         end
       end
       object pnFechar: TPanel
@@ -134,7 +128,7 @@ object frmListagemBase: TfrmListagemBase
         Width = 93
         Height = 43
         Caption = 'Fechar'
-        Color = 5198809
+        Color = clBlack
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindow
         Font.Height = -13
@@ -157,8 +151,6 @@ object frmListagemBase: TfrmListagemBase
           Height = 64
           Flat = True
           OnClick = btnFecharClick
-          OnMouseEnter = btnFecharMouseEnter
-          OnMouseLeave = btnFecharMouseLeave
         end
       end
     end
@@ -168,7 +160,7 @@ object frmListagemBase: TfrmListagemBase
       Width = 93
       Height = 43
       Caption = 'Cadastrar'
-      Color = 11251232
+      Color = clBlack
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindow
       Font.Height = -13
@@ -183,8 +175,6 @@ object frmListagemBase: TfrmListagemBase
         Width = 117
         Height = 64
         Flat = True
-        OnMouseEnter = btnCadastrarMouseEnter
-        OnMouseLeave = btnCadastrarMouseLeave
       end
     end
   end

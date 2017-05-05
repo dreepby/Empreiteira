@@ -7,20 +7,19 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uListagemBase, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, uEstados,
-  uEstadoController;
+  uEstadoController, uEstadoDto;
 
 type
   TfrmListagemEstados = class(TfrmListagemBase)
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnCadastrarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
-    procedure btnFecharMouseLeave(Sender: TObject);
-    procedure btnFecharMouseMove(Sender: TObject; Shift: TShiftState;
-      X, Y: Integer);
     procedure FormCreate(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
   private
     { Private declarations }
     oController: TEstadoControler;
+    oEstado: TEstadoDto;
   public
     { Public declarations }
   end;
@@ -32,14 +31,16 @@ implementation
 
 {$R *.dfm}
 
+procedure TfrmListagemEstados.btnAlterarClick(Sender: TObject);
+begin
+  inherited;
+  oController.abrirEstadoUpdate(oEstado);
+end;
+
 procedure TfrmListagemEstados.btnCadastrarClick(Sender: TObject);
 begin
   inherited;
-  // Verifica se a variável do formulário foi instanciada
-  if (not(Assigned(frmEstados))) then
-    frmEstados := TfrmEstados.Create(Self);
-  // Manda mostrar o formulário
-  frmEstados.Show;
+  oController.abrirEstado();
 end;
 
 procedure TfrmListagemEstados.btnFecharClick(Sender: TObject);
@@ -48,23 +49,13 @@ begin
   frmListagemEstados := nil;
 end;
 
-procedure TfrmListagemEstados.btnFecharMouseLeave(Sender: TObject);
-begin
-  inherited;
-  pnFechar.Color := $002B2FC6;
-end;
-
-procedure TfrmListagemEstados.btnFecharMouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  inherited;
-  pnFechar.Color := $004F53D9;
-end;
-
 procedure TfrmListagemEstados.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
   inherited;
+
+  if Assigned(oEstado) then
+    FreeAndNil(oEstado);
 
   if Assigned(oController) then
     FreeAndNil(oController);
@@ -75,6 +66,7 @@ end;
 procedure TfrmListagemEstados.FormCreate(Sender: TObject);
 begin
   inherited;
+  oEstado := TEstadoDto.Create;
   oController := TEstadoControler.Create;
   oController.ListarEstados(dsTabela);
 end;

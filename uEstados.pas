@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uCadastroBase, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
-  uEstadoDto, uEstadoController, System.ImageList, Vcl.ImgList;
+  uEstadoDto, System.ImageList, Vcl.ImgList, uEstadoControlerInserirAlterar;
 
 type
   TfrmEstados = class(TfrmCadastroBase)
@@ -23,7 +23,7 @@ type
   private
     { Private declarations }
     oEstado: TEstadoDto;
-    oControlerEstado: TEstadoControler;
+    oControlerInserirAlterar: TEstadoControlerInserirAlterar;
   public
     { Public declarations }
   end;
@@ -48,11 +48,11 @@ begin
   oEstado.Nome := edtNome.Text;
   if (Trim(oEstado.UF) <> '') and (Trim(oEstado.Nome) <> '') then
   begin
-    if (oControlerEstado.Salvar(oEstado)) then
+    if (oControlerInserirAlterar.Salvar(oEstado)) then
       ShowMessage('Salvo com sucesso!!')
     else
       ShowMessage('Houve algum na inserção!!');
-    oControlerEstado.Limpar(oEstado);
+    oControlerInserirAlterar.Limpar(oEstado);
     edtNome.Text := '';
     edtUF.Text := '';
   end
@@ -63,18 +63,18 @@ end;
 procedure TfrmEstados.edtUFExit(Sender: TObject);
 begin
   inherited;
-  oControlerEstado.Limpar(oEstado);
+  oControlerInserirAlterar.Limpar(oEstado);
   oEstado.UF := edtUF.Text;
 
-  if oControlerEstado.Buscar(oEstado) then
+  if oControlerInserirAlterar.Buscar(oEstado) then
     edtNome.Text := oEstado.Nome;
 end;
 
 procedure TfrmEstados.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   inherited;
-  if Assigned(oControlerEstado) then
-    FreeAndNil(oControlerEstado);
+  if Assigned(oControlerInserirAlterar) then
+    FreeAndNil(oControlerInserirAlterar);
 
   if Assigned(oEstado) then
     FreeAndNil(oEstado);
@@ -86,8 +86,8 @@ procedure TfrmEstados.FormCreate(Sender: TObject);
 begin
   inherited;
   oEstado := TEstadoDto.Create;
-  oControlerEstado := TEstadoControler.Create;
-  oControlerEstado.Limpar(oEstado);
+  oControlerInserirAlterar:= TEstadoControlerInserirAlterar.Create;
+  oControlerInserirAlterar.Limpar(oEstado);
 end;
 
 procedure TfrmEstados.SpeedButton1Click(Sender: TObject);
@@ -97,11 +97,11 @@ begin
   oEstado.Nome := edtNome.Text;
   if (Trim(oEstado.UF) <> '') and (Trim(oEstado.Nome) <> '') then
   begin
-    if (oControlerEstado.Salvar(oEstado)) then
+    if (oControlerInserirAlterar.Salvar(oEstado)) then
       ShowMessage('Salvo com sucesso!!')
     else
       ShowMessage('Houve algum na inserção!!');
-    oControlerEstado.Limpar(oEstado);
+    oControlerInserirAlterar.Limpar(oEstado);
     edtNome.Text := '';
     edtUF.Text := '';
   end

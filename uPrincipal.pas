@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   uEstados,
-  Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes;
+  Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes, uEstadoController;
 
 type
   TfrmPrincipal = class(TForm)
@@ -23,8 +23,11 @@ type
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actListagemEstadoExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    oControllerEstado: TEstadoControler;
+
     procedure WMClose(var Message: TWMClose); message WM_Close;
   public
     { Public declarations }
@@ -46,29 +49,31 @@ end;
 
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);
 begin
-  // Verifica se a variável do formulário foi instanciada
-  if (not(Assigned(frmEstados))) then
-    frmEstados := TfrmEstados.Create(Self);
-  // Manda mostrar o formulário
-  frmEstados.Show;
+  oControllerEstado.abrirEstado();
 end;
 
 procedure TfrmPrincipal.actListagemEstadoExecute(Sender: TObject);
 begin
-    // Verifica se a variável do formulário foi instanciada
+  // Verifica se a variável do formulário foi instanciada
   if (not(Assigned(frmListagemEstados))) then
     frmListagemEstados := TfrmListagemEstados.Create(Self);
   // Manda mostrar o formulário
   frmListagemEstados.Show;
 end;
 
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if Assigned(oControllerEstado) then
+    FreeAndNil(oControllerEstado);
+end;
+
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
+
 begin
 
   ReportMemoryLeaksOnShutdown := True;
   // Quando True verifica se ocorreu vazamento de memória ao fechar o programa
-  ReportMemoryLeaksOnShutdown := True;
-
+  oControllerEstado := TEstadoControler.Create;
   // Cria a conexão com o banco de dados
   try
     TSingletonConexao.GetInstancia;

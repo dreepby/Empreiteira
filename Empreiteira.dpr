@@ -2,19 +2,18 @@ program Empreiteira;
 
 uses
   Vcl.Forms,
-  uPrincipal in 'uPrincipal.pas' {frmPrincipal},
-  uClassSingletonConexao in 'uClassSingletonConexao.pas',
-  uClassConexaoBanco in 'uClassConexaoBanco.pas',
   uCadastroBase in 'uCadastroBase.pas' {frmCadastroBase},
-  uEstados in 'uEstados.pas' {frmEstados},
+  uClassConexaoBanco in 'uClassConexaoBanco.pas',
+  uClassSingletonConexao in 'uClassSingletonConexao.pas',
   uEstadoController in 'uEstadoController.pas',
-  uEstadoModel in 'uEstadoModel.pas',
   uEstadoDto in 'uEstadoDto.pas',
+  uEstadoModel in 'uEstadoModel.pas',
+  uEstados in 'uEstados.pas' {frmEstados},
   uListaEstado in 'uListaEstado.pas',
   uListagemBase in 'uListagemBase.pas' {frmListagemBase},
-  Vcl.Themes,
-  Vcl.Styles,
-  uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados};
+  uPrincipal in 'uPrincipal.pas' {frmPrincipal},
+  uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados},
+  uEstadoControlerInserirAlterar in 'uEstadoControlerInserirAlterar.pas';
 
 {$R *.res}
 

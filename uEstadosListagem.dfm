@@ -7,11 +7,9 @@ inherited frmListagemEstados: TfrmListagemEstados
   TextHeight = 13
   inherited Panel2: TPanel
     inherited Panel4: TPanel
-      ExplicitLeft = 326
-      ExplicitTop = 1
-      inherited pnFechar: TPanel
-        inherited btnFechar: TSpeedButton
-          OnMouseMove = btnFecharMouseMove
+      inherited pnAlterar: TPanel
+        inherited btnAlterar: TSpeedButton
+          OnClick = btnAlterarClick
         end
       end
     end
