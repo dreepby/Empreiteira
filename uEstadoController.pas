@@ -12,7 +12,7 @@ type
 
   public
 
-    function Excluir(var AEstado: TEstadoDto): Boolean;
+    function Excluir(id: Integer): Boolean;
 
     function Salvar(var AEstado: TEstadoDto): Boolean;
 
@@ -33,14 +33,6 @@ implementation
 
 { TEstadoControler }
 
-function TEstadoControler.Excluir(var AEstado: TEstadoDto): Boolean;
-begin
-  if AEstado.IDuf > 0 then
-    Result := oModelEstado.Deletar(AEstado.IDuf)
-  else
-    Result := False;
-end;
-
 procedure TEstadoControler.abrirEstado();
 begin
   if (not(Assigned(frmEstados))) then
@@ -53,9 +45,11 @@ procedure TEstadoControler.abrirEstadoUpdate(AEstado: TEstadoDto);
 begin
   if (not(Assigned(frmEstados))) then
     frmEstados := TfrmEstados.Create(nil);
-  // Manda mostrar o formulário
   frmEstados.Caption := 'Alteração de Estado';
   frmEstados.Panel3.Caption := 'Alterar';
+  frmEstados.edtNome.Text := AEstado.Nome;
+  frmEstados.edtUF.Text := AEstado.UF;
+  frmEstados.oEstado.IdUF := AEstado.IdUF;
   frmEstados.Show;
 end;
 
@@ -78,6 +72,14 @@ begin
     FreeAndNil(oModelEstado);
 
   inherited;
+end;
+
+function TEstadoControler.Excluir(id: Integer): Boolean;
+begin
+  if id > 0 then
+    Result := oModelEstado.Deletar(id)
+  else
+    Result := False;
 end;
 
 procedure TEstadoControler.Limpar(var AEstado: TEstadoDto);

@@ -14,6 +14,7 @@ object frmPrincipal: TfrmPrincipal
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poDesktopCenter
+  Visible = True
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate

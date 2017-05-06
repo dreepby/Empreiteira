@@ -2,6 +2,7 @@ inherited frmListagemEstados: TfrmListagemEstados
   Caption = 'Listagem de Estados'
   FormStyle = fsMDIChild
   Visible = True
+  OnActivate = FormActivate
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -12,17 +13,23 @@ inherited frmListagemEstados: TfrmListagemEstados
           OnClick = btnAlterarClick
         end
       end
+      inherited pnExcluir: TPanel
+        inherited btnExcluir: TSpeedButton
+          OnClick = btnExcluirClick
+        end
+      end
     end
     inherited pnCadastrar: TPanel
       inherited btnCadastrar: TSpeedButton
+        Left = -24
         OnClick = btnCadastrarClick
+        ExplicitLeft = -24
       end
     end
   end
   inherited Panel3: TPanel
+    ExplicitTop = 56
     inherited DBGrid1: TDBGrid
-      Left = 2
-      Align = alNone
       DataSource = dsTabela
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
       Columns = <

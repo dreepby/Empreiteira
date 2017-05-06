@@ -20,12 +20,13 @@ type
     procedure edtUFExit(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
-    oEstado: TEstadoDto;
     oControlerInserirAlterar: TEstadoControlerInserirAlterar;
   public
     { Public declarations }
+    oEstado: TEstadoDto;
   end;
 
 var
@@ -70,6 +71,12 @@ begin
     edtNome.Text := oEstado.Nome;
 end;
 
+procedure TfrmEstados.FormActivate(Sender: TObject);
+begin
+  inherited;
+  edtUF.SetFocus;
+end;
+
 procedure TfrmEstados.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   inherited;
@@ -86,7 +93,7 @@ procedure TfrmEstados.FormCreate(Sender: TObject);
 begin
   inherited;
   oEstado := TEstadoDto.Create;
-  oControlerInserirAlterar:= TEstadoControlerInserirAlterar.Create;
+  oControlerInserirAlterar := TEstadoControlerInserirAlterar.Create;
   oControlerInserirAlterar.Limpar(oEstado);
 end;
 
@@ -97,13 +104,19 @@ begin
   oEstado.Nome := edtNome.Text;
   if (Trim(oEstado.UF) <> '') and (Trim(oEstado.Nome) <> '') then
   begin
-    if (oControlerInserirAlterar.Salvar(oEstado)) then
-      ShowMessage('Salvo com sucesso!!')
+    if oControlerInserirAlterar.VerificarUF(oEstado.UF) <> True then
+    begin
+      if (oControlerInserirAlterar.Salvar(oEstado)) then
+        ShowMessage('Salvo com sucesso!!')
+      else
+        ShowMessage('Houve algum na inserção!!');
+      oControlerInserirAlterar.Limpar(oEstado);
+      edtNome.Text := '';
+      edtUF.Text := '';
+      edtUF.SetFocus;
+    end
     else
-      ShowMessage('Houve algum na inserção!!');
-    oControlerInserirAlterar.Limpar(oEstado);
-    edtNome.Text := '';
-    edtUF.Text := '';
+    ShowMessage('Estado já cadastrado.');
   end
   else
     ShowMessage('Prencha todos os campos');

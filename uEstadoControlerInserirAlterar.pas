@@ -19,6 +19,8 @@ type
 
     function Buscar(var AEstado: TEstadoDto): Boolean;
 
+    function VerificarUF(UF: string): Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -68,6 +70,11 @@ begin
 
     Result := oModelEstado.Inserir(AEstado);
   end;
+end;
+
+function TEstadoControlerInserirAlterar.VerificarUF(UF: string): Boolean;
+begin
+   Result := oModelEstado.VerificarUF(UF);
 end;
 
 end.

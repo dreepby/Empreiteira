@@ -28,6 +28,8 @@ type
 
     procedure ListarEstados(var DsEstado: TDataSource);
 
+    function VerificarUF(UF: string): Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -112,7 +114,7 @@ begin
   oQueryListarEstados.Close;
 
   if Assigned(oQueryListarEstados) then
-      FreeAndNil(oQueryListarEstados);
+    FreeAndNil(oQueryListarEstados);
   inherited;
 end;
 
@@ -150,9 +152,27 @@ end;
 
 procedure TEstadoModel.ListarEstados(var DsEstado: TDataSource);
 begin
-    oQueryListarEstados.Connection := TSingletonConexao.GetInstancia;
-    oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
-    DsEstado.DataSet := oQueryListarEstados;
+  oQueryListarEstados.Connection := TSingletonConexao.GetInstancia;
+  oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
+  DsEstado.DataSet := oQueryListarEstados;
+end;
+
+function TEstadoModel.VerificarUF(UF: string): Boolean;
+var
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select iduf  from uf where UF = ' + QuotedStr(UF));
+    if (not(oQuery.IsEmpty)) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 end;
 
 end.

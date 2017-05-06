@@ -5,6 +5,7 @@ inherited frmEstados: TfrmEstados
   Font.Height = -12
   FormStyle = fsMDIChild
   Visible = True
+  OnActivate = FormActivate
   OnCreate = FormCreate
   ExplicitWidth = 444
   ExplicitHeight = 244

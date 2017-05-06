@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   uEstados,
-  Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes, uEstadoController;
+  Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes, uEstadoController,
+  Vcl.ExtCtrls;
 
 type
   TfrmPrincipal = class(TForm)
