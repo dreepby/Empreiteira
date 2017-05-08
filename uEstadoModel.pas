@@ -30,6 +30,8 @@ type
 
     function VerificarUF(UF: string): Boolean;
 
+    function Pesquisar(ANome: String): Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -42,8 +44,8 @@ function TEstadoModel.Alterar(var AEstado: TEstadoDto): Boolean;
 var
   sSql: String;
 begin
-  sSql := 'update Estado' + '   set UF = ' + QuotedStr(AEstado.UF) +
-    '     , Nome = ' + QuotedStr(AEstado.Nome) + ' where idEstado = ' +
+  sSql := 'update UF' + '   set UF = ' + QuotedStr(AEstado.UF) +
+    '     , Nome = ' + QuotedStr(AEstado.Nome) + ' where idUF = ' +
     IntToStr(AEstado.IdUF);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
@@ -155,6 +157,21 @@ begin
   oQueryListarEstados.Connection := TSingletonConexao.GetInstancia;
   oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
   DsEstado.DataSet := oQueryListarEstados;
+end;
+
+function TEstadoModel.Pesquisar(ANome: String): Boolean;
+begin
+  oQueryListarEstados.Open('select iduf, Nome, uf from uf WHERE Nome LIKE "%' +
+   ANome + '%"');
+  if (not(oQueryListarEstados.IsEmpty)) then
+  begin
+    Result := True;
+  end
+  else
+  begin
+    Result := False;
+    oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
+  end;
 end;
 
 function TEstadoModel.VerificarUF(UF: string): Boolean;

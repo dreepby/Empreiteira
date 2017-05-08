@@ -25,6 +25,9 @@ type
     procedure abrirEstadoUpdate(AEstado: TEstadoDto);
 
     procedure abrirEstado();
+
+    function Pesquisar(ANome : String): Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -37,7 +40,7 @@ procedure TEstadoControler.abrirEstado();
 begin
   if (not(Assigned(frmEstados))) then
     frmEstados := TfrmEstados.Create(nil);
-  // Manda mostrar o formulário
+    Limpar(frmEstados.oEstado);
   frmEstados.Show;
 end;
 
@@ -84,7 +87,7 @@ end;
 
 procedure TEstadoControler.Limpar(var AEstado: TEstadoDto);
 begin
-  AEstado.IDuf := 0;
+  AEstado.IdUF := 0;
   AEstado.UF := EmptyStr;
   AEstado.Nome := EmptyStr;
 end;
@@ -94,14 +97,20 @@ begin
   oModelEstado.ListarEstados(DsEstado);
 end;
 
+
+function TEstadoControler.Pesquisar(ANome: String): Boolean;
+begin
+  Result := oModelEstado.Pesquisar(ANome);
+end;
+
 function TEstadoControler.Salvar(var AEstado: TEstadoDto): Boolean;
 begin
 
-  if AEstado.IDuf > 0 then
+  if AEstado.IdUF > 0 then
     Result := oModelEstado.Alterar(AEstado)
   else
   begin
-    AEstado.IDuf := oModelEstado.BuscarID;
+    AEstado.IdUF := oModelEstado.BuscarID;
 
     Result := oModelEstado.Inserir(AEstado);
   end;

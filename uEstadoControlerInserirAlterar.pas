@@ -21,6 +21,8 @@ type
 
     function VerificarUF(UF: string): Boolean;
 
+    function Alterar(var AEstado: TEstadoDto): Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -30,6 +32,12 @@ implementation
 { TEstadoControler }
 
 
+
+function TEstadoControlerInserirAlterar.Alterar(
+  var AEstado: TEstadoDto): Boolean;
+begin
+  Result := oModelEstado.Alterar(AEstado);
+end;
 
 function TEstadoControlerInserirAlterar.Buscar(var AEstado: TEstadoDto): Boolean;
 begin

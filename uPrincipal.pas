@@ -64,6 +64,7 @@ end;
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+
   if Assigned(oControllerEstado) then
     FreeAndNil(oControllerEstado);
 end;
@@ -74,7 +75,6 @@ begin
 
   ReportMemoryLeaksOnShutdown := True;
   // Quando True verifica se ocorreu vazamento de memória ao fechar o programa
-  oControllerEstado := TEstadoControler.Create;
   // Cria a conexão com o banco de dados
   try
     TSingletonConexao.GetInstancia;

@@ -17,7 +17,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure edtUFExit(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -61,16 +60,6 @@ begin
     ShowMessage('Prencha todos os campos');
 end;
 
-procedure TfrmEstados.edtUFExit(Sender: TObject);
-begin
-  inherited;
-  oControlerInserirAlterar.Limpar(oEstado);
-  oEstado.UF := edtUF.Text;
-
-  if oControlerInserirAlterar.Buscar(oEstado) then
-    edtNome.Text := oEstado.Nome;
-end;
-
 procedure TfrmEstados.FormActivate(Sender: TObject);
 begin
   inherited;
@@ -104,19 +93,29 @@ begin
   oEstado.Nome := edtNome.Text;
   if (Trim(oEstado.UF) <> '') and (Trim(oEstado.Nome) <> '') then
   begin
-    if oControlerInserirAlterar.VerificarUF(oEstado.UF) <> True then
+    if oEstado.IdUF > 0 then
     begin
-      if (oControlerInserirAlterar.Salvar(oEstado)) then
-        ShowMessage('Salvo com sucesso!!')
+      if oControlerInserirAlterar.alterar(oEstado) then
+        ShowMessage('Registro alterado com sucesso!')
       else
-        ShowMessage('Houve algum na inserção!!');
-      oControlerInserirAlterar.Limpar(oEstado);
-      edtNome.Text := '';
-      edtUF.Text := '';
-      edtUF.SetFocus;
+        ShowMessage('Houve algum erro!');
     end
     else
-    ShowMessage('Estado já cadastrado.');
+    begin
+      if oControlerInserirAlterar.VerificarUF(oEstado.UF) <> True then
+      begin
+        if (oControlerInserirAlterar.Salvar(oEstado)) then
+          ShowMessage('Salvo com sucesso!!')
+        else
+          ShowMessage('Houve algum na inserção!!');
+        oControlerInserirAlterar.Limpar(oEstado);
+        edtNome.Text := '';
+        edtUF.Text := '';
+        edtUF.SetFocus;
+      end
+      else
+        ShowMessage('Estado já cadastrado.');
+    end;
   end
   else
     ShowMessage('Prencha todos os campos');

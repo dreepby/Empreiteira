@@ -76,7 +76,6 @@ inherited frmEstados: TfrmEstados
       ParentFont = False
       TabOrder = 1
       TextHint = '   UF'
-      OnExit = edtUFExit
     end
   end
 end

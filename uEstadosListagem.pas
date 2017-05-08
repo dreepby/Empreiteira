@@ -7,10 +7,12 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uListagemBase, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, uEstados,
-  uEstadoController, uEstadoDto;
+  uEstadoController, uEstadoDto, System.UITypes;
 
 type
   TfrmListagemEstados = class(TfrmListagemBase)
+    btnPesquisa: TButton;
+    edtPesquisa: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnCadastrarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
@@ -18,6 +20,8 @@ type
     procedure btnAlterarClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure edtPesquisaKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     oController: TEstadoControler;
@@ -69,6 +73,29 @@ procedure TfrmListagemEstados.btnFecharClick(Sender: TObject);
 begin
   inherited;
   frmListagemEstados := nil;
+end;
+
+procedure TfrmListagemEstados.btnPesquisaClick(Sender: TObject);
+begin
+  inherited;
+  if (Trim(edtPesquisa.Text) <> '') then
+  begin
+    if (oController.Pesquisar(edtPesquisa.Text) = False) then
+      ShowMessage('Nenhum registro correspondente');
+  end
+  else
+    ShowMessage('Campo de pesquisa vazio!');
+end;
+
+procedure TfrmListagemEstados.edtPesquisaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key = #8 then
+  begin
+    if Length(Trim(edtPesquisa.Text)) = 1 then
+      oController.ListarEstados(dsTabela);
+  end;
 end;
 
 procedure TfrmListagemEstados.FormActivate(Sender: TObject);
