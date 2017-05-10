@@ -4,9 +4,11 @@ inherited frmEstados: TfrmEstados
   ClientWidth = 438
   Font.Height = -12
   FormStyle = fsMDIChild
+  KeyPreview = True
   Visible = True
   OnActivate = FormActivate
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   ExplicitWidth = 444
   ExplicitHeight = 244
   PixelsPerInch = 96
@@ -46,36 +48,39 @@ inherited frmEstados: TfrmEstados
       Left = 48
       Top = 96
       Width = 329
-      Height = 31
+      Height = 27
       EditLabel.Width = 32
       EditLabel.Height = 14
       EditLabel.Caption = 'Nome'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
       TabOrder = 0
       TextHint = '   Nome'
+      OnKeyPress = edtNomeKeyPress
     end
     object edtUF: TLabeledEdit
       Left = 48
       Top = 44
       Width = 329
-      Height = 31
+      Height = 27
       CharCase = ecUpperCase
       EditLabel.Width = 14
       EditLabel.Height = 14
       EditLabel.Caption = 'UF'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
       TabOrder = 1
       TextHint = '   UF'
+      OnKeyDown = edtUFKeyDown
+      OnKeyPress = edtUFKeyPress
     end
   end
 end

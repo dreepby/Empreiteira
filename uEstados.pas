@@ -20,6 +20,10 @@ type
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtUFKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtUFKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     oControlerInserirAlterar: TEstadoControlerInserirAlterar;
@@ -60,6 +64,33 @@ begin
     ShowMessage('Prencha todos os campos');
 end;
 
+procedure TfrmEstados.edtNomeKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+   if Key = #13 then
+    btnSalvar.Click;
+end;
+
+procedure TfrmEstados.edtUFKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+   if (Shift = [ssCtrl]) then
+  begin
+    case Key of
+      87:
+        Close; // Código desejado
+    end;
+  end;
+end;
+
+procedure TfrmEstados.edtUFKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+   if Key = #13 then
+    edtNome.SetFocus;
+end;
+
 procedure TfrmEstados.FormActivate(Sender: TObject);
 begin
   inherited;
@@ -84,6 +115,19 @@ begin
   oEstado := TEstadoDto.Create;
   oControlerInserirAlterar := TEstadoControlerInserirAlterar.Create;
   oControlerInserirAlterar.Limpar(oEstado);
+end;
+
+procedure TfrmEstados.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if (Shift = [ssCtrl]) then
+  begin
+    case Key of
+      87:
+        Close; // Código desejado
+    end;
+  end;
 end;
 
 procedure TfrmEstados.SpeedButton1Click(Sender: TObject);
