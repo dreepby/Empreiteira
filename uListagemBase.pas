@@ -31,6 +31,7 @@ type
     dsTabela: TDataSource;
     procedure btnFecharClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -52,6 +53,18 @@ end;
 procedure TfrmListagemBase.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
+end;
+
+procedure TfrmListagemBase.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Shift = [ssCtrl]) then
+  begin
+    case Key of
+      87:
+        Close; // Código desejado
+    end;
+  end;
 end;
 
 end.

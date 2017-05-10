@@ -12,9 +12,11 @@ object frmCadastroBase: TfrmCadastroBase
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
   OnClose = FormClose
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -26,8 +28,6 @@ object frmCadastroBase: TfrmCadastroBase
     Color = clBtnHighlight
     ParentBackground = False
     TabOrder = 0
-    ExplicitTop = 280
-    ExplicitWidth = 505
     object Panel3: TPanel
       Left = 370
       Top = 6
@@ -89,7 +89,5 @@ object frmCadastroBase: TfrmCadastroBase
     Color = clBtnHighlight
     ParentBackground = False
     TabOrder = 1
-    ExplicitWidth = 505
-    ExplicitHeight = 280
   end
 end

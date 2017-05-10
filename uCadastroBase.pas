@@ -23,6 +23,7 @@ type
     procedure btnSalvarMouseLeave(Sender: TObject);
     procedure btnCancelarMouseEnter(Sender: TObject);
     procedure btnCancelarMouseLeave(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -64,6 +65,18 @@ end;
 procedure TfrmCadastroBase.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
+end;
+
+procedure TfrmCadastroBase.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    if (Shift = [ssCtrl]) then
+  begin
+    case Key of
+      87:
+        Close; // Código desejado
+    end;
+  end;
 end;
 
 procedure TfrmCadastroBase.btnCancelarClick(Sender: TObject);
