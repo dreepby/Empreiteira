@@ -14,9 +14,9 @@ inherited frmListagemEstados: TfrmListagemEstados
     end
     object btnPesquisa: TButton
       Left = 562
-      Top = 15
+      Top = 11
       Width = 75
-      Height = 36
+      Height = 31
       Caption = 'Pesquisar'
       TabOrder = 0
       OnClick = btnPesquisaClick

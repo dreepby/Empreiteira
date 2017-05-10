@@ -22,6 +22,7 @@ type
     procedure btnExcluirClick(Sender: TObject);
     procedure btnPesquisaClick(Sender: TObject);
     procedure edtPesquisaKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     oController: TEstadoControler;
@@ -96,12 +97,16 @@ begin
     if Length(Trim(edtPesquisa.Text)) = 1 then
       oController.ListarEstados(dsTabela);
   end;
+
+  if Key = #13 then
+    btnPesquisa.Click;
 end;
 
 procedure TfrmListagemEstados.FormActivate(Sender: TObject);
 begin
   inherited;
   oController.ListarEstados(dsTabela);
+  edtPesquisa.SetFocus;
 end;
 
 procedure TfrmListagemEstados.FormClose(Sender: TObject;
@@ -124,6 +129,22 @@ begin
   oEstado := TEstadoDto.Create;
   oController := TEstadoControler.Create;
   oController.ListarEstados(dsTabela);
+end;
+
+procedure TfrmListagemEstados.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if (Shift = [ssCtrl]) then
+  begin
+    case Key of
+      87:
+        Close; // Código desejado
+    end;
+  end;
+
+   if key = vk_F2 then
+    edtPesquisa.SetFocus;
 end;
 
 end.
