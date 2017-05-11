@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   uEstados,
   Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls;
+  Vcl.ExtCtrls, uMunicipioListagem, uMunicipioControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -21,13 +21,20 @@ type
     Listagem1: TMenuItem;
     actListagemEstado: TAction;
     Estados2: TMenuItem;
+    actListagemMunicipio: TAction;
+    Municipio1: TMenuItem;
+    actMunicipio: TAction;
+    Municipios1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actListagemEstadoExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure actListagemMunicipioExecute(Sender: TObject);
+    procedure actMunicipioExecute(Sender: TObject);
   private
     { Private declarations }
     oControllerEstado: TEstadoControler;
+    oControllerMunicipio: TMunicipioControler;
 
     procedure WMClose(var Message: TWMClose); message WM_Close;
   public
@@ -53,6 +60,11 @@ begin
   oControllerEstado.abrirEstado();
 end;
 
+procedure TfrmPrincipal.actMunicipioExecute(Sender: TObject);
+begin
+  oControllerMunicipio.AbrirMunicipio();
+end;
+
 procedure TfrmPrincipal.actListagemEstadoExecute(Sender: TObject);
 begin
   // Verifica se a variável do formulário foi instanciada
@@ -60,6 +72,15 @@ begin
     frmListagemEstados := TfrmListagemEstados.Create(Self);
   // Manda mostrar o formulário
   frmListagemEstados.Show;
+end;
+
+procedure TfrmPrincipal.actListagemMunicipioExecute(Sender: TObject);
+begin
+    // Verifica se a variável do formulário foi instanciada
+  if (not(Assigned(frmListagemMunicipios))) then
+    frmListagemMunicipios := TfrmListagemMunicipios.Create(Self);
+  // Manda mostrar o formulário
+  frmListagemMunicipios.Show;
 end;
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -72,7 +93,6 @@ end;
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 
 begin
-
   ReportMemoryLeaksOnShutdown := True;
   // Quando True verifica se ocorreu vazamento de memória ao fechar o programa
   // Cria a conexão com o banco de dados

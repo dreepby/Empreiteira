@@ -28,11 +28,17 @@ object frmPrincipal: TfrmPrincipal
       object Estados2: TMenuItem
         Action = actListagemEstado
       end
+      object Municipio1: TMenuItem
+        Action = actListagemMunicipio
+      end
     end
     object Cadastros1: TMenuItem
       Caption = 'Cadastros'
       object Estados1: TMenuItem
         Action = actEstados
+      end
+      object Municipios1: TMenuItem
+        Action = actMunicipio
       end
     end
     object Sobre1: TMenuItem
@@ -49,6 +55,14 @@ object frmPrincipal: TfrmPrincipal
     object actListagemEstado: TAction
       Caption = 'Estados'
       OnExecute = actListagemEstadoExecute
+    end
+    object actListagemMunicipio: TAction
+      Caption = 'Municipio'
+      OnExecute = actListagemMunicipioExecute
+    end
+    object actMunicipio: TAction
+      Caption = 'Municipios'
+      OnExecute = actMunicipioExecute
     end
   end
 end
