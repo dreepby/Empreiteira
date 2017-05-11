@@ -29,7 +29,7 @@ object frmCadastroBase: TfrmCadastroBase
     ParentBackground = False
     TabOrder = 0
     object Panel3: TPanel
-      Left = 370
+      Left = 338
       Top = 6
       Width = 73
       Height = 27
@@ -44,7 +44,7 @@ object frmCadastroBase: TfrmCadastroBase
       ParentFont = False
       TabOrder = 0
       object btnSalvar: TSpeedButton
-        Left = -8
+        Left = -24
         Top = -8
         Width = 97
         Height = 41
@@ -54,7 +54,7 @@ object frmCadastroBase: TfrmCadastroBase
       end
     end
     object Panel4: TPanel
-      Left = 292
+      Left = 417
       Top = 6
       Width = 72
       Height = 27
@@ -69,7 +69,7 @@ object frmCadastroBase: TfrmCadastroBase
       ParentFont = False
       TabOrder = 1
       object btnCancelar: TSpeedButton
-        Left = -8
+        Left = 0
         Top = -8
         Width = 88
         Height = 49
