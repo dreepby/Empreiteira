@@ -4,7 +4,6 @@ inherited frmEstados: TfrmEstados
   ClientWidth = 438
   Font.Height = -12
   FormStyle = fsMDIChild
-  KeyPreview = True
   Visible = True
   OnActivate = FormActivate
   OnCreate = FormCreate
@@ -19,22 +18,24 @@ inherited frmEstados: TfrmEstados
     ExplicitTop = 175
     ExplicitWidth = 438
     inherited Panel3: TPanel
-      Left = 338
-      ExplicitLeft = 338
+      Left = 245
+      ExplicitLeft = 245
       inherited btnSalvar: TSpeedButton
-        Left = -16
+        Left = -13
         OnClick = SpeedButton1Click
-        ExplicitLeft = -16
+        ExplicitLeft = -13
       end
     end
     inherited Panel4: TPanel
-      Left = 260
-      ExplicitLeft = 260
+      Left = 324
+      ExplicitLeft = 324
       inherited btnCancelar: TSpeedButton
-        Left = -16
+        Left = -8
+        Top = -16
         Width = 104
         OnClick = SpeedButton2Click
-        ExplicitLeft = -16
+        ExplicitLeft = -8
+        ExplicitTop = -16
         ExplicitWidth = 104
       end
     end
@@ -59,7 +60,6 @@ inherited frmEstados: TfrmEstados
       Font.Style = []
       ParentFont = False
       TabOrder = 0
-      TextHint = '   Nome'
       OnKeyPress = edtNomeKeyPress
     end
     object edtUF: TLabeledEdit
@@ -78,8 +78,6 @@ inherited frmEstados: TfrmEstados
       Font.Style = []
       ParentFont = False
       TabOrder = 1
-      TextHint = '   UF'
-      OnKeyDown = edtUFKeyDown
       OnKeyPress = edtUFKeyPress
     end
   end
