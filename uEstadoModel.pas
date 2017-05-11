@@ -5,7 +5,7 @@ interface
 
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
-  FireDAC.Comp.DataSet, uListaEstado,
+  FireDAC.Comp.DataSet, System.Generics.Collections, uListaEstado,
   uEstadoDto, uClassSingletonConexao;
 
 type
@@ -20,7 +20,8 @@ type
 
     function Deletar(const AIDUF: Integer): Boolean;
 
-    function BuscarListaEstados(out ALista: TListaEstados): Boolean;
+    function ADDListaHash(var oEstado: TObjectDictionary<string,
+      TEstadoDto>): Boolean;
 
     function BuscarID: Integer;
 
@@ -39,6 +40,46 @@ type
 implementation
 
 { TEstadoModel }
+
+function TEstadoModel.ADDListaHash(var oEstado
+  : TObjectDictionary<string, TEstadoDto>): Boolean;
+var
+  oEstadoDTO: TEstadoDto;
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select * from uf');
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oEstadoDTO := TEstadoDto.Create;
+
+        // Atribui os valores
+        oEstadoDTO.IdUF := oQuery.FieldByName('idUf').AsInteger;
+        oEstadoDTO.UF := oQuery.FieldByName('UF').AsString;
+        oEstadoDTO.Nome := oQuery.FieldByName('nome').AsString;
+
+        // Adiciona o objeto na lista hash
+        oEstado.Add(oEstadoDTO.UF, oEstadoDTO);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+
+end;
 
 function TEstadoModel.Alterar(var AEstado: TEstadoDto): Boolean;
 var
@@ -62,38 +103,6 @@ begin
     oQuery.Open('select max(IdUF) as ID' + '  from UF');
     if (not(oQuery.IsEmpty)) then
       Result := oQuery.FieldByName('ID').AsInteger + 1;
-  finally
-    if Assigned(oQuery) then
-      FreeAndNil(oQuery);
-  end;
-end;
-
-function TEstadoModel.BuscarListaEstados(out ALista: TListaEstados): Boolean;
-var
-  oEstadoDTO: TEstadoDto;
-  oQuery: TFDQuery;
-begin
-  Result := False;
-  oQuery := TFDQuery.Create(nil);
-  try
-    oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select IdEstado, UF, NOME from Estado');
-    if (not(oQuery.IsEmpty)) then
-    begin
-      oQuery.First;
-      while (not(oQuery.Eof)) do
-      begin
-        oEstadoDTO := TEstadoDto.Create;
-        oEstadoDTO.IdUF := oQuery.FieldByName('IdEstado').AsInteger;
-        oEstadoDTO.Nome := oQuery.FieldByName('Nome').AsString;
-        oEstadoDTO.UF := oQuery.FieldByName('UF').AsString;
-
-        ALista.Add(oEstadoDTO.Nome, oEstadoDTO);
-
-        oQuery.Next;
-      end;
-      Result := True;
-    end;
   finally
     if Assigned(oQuery) then
       FreeAndNil(oQuery);
@@ -162,7 +171,7 @@ end;
 function TEstadoModel.Pesquisar(ANome: String): Boolean;
 begin
   oQueryListarEstados.Open('select iduf, Nome, uf from uf WHERE Nome LIKE "%' +
-   ANome + '%"');
+    ANome + '%"');
   if (not(oQueryListarEstados.IsEmpty)) then
   begin
     Result := True;
