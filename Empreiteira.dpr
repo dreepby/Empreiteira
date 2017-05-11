@@ -13,7 +13,13 @@ uses
   uListagemBase in 'uListagemBase.pas' {frmListagemBase},
   uPrincipal in 'uPrincipal.pas' {frmPrincipal},
   uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados},
-  uEstadoControlerInserirAlterar in 'uEstadoControlerInserirAlterar.pas';
+  uEstadoControlerInserirAlterar in 'uEstadoControlerInserirAlterar.pas',
+  uMunicipioListagem in 'uMunicipioListagem.pas' {frmListagemMunicipios},
+  uMunicipio in 'uMunicipio.pas' {frmMunicipio},
+  uMunicipioModel in 'uMunicipioModel.pas',
+  uMunicipioControler in 'uMunicipioControler.pas',
+  uMunicipioDto in 'uMunicipioDto.pas',
+  uMunicipioControlerInserirAlterar in 'uMunicipioControlerInserirAlterar.pas';
 
 {$R *.res}
 
