@@ -65,7 +65,7 @@ begin
       oController.ListarEstados(dsTabela);
     end
     else
-      ShowMessage('Jouve algum erro!!');
+      ShowMessage('Houve algum erro!!');
   end;
 
 end;
