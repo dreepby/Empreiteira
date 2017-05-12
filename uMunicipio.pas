@@ -132,8 +132,6 @@ begin
 end;
 
 procedure TfrmMunicipio.FormCreate(Sender: TObject);
-var
-  sIndice: String;
 begin
   inherited;
   oMunicipio := TMunicipioDto.Create;
