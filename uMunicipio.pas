@@ -21,6 +21,7 @@ type
     procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
     procedure cbUfKeyPress(Sender: TObject; var Key: Char);
     procedure btnSalvarClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
     oListaEstados: TObjectDictionary<string, TEstadoDto>;
@@ -48,27 +49,34 @@ procedure TfrmMunicipio.btnSalvarClick(Sender: TObject);
 begin
   inherited;
   oMunicipio.Nome := Trim(edtNome.Text);
-
+  oMunicipio.idUf := oListaEstados.Items[cbUf.Items[cbUf.ItemIndex]].idUf;
   if (oMunicipio.Nome <> '') and (cbUf.ItemIndex <> -1) then
   begin
-  oMunicipio.idUf := oListaEstados.Items[cbUf.Items[cbUf.ItemIndex]].idUf;
-    if oMunicipio.idMunicipio > 0 then
+    if oControler.VerificarMunicipio(oMunicipio) then
     begin
-      if oControler.alterar(oMunicipio) then
-        ShowMessage('Registro alterado com sucesso!')
+
+      if oMunicipio.idMunicipio > 0 then
+      begin
+        if oControler.alterar(oMunicipio) then
+          ShowMessage('Registro alterado com sucesso!')
+        else
+          ShowMessage('Houve algum erro!');
+      end
       else
-        ShowMessage('Houve algum erro!');
+      begin
+        if (oControler.Salvar(oMunicipio)) then
+          ShowMessage('Salvo com sucesso!!')
+        else
+          ShowMessage('Houve algum erro na inserção!!');
+        oControler.Limpar(oMunicipio);
+        edtNome.Text := '';
+        cbUf.ItemIndex := -1;
+        edtNome.SetFocus;
+      end;
     end
     else
     begin
-      if (oControler.Salvar(oMunicipio)) then
-        ShowMessage('Salvo com sucesso!!')
-      else
-        ShowMessage('Houve algum erro na inserção!!');
-      oControler.Limpar(oMunicipio);
-      edtNome.Text := '';
-      cbUf.ItemIndex := -1;
-      edtNome.SetFocus;
+      ShowMessage('Municipio Já cadastrado!');
     end;
   end
   else
@@ -87,6 +95,21 @@ begin
   inherited;
   if Key = #13 then
     cbUf.SetFocus;
+end;
+
+procedure TfrmMunicipio.FormActivate(Sender: TObject);
+var
+  sIndice: String;
+begin
+  inherited;
+  oListaEstados.Clear;
+  if (oControler.ADDListaHash(oListaEstados)) then
+  begin
+    for sIndice in oListaEstados.Keys do
+      cbUf.AddItem(sIndice, oListaEstados);
+  end
+  else
+    ShowMessage('Nenhum estado cadastrado!!');
 end;
 
 procedure TfrmMunicipio.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -116,14 +139,6 @@ begin
   oMunicipio := TMunicipioDto.Create;
   oControler := TMunicipioControlerInserirAlterar.Create;
   oListaEstados := TObjectDictionary<string, TEstadoDto>.Create([doOwnsValues]);
-
-  if (oControler.ADDListaHash(oListaEstados)) then
-  begin
-    for sIndice in oListaEstados.Keys do
-      cbUf.AddItem(sIndice, oListaEstados);
-  end
-  else
-    ShowMessage('Nenhum estado cadastrado!!');
 end;
 
 end.

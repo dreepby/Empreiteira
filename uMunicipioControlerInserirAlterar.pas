@@ -18,6 +18,7 @@ type
     procedure Limpar(var AMunicipio: TMunicipioDto);
     function Salvar(var AMunicipio: TMunicipioDto): Boolean;
     function Alterar(var AMunicipio: TMunicipioDto): Boolean;
+    function VerificarMunicipio(AMunicipio: TMunicipioDto):Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -76,6 +77,14 @@ function TMunicipioControlerInserirAlterar.Salvar(var AMunicipio
 begin
   AMunicipio.idMunicipio := oModelMunicipio.BuscarID;
   Result := oModelMunicipio.Inserir(AMunicipio);
+end;
+
+
+
+function TMunicipioControlerInserirAlterar.VerificarMunicipio(
+  AMunicipio: TMunicipioDto): Boolean;
+begin
+  Result := oModelMunicipio.VerificarMunicipio(AMunicipio);
 end;
 
 end.

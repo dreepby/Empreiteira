@@ -4,6 +4,7 @@ inherited frmMunicipio: TfrmMunicipio
   ClientWidth = 444
   FormStyle = fsMDIChild
   Visible = True
+  OnActivate = FormActivate
   OnCreate = FormCreate
   ExplicitWidth = 450
   ExplicitHeight = 244
@@ -12,7 +13,7 @@ inherited frmMunicipio: TfrmMunicipio
   inherited Panel1: TPanel
     Top = 175
     Width = 444
-    ExplicitTop = 165
+    ExplicitTop = 175
     ExplicitWidth = 444
     inherited Panel3: TPanel
       Left = 245
@@ -45,14 +46,14 @@ inherited frmMunicipio: TfrmMunicipio
   inherited Panel2: TPanel
     Width = 444
     Height = 175
-    ExplicitWidth = 573
-    ExplicitHeight = 249
+    ExplicitWidth = 444
+    ExplicitHeight = 175
     object Label1: TLabel
       Left = 48
       Top = 81
-      Width = 43
+      Width = 33
       Height = 13
-      Caption = 'Municipio'
+      Caption = 'Estado'
     end
     object edtNome: TLabeledEdit
       Left = 48
