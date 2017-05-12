@@ -59,13 +59,19 @@ begin
     if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
     [mbyes, mbno], 0) = mryes then
   begin
-    if oController.Excluir(DBGrid1.Fields[0].AsInteger) then
+  if oController.VerificarExcluir(DBGrid1.Fields[0].AsInteger) then
+    begin
+      if oController.Excluir(DBGrid1.Fields[0].AsInteger) then
     begin
       ShowMessage('Excluido com sucesso.');
       oController.ListarMunicipios(dsTabela);
     end
     else
       ShowMessage('Houve algum erro!!');
+    end
+    else
+      ShowMessage('Impossível excluir, pois existe um ou mais registros vinculados com esse!');
+
   end;
 end;
 

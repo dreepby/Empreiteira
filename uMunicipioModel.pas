@@ -18,6 +18,7 @@ type
     function Deletar(const AIDUF: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
     function VerificarMunicipio(AMunicipio: TMunicipioDto): Boolean;
+    function VerificarExcluir(AId: integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -108,6 +109,24 @@ begin
     Result := False;
     oQueryListarMunicipios.Open
       ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
+  end;
+end;
+
+function TMunicipioModel.VerificarExcluir(AId: integer): Boolean;
+var
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idBairro from bairro where bairro_idMunicipio = ' + IntToStr(AId));
+    if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
   end;
 end;
 

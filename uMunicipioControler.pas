@@ -19,6 +19,7 @@ type
     function Excluir(id: Integer): Boolean;
     function Pesquisar(ANome : String): Boolean;
     procedure AbrirMunicipioUpdate(AMunicipio: TMunicipioDto);
+    function VerificarExcluir(AId: Integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -95,6 +96,11 @@ end;
 function TMunicipioControler.Pesquisar(ANome: String): Boolean;
 begin
   Result := oModelMunicipio.Pesquisar(ANome);
+end;
+
+function TMunicipioControler.VerificarExcluir(AId: Integer): Boolean;
+begin
+  Result := oModelMunicipio.VerificarExcluir(Aid);
 end;
 
 end.
