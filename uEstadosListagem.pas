@@ -59,15 +59,19 @@ begin
   if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
     [mbyes, mbno], 0) = mryes then
   begin
-    if oController.Excluir(DBGrid1.Fields[0].AsInteger) then
+    if oController.VerificarExcluir(DBGrid1.Fields[0].AsInteger) then
     begin
-      ShowMessage('Excluido com sucesso.');
-      oController.ListarEstados(dsTabela);
+      if oController.Excluir(DBGrid1.Fields[0].AsInteger) then
+      begin
+        ShowMessage('Excluido com sucesso.');
+        oController.ListarEstados(dsTabela);
+      end
+      else
+        ShowMessage('Houve algum erro!!');
     end
     else
-      ShowMessage('Houve algum erro!!');
+      ShowMessage('Impossível excluir, pois existe um ou mais registros vinculados com esse!');
   end;
-
 end;
 
 procedure TfrmListagemEstados.btnFecharClick(Sender: TObject);
@@ -143,7 +147,7 @@ begin
     end;
   end;
 
-   if key = vk_F2 then
+  if Key = vk_F2 then
     edtPesquisa.SetFocus;
 end;
 

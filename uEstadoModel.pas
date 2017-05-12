@@ -18,6 +18,8 @@ type
 
     function Alterar(var AEstado: TEstadoDto): Boolean;
 
+    function VerificarExcluir(AId: integer): Boolean;
+
     function Deletar(const AIDUF: Integer): Boolean;
 
     function ADDListaHash(var oEstado: TObjectDictionary<string,
@@ -180,6 +182,24 @@ begin
   begin
     Result := False;
     oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
+  end;
+end;
+
+function TEstadoModel.VerificarExcluir(AId: integer): Boolean;
+var
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idMunicipio from municipio where municipio_iduf = ' + IntToStr(AId));
+    if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
   end;
 end;
 

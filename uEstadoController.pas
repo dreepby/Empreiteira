@@ -13,20 +13,14 @@ type
   public
 
     function Excluir(id: Integer): Boolean;
-
     function Salvar(var AEstado: TEstadoDto): Boolean;
-
     procedure Limpar(var AEstado: TEstadoDto);
-
     function Buscar(var AEstado: TEstadoDto): Boolean;
-
     procedure ListarEstados(var DsEstado: TDataSource);
-
     procedure abrirEstadoUpdate(AEstado: TEstadoDto);
-
     procedure abrirEstado();
-
-    function Pesquisar(ANome : String): Boolean;
+    function Pesquisar(ANome: String): Boolean;
+    function VerificarExcluir(AId: Integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -40,7 +34,7 @@ procedure TEstadoControler.abrirEstado();
 begin
   if (not(Assigned(frmEstados))) then
     frmEstados := TfrmEstados.Create(nil);
-    Limpar(frmEstados.oEstado);
+  Limpar(frmEstados.oEstado);
   frmEstados.Show;
 end;
 
@@ -97,7 +91,6 @@ begin
   oModelEstado.ListarEstados(DsEstado);
 end;
 
-
 function TEstadoControler.Pesquisar(ANome: String): Boolean;
 begin
   Result := oModelEstado.Pesquisar(ANome);
@@ -114,6 +107,11 @@ begin
 
     Result := oModelEstado.Inserir(AEstado);
   end;
+end;
+
+function TEstadoControler.VerificarExcluir(AId: Integer): Boolean;
+begin
+  Result := oModelEstado.VerificarExcluir(Aid);
 end;
 
 end.
