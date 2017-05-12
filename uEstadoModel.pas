@@ -67,7 +67,7 @@ begin
         oEstadoDTO.Nome := oQuery.FieldByName('nome').AsString;
 
         // Adiciona o objeto na lista hash
-        oEstado.Add(oEstadoDTO.UF, oEstadoDTO);
+        oEstado.Add(oEstadoDTO.Nome, oEstadoDTO);
 
         // Vai para o próximo registro
         oQuery.Next;
