@@ -9,7 +9,6 @@ uses
   uEstadoDto in 'uEstadoDto.pas',
   uEstadoModel in 'uEstadoModel.pas',
   uEstados in 'uEstados.pas' {frmEstados},
-  uListaEstado in 'uListaEstado.pas',
   uListagemBase in 'uListagemBase.pas' {frmListagemBase},
   uPrincipal in 'uPrincipal.pas' {frmPrincipal},
   uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados},
@@ -19,7 +18,13 @@ uses
   uMunicipioModel in 'uMunicipioModel.pas',
   uMunicipioControler in 'uMunicipioControler.pas',
   uMunicipioDto in 'uMunicipioDto.pas',
-  uMunicipioControlerInserirAlterar in 'uMunicipioControlerInserirAlterar.pas';
+  uMunicipioControlerInserirAlterar in 'uMunicipioControlerInserirAlterar.pas',
+  uBairros in 'uBairros.pas' {frmCadastroBase1},
+  uBairrosListagem in 'uBairrosListagem.pas' {frmListagemBairro},
+  uBairrosControler in 'uBairrosControler.pas',
+  uBairrosControlerInserirAlterar in 'uBairrosControlerInserirAlterar.pas',
+  uBairrosModel in 'uBairrosModel.pas',
+  uBairrosDto in 'uBairrosDto.pas';
 
 {$R *.res}
 
@@ -27,5 +32,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TfrmCadastroBase1, frmCadastroBase1);
+  Application.CreateForm(TfrmListagemBairro, frmListagemBairro);
   Application.Run;
 end.
