@@ -54,7 +54,7 @@ begin
     if Assigned(oQuery) then
       FreeAndNil(oQuery);
   end;
-end
+end;
 
 constructor TBairrosModel.Create;
 begin
