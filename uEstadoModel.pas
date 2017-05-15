@@ -5,7 +5,7 @@ interface
 
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
-  FireDAC.Comp.DataSet, System.Generics.Collections, uListaEstado,
+  FireDAC.Comp.DataSet, System.Generics.Collections,
   uEstadoDto, uClassSingletonConexao;
 
 type
