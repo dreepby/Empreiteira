@@ -4,10 +4,14 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uCadastroBase, Vcl.Buttons, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uCadastroBase, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.StdCtrls, uBairrosDto, uBairrosControlerInserirAlterar;
 
 type
-  TfrmCadastroBase1 = class(TfrmCadastroBase)
+  TfrmBairros = class(TfrmCadastroBase)
+    edtNome: TLabeledEdit;
+    Label1: TLabel;
+    cbMunicipio: TComboBox;
   private
     { Private declarations }
   public
@@ -15,7 +19,7 @@ type
   end;
 
 var
-  frmCadastroBase1: TfrmCadastroBase1;
+  frmBairros: TfrmBairros;
 
 implementation
 
