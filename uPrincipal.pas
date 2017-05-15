@@ -28,7 +28,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actListagemEstadoExecute(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure actListagemMunicipioExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
   private
@@ -81,13 +80,6 @@ begin
     frmListagemMunicipios := TfrmListagemMunicipios.Create(Self);
   // Manda mostrar o formulário
   frmListagemMunicipios.Show;
-end;
-
-procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-
-  if Assigned(oControllerEstado) then
-    FreeAndNil(oControllerEstado);
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
