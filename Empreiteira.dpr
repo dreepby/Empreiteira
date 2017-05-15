@@ -19,7 +19,7 @@ uses
   uMunicipioControler in 'uMunicipioControler.pas',
   uMunicipioDto in 'uMunicipioDto.pas',
   uMunicipioControlerInserirAlterar in 'uMunicipioControlerInserirAlterar.pas',
-  uBairros in 'uBairros.pas' {frmCadastroBase1},
+  uBairros in 'uBairros.pas' {frmBairros},
   uBairrosListagem in 'uBairrosListagem.pas' {frmListagemBairro},
   uBairrosControler in 'uBairrosControler.pas',
   uBairrosControlerInserirAlterar in 'uBairrosControlerInserirAlterar.pas',
@@ -32,7 +32,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TfrmCadastroBase1, frmCadastroBase1);
+  Application.CreateForm(TfrmBairros, frmBairros);
   Application.CreateForm(TfrmListagemBairro, frmListagemBairro);
   Application.Run;
 end.
