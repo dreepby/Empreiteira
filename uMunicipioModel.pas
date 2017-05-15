@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
-  FireDAC.Comp.DataSet, uMunicipioDto, uClassSingletonConexao;
+  FireDAC.Comp.DataSet, uMunicipioDto, uClassSingletonConexao, System.Generics.Collections;
 
 type
   TMunicipioModel = class
@@ -15,10 +15,12 @@ type
     function Alterar(var AMunicipio: TMunicipioDto): Boolean;
     function Inserir(var AMunicipio: TMunicipioDto): Boolean;
     procedure ListarMunicipios(var DsEstado: TDataSource);
-    function Deletar(const AIDUF: Integer): Boolean;
+    function Deletar(const AIDMunicipio: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
     function VerificarMunicipio(AMunicipio: TMunicipioDto): Boolean;
     function VerificarExcluir(AId: integer): Boolean;
+    function ADDListaHash(var oMunicipio: TObjectDictionary<string,
+      TMunicipioDto>): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -27,6 +29,45 @@ type
 implementation
 
 { TMunicipioModel }
+
+function TMunicipioModel.ADDListaHash(
+  var oMunicipio: TObjectDictionary<string, TMunicipioDto>): Boolean;
+var
+  oMunicipioDTO: TMunicipioDto;
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select * from municipio');
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oMunicipioDTO := TMunicipioDto.Create;
+
+        // Atribui os valores
+        oMunicipioDTO.idMunicipio := oQuery.FieldByName('idMunicipio').AsInteger;
+        oMunicipioDTO.Nome := oQuery.FieldByName('UF').AsString;
+
+        // Adiciona o objeto na lista hash
+        oMunicipio.Add(oMunicipioDTO.Nome, oMunicipioDTO);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+
+end;
 
 function TMunicipioModel.Alterar(var AMunicipio: TMunicipioDto): Boolean;
 var
@@ -61,10 +102,10 @@ begin
   oQueryListarMunicipios := TFDQuery.Create(nil);
 end;
 
-function TMunicipioModel.Deletar(const AIDUF: Integer): Boolean;
+function TMunicipioModel.Deletar(const AIDMunicipio: Integer): Boolean;
 begin
   Result := TSingletonConexao.GetInstancia.ExecSQL
-    ('delete from municipio where idmunicipio = ' + IntToStr(AIDUF)) > 0;
+    ('delete from municipio where idmunicipio = ' + IntToStr(AIDMunicipio)) > 0;
 end;
 
 destructor TMunicipioModel.Destroy;
