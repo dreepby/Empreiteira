@@ -9,9 +9,12 @@ Uses
 type
   TBairrosControlerInserirAlterar = class
   private
+    oListaMunicipios: TDictionary<string, TMunicipioDto>;
     oModelBairros: TBairrosModel;
     oModelMunicipio: TMunicipioModel;
   public
+    function ADDListaHash(var oMunicipio: TObjectDictionary<string,
+      TMunicipioDto>): Boolean;
     procedure Limpar(var ABairros: TBairrosDto);
     function Salvar(var ABairros: TBairrosDto): Boolean;
     function Alterar(var ABairros: TBairrosDto): Boolean;
@@ -24,6 +27,12 @@ type
 implementation
 
 { TBairrosControlerInserirAlterar }
+
+function TBairrosControlerInserirAlterar.ADDListaHash(var oMunicipio
+  : TObjectDictionary<string, TMunicipioDto>): Boolean;
+begin
+  Result := oModelMunicipio.ADDListaHash(oMunicipio);
+end;
 
 function TBairrosControlerInserirAlterar.Alterar(var ABairros
   : TBairrosDto): Boolean;
