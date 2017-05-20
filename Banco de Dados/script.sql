@@ -20,6 +20,7 @@ USE `Empreiteira` ;
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`UF` (
   `idUF` INT NOT NULL,
   `Nome` VARCHAR(45) NULL,
+  `UF` VARCHAR(45) NULL,
   PRIMARY KEY (`idUF`))
 ENGINE = InnoDB;
 
@@ -71,11 +72,12 @@ CREATE TABLE IF NOT EXISTS `Empreiteira`.`Cliente` (
   `Rua` VARCHAR(255) NULL,
   `Numero` VARCHAR(255) NULL,
   `Complemento` VARCHAR(45) NULL,
-  `Bairro_idBairro` INT NOT NULL,
-  PRIMARY KEY (`idCliente`, `Bairro_idBairro`),
-  INDEX `fk_Cliente_Bairro1_idx` (`Bairro_idBairro` ASC),
+  `CEP` VARCHAR(10) NULL,
+  `cliente_idBairro` INT NOT NULL,
+  PRIMARY KEY (`idCliente`, `cliente_idBairro`),
+  INDEX `fk_Cliente_Bairro1_idx` (`cliente_idBairro` ASC),
   CONSTRAINT `fk_Cliente_Bairro1`
-    FOREIGN KEY (`Bairro_idBairro`)
+    FOREIGN KEY (`cliente_idBairro`)
     REFERENCES `Empreiteira`.`Bairro` (`idBairro`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
