@@ -1,10 +1,10 @@
-inherited frmMunicipio: TfrmMunicipio
-  Caption = 'Listagem de Municipios'
+inherited frmBairro: TfrmBairro
+  Caption = 'frmBairro'
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel2: TPanel
+    ExplicitTop = 56
     inherited PageControl1: TPageControl
-      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -14,21 +14,22 @@ inherited frmMunicipio: TfrmMunicipio
           Columns = <
             item
               Expanded = False
-              FieldName = 'idMunicipio'
+              FieldName = 'idBairro'
               Title.Caption = 'C'#243'digo'
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'Nome'
-              Width = 145
+              FieldName = 'nome'
+              Title.Caption = 'Nome'
+              Width = 307
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'estado'
-              Title.Caption = 'Estado'
-              Width = 500
+              FieldName = 'nomeMunicipio'
+              Title.Caption = 'Municipio'
+              Width = 331
               Visible = True
             end>
         end
@@ -41,9 +42,9 @@ inherited frmMunicipio: TfrmMunicipio
         object Label2: TLabel
           Left = 203
           Top = 103
-          Width = 33
+          Width = 43
           Height = 13
-          Caption = 'Estado'
+          Caption = 'Municipio'
         end
         object edtNome: TLabeledEdit
           Left = 203
@@ -62,7 +63,7 @@ inherited frmMunicipio: TfrmMunicipio
           TabOrder = 0
           OnKeyPress = edtNomeKeyPress
         end
-        object cbEstado: TComboBox
+        object cbMunicipio: TComboBox
           Left = 203
           Top = 122
           Width = 329
@@ -74,7 +75,7 @@ inherited frmMunicipio: TfrmMunicipio
           Font.Style = []
           ParentFont = False
           TabOrder = 1
-          OnKeyPress = cbEstadoKeyPress
+          OnKeyPress = cbMunicipioKeyPress
         end
       end
     end

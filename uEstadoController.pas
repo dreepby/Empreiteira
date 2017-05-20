@@ -112,6 +112,11 @@ begin
   if Assigned(oModelEstado) then
     FreeAndNil(oModelEstado);
 
+  if Assigned(frmEstados) then
+  begin
+    frmEstados.Close;
+    FreeAndNil(frmEstados);
+  end;
   inherited;
 end;
 
@@ -170,14 +175,6 @@ end;
 procedure TEstadoControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (Shift = [ssCtrl]) then
-  begin
-    case Key of
-      87:
-        fecharEstado(Self);
-    end;
-  end;
-
   if Key = VK_F2 then
     frmEstados.edtPesquisa.SetFocus;
 

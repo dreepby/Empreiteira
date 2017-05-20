@@ -31,7 +31,7 @@ type
 
     procedure ListarEstados(var DsEstado: TDataSource);
 
-    function VerificarUF(var AModel: TEstadoModel; AUF: String; out AId: integer): Boolean;
+    function VerificarUF(AUF: String; out AId: integer): Boolean;
 
     function Pesquisar(ANome: String): Boolean;
 
@@ -204,7 +204,7 @@ begin
   end;
 end;
 
-function TEstadoModel.VerificarUF(var AModel: TEstadoModel; AUF: String; out AId: integer): Boolean;
+function TEstadoModel.VerificarUF(AUF: String; out AId: integer): Boolean;
 var
   oQuery: TFDQuery;
 begin

@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls, uMunicipioControler;
+  Vcl.ExtCtrls, uMunicipioControler, uBairroControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -19,14 +19,14 @@ type
     Estados1: TMenuItem;
     actMunicipio: TAction;
     Municipios1: TMenuItem;
+    actBairro: TAction;
+    Bairros1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure actBairroExecute(Sender: TObject);
   private
     { Private declarations }
-    oControllerEstado: TEstadoControler;
-
     procedure WMClose(var Message: TWMClose); message WM_Close;
   public
     { Public declarations }
@@ -46,21 +46,25 @@ begin
     Application.Terminate;
 end;
 
+procedure TfrmPrincipal.actBairroExecute(Sender: TObject);
+begin
+  if not(Assigned(oBairroControler)) then
+    oBairroControler := TBairroControler.Create;
+  oBairroControler.abrirForm;
+end;
+
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);
 begin
-  oControllerEstado.abrirForm;
+  if not(Assigned(oEstadoControler)) then
+    oEstadoControler := TEstadoControler.Create;
+  oEstadoControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actMunicipioExecute(Sender: TObject);
 begin
-  // oControllerMunicipio.abrirForm;
-end;
-
-procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-
-  if Assigned(oControllerEstado) then
-    FreeAndNil(oControllerEstado);
+  if not(Assigned(oMunicipioControler)) then
+    oMunicipioControler := TMunicipioControler.Create;
+  oMunicipioControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
@@ -77,10 +81,6 @@ begin
     Application.Terminate;
     exit;
   end;
-
-  if not(Assigned(oControllerEstado)) then
-    oControllerEstado := TEstadoControler.Create;
-
 end;
 
 end.

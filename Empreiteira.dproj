@@ -114,32 +114,24 @@
         <DCCReference Include="uMunicipioModel.pas"/>
         <DCCReference Include="uMunicipioControler.pas"/>
         <DCCReference Include="uMunicipioDto.pas"/>
-        <DCCReference Include="uMunicipioControlerInserirAlterar.pas"/>
-        <DCCReference Include="uBairros.pas">
-            <Form>frmBairros</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uBairrosListagem.pas">
-            <Form>frmListagemBairro</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uBairrosControler.pas"/>
-        <DCCReference Include="uBairrosControlerInserirAlterar.pas"/>
-        <DCCReference Include="uBairrosModel.pas"/>
-        <DCCReference Include="uBairrosDto.pas"/>
+        <DCCReference Include="uBairroControler.pas"/>
+        <DCCReference Include="uBairroModel.pas"/>
+        <DCCReference Include="uBairroDto.pas"/>
         <DCCReference Include="uEstadoRegra.pas"/>
         <DCCReference Include="uEstado.pas">
             <Form>frmEstados</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uListagemBase.pas">
-            <Form>frmListagemBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uMunicipio.pas">
             <Form>frmMunicipio</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uMunicipioRegra.pas"/>
+        <DCCReference Include="uBairro.pas">
+            <Form>frmBairro</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uBairroRegra.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

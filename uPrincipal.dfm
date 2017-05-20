@@ -16,7 +16,6 @@ object frmPrincipal: TfrmPrincipal
   Position = poDesktopCenter
   Visible = True
   WindowState = wsMaximized
-  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -30,6 +29,9 @@ object frmPrincipal: TfrmPrincipal
       end
       object Municipios1: TMenuItem
         Action = actMunicipio
+      end
+      object Bairros1: TMenuItem
+        Action = actBairro
       end
     end
     object Sobre1: TMenuItem
@@ -46,6 +48,10 @@ object frmPrincipal: TfrmPrincipal
     object actMunicipio: TAction
       Caption = 'Municipios'
       OnExecute = actMunicipioExecute
+    end
+    object actBairro: TAction
+      Caption = 'Bairros'
+      OnExecute = actBairroExecute
     end
   end
 end

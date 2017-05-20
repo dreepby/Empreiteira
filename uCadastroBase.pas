@@ -28,7 +28,6 @@ type
     btnExcluir: TBitBtn;
     BtnFechar: TBitBtn;
     dsTabela: TDataSource;
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnCancelarMouseEnter(Sender: TObject);
   private
     { Private declarations }
@@ -45,11 +44,6 @@ implementation
 
 procedure TfrmCadastroBase.btnCancelarMouseEnter(Sender: TObject);
 begin;
-end;
-
-procedure TfrmCadastroBase.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  Action := caFree;
 end;
 
 end.

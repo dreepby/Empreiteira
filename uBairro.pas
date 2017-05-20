@@ -1,4 +1,4 @@
-unit uMunicipio;
+unit uBairro;
 
 interface
 
@@ -9,12 +9,12 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
-  TfrmMunicipio = class(TfrmCadastroBase)
+  TfrmBairro = class(TfrmCadastroBase)
     edtNome: TLabeledEdit;
+    cbMunicipio: TComboBox;
     Label2: TLabel;
-    cbEstado: TComboBox;
     procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
-    procedure cbEstadoKeyPress(Sender: TObject; var Key: Char);
+    procedure cbMunicipioKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -25,18 +25,18 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmMunicipio.cbEstadoKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmBairro.cbMunicipioKeyPress(Sender: TObject; var Key: Char);
 begin
   inherited;
-  if Key = #13 then
+   if Key = #13 then
     BtnSalvar.Click;
 end;
 
-procedure TfrmMunicipio.edtNomeKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmBairro.edtNomeKeyPress(Sender: TObject; var Key: Char);
 begin
   inherited;
   if Key = #13 then
-    cbEstado.SetFocus;
+    cbMunicipio.SetFocus;
 end;
 
 end.

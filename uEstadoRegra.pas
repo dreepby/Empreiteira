@@ -46,7 +46,7 @@ begin
 
   if AEstado.IdUF = 0 then
   begin
-    if (AModel.VerificarUF(AModel, AEstado.UF, VerificarID) = False) then
+    if (AModel.VerificarUF(AEstado.UF, VerificarID) = False) then
     begin
       AEstado.IdUF := AModel.BuscarID;
       if (AModel.Inserir(AEstado)) then
@@ -59,7 +59,7 @@ begin
   end
   else
   begin
-    if AModel.VerificarUF(AModel, AEstado.UF, VerificarID) then
+    if AModel.VerificarUF(AEstado.UF, VerificarID) then
     begin
       if VerificarID = AEstado.IdUF then
         If AModel.Alterar(AEstado) then

@@ -17,7 +17,6 @@ object frmCadastroBase: TfrmCadastroBase
   OldCreateOrder = False
   Position = poDesktopCenter
   Visible = True
-  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -81,6 +80,10 @@ object frmCadastroBase: TfrmCadastroBase
       TabOrder = 0
       object tsTabela: TTabSheet
         Caption = '&Tabela'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
@@ -101,6 +104,10 @@ object frmCadastroBase: TfrmCadastroBase
         Caption = '&Dados'
         Enabled = False
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end

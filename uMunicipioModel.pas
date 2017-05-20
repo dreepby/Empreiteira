@@ -17,7 +17,7 @@ type
     procedure ListarMunicipios(var DsEstado: TDataSource);
     function Deletar(const AIDMunicipio: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
-    function VerificarMunicipio(AMunicipio: TMunicipioDto): Boolean;
+    function VerificarMunicipio(AMunicipio: TMunicipioDto; out AId: integer): Boolean;
     function VerificarExcluir(AId: integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
       TMunicipioDto>): Boolean;
@@ -74,7 +74,7 @@ var
   sSql: String;
 begin
   sSql := 'update municipio set nome = ' + QuotedStr(AMunicipio.Nome) +
-    '     , municipio_idUf = ' + IntToStr(AMunicipio.idUf) +
+    '     , municipio_idUf = ' + IntToStr(AMunicipio.oEstado.IdUF) +
     ' where idMunicipio = ' + IntToStr(AMunicipio.idMunicipio);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
@@ -123,7 +123,7 @@ var
 begin
   sSql := 'insert into municipio (idMunicipio, Nome, Municipio_idUF) values (' +
     IntToStr(AMunicipio.idMunicipio) + ', ' + QuotedStr(AMunicipio.Nome) + ', '
-    + IntToStr(AMunicipio.idUf) + ')';
+    + IntToStr(AMunicipio.oEstado.IdUF) + ')';
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
@@ -171,7 +171,7 @@ begin
   end;
 end;
 
-function TMunicipioModel.VerificarMunicipio(AMunicipio: TMunicipioDto): Boolean;
+function TMunicipioModel.VerificarMunicipio(AMunicipio: TMunicipioDto; out AId: integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
@@ -179,9 +179,12 @@ begin
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select IdMunicipio from Municipio where Nome=' +
-      QuotedStr(AMunicipio.Nome) + ' AND Municipio_idUF='+IntToStr(AMunicipio.idUf));
-    if (oQuery.IsEmpty) then
-      Result := True
+      QuotedStr(AMunicipio.Nome) + ' AND Municipio_idUF='+IntToStr(AMunicipio.oEstado.IdUF));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      AId := oQuery.FieldByName('IdMunicipio').AsInteger;
+      Result := True;
+    end
     else
       Result := False;
   finally
