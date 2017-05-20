@@ -32,14 +32,15 @@ implementation
 
 procedure TMunicipioControler.AbrirMunicipio;
 begin
+{
   if (not(Assigned(frmMunicipio))) then
     frmMunicipio := TfrmMunicipio.Create(nil);
   Limpar(frmMunicipio.oMunicipio);
-  frmMunicipio.Show;
+  frmMunicipio.Show;}
 end;
 
 procedure TMunicipioControler.AbrirMunicipioUpdate(AMunicipio: TMunicipioDto);
-begin
+begin     {
   if (not(Assigned(frmMunicipio))) then
     frmMunicipio := TfrmMunicipio.Create(nil);
   frmMunicipio.Caption := 'Alteração de Municipio';
@@ -47,7 +48,7 @@ begin
   frmMunicipio.edtNome.Text := AMunicipio.Nome;
   frmMunicipio.cbUf.ItemIndex := frmMunicipio.cbUf.Items.IndexOf(AMunicipio.nomeUf);
   frmMunicipio.oMunicipio.idMunicipio := AMunicipio.idMunicipio;
-  frmMunicipio.Show;
+  frmMunicipio.Show;   }
 end;
 
 constructor TMunicipioControler.Create;

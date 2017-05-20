@@ -6,9 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
-  uEstados,
-  Vcl.ActnList, Vcl.Menus, uEstadosListagem, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls, uMunicipioListagem, uMunicipioControler;
+  Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
+  Vcl.ExtCtrls, uMunicipioControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -18,22 +17,15 @@ type
     ActionList1: TActionList;
     actEstados: TAction;
     Estados1: TMenuItem;
-    Listagem1: TMenuItem;
-    actListagemEstado: TAction;
-    Estados2: TMenuItem;
-    actListagemMunicipio: TAction;
-    Municipio1: TMenuItem;
     actMunicipio: TAction;
     Municipios1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
-    procedure actListagemEstadoExecute(Sender: TObject);
-    procedure actListagemMunicipioExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     oControllerEstado: TEstadoControler;
-    oControllerMunicipio: TMunicipioControler;
 
     procedure WMClose(var Message: TWMClose); message WM_Close;
   public
@@ -56,30 +48,19 @@ end;
 
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);
 begin
-  oControllerEstado.abrirEstado();
+  oControllerEstado.abrirForm;
 end;
 
 procedure TfrmPrincipal.actMunicipioExecute(Sender: TObject);
 begin
-  oControllerMunicipio.AbrirMunicipio();
+  // oControllerMunicipio.abrirForm;
 end;
 
-procedure TfrmPrincipal.actListagemEstadoExecute(Sender: TObject);
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  // Verifica se a variável do formulário foi instanciada
-  if (not(Assigned(frmListagemEstados))) then
-    frmListagemEstados := TfrmListagemEstados.Create(Self);
-  // Manda mostrar o formulário
-  frmListagemEstados.Show;
-end;
 
-procedure TfrmPrincipal.actListagemMunicipioExecute(Sender: TObject);
-begin
-    // Verifica se a variável do formulário foi instanciada
-  if (not(Assigned(frmListagemMunicipios))) then
-    frmListagemMunicipios := TfrmListagemMunicipios.Create(Self);
-  // Manda mostrar o formulário
-  frmListagemMunicipios.Show;
+  if Assigned(oControllerEstado) then
+    FreeAndNil(oControllerEstado);
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
@@ -96,6 +77,9 @@ begin
     Application.Terminate;
     exit;
   end;
+
+  if not(Assigned(oControllerEstado)) then
+    oControllerEstado := TEstadoControler.Create;
 
 end;
 

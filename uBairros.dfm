@@ -4,6 +4,8 @@ inherited frmBairros: TfrmBairros
   ClientWidth = 444
   FormStyle = fsMDIChild
   Visible = True
+  OnActivate = FormActivate
+  OnCreate = FormCreate
   ExplicitWidth = 450
   ExplicitHeight = 244
   PixelsPerInch = 96
@@ -16,6 +18,9 @@ inherited frmBairros: TfrmBairros
     inherited Panel3: TPanel
       Left = 245
       ExplicitLeft = 245
+      inherited btnSalvar: TSpeedButton
+        OnClick = btnSalvarClick
+      end
     end
     inherited Panel4: TPanel
       Left = 324
@@ -49,6 +54,7 @@ inherited frmBairros: TfrmBairros
       Font.Style = []
       ParentFont = False
       TabOrder = 0
+      OnKeyPress = edtNomeKeyPress
     end
     object cbMunicipio: TComboBox
       Left = 48
@@ -63,6 +69,7 @@ inherited frmBairros: TfrmBairros
       Font.Style = []
       ParentFont = False
       TabOrder = 1
+      OnKeyPress = cbMunicipioKeyPress
     end
   end
 end

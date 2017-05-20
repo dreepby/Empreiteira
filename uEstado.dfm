@@ -1,5 +1,5 @@
-inherited frmMunicipio: TfrmMunicipio
-  Caption = 'Listagem de Municipios'
+inherited frmEstados: TfrmEstados
+  Caption = 'Listagem de Estados'
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel2: TPanel
@@ -9,37 +9,47 @@ inherited frmMunicipio: TfrmMunicipio
           Columns = <
             item
               Expanded = False
-              FieldName = 'idMunicipio'
+              FieldName = 'idUf'
               Title.Caption = 'C'#243'digo'
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'Nome'
+              FieldName = 'UF'
+              Width = 86
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'estado'
-              Title.Caption = 'Estado'
+              FieldName = 'Nome'
+              Width = 559
               Visible = True
             end>
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitTop = 27
-        ExplicitWidth = 746
-        ExplicitHeight = 239
-        object Label2: TLabel
+        object edtUF: TLabeledEdit
           Left = 203
-          Top = 103
-          Width = 33
-          Height = 13
-          Caption = 'Estado'
+          Top = 68
+          Width = 329
+          Height = 27
+          CharCase = ecUpperCase
+          EditLabel.Width = 13
+          EditLabel.Height = 13
+          EditLabel.Caption = 'UF'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 2
+          ParentFont = False
+          TabOrder = 0
+          OnKeyPress = edtUFKeyPress
         end
         object edtNome: TLabeledEdit
           Left = 203
-          Top = 68
+          Top = 120
           Width = 329
           Height = 27
           EditLabel.Width = 27
@@ -51,21 +61,8 @@ inherited frmMunicipio: TfrmMunicipio
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 0
-        end
-        object cbEstado: TComboBox
-          Left = 203
-          Top = 120
-          Width = 329
-          Height = 27
-          AutoDropDown = True
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
           TabOrder = 1
+          OnKeyPress = edtNomeKeyPress
         end
       end
     end

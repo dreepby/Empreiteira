@@ -11,19 +11,25 @@ uses
 type
   TfrmCadastroBase = class(TForm)
     Panel1: TPanel;
+    Label1: TLabel;
+    edtPesquisa: TEdit;
+    btnPesquisa: TButton;
     Panel2: TPanel;
+    PageControl1: TPageControl;
+    tsTabela: TTabSheet;
+    DBGrid1: TDBGrid;
+    tsDados: TTabSheet;
     Panel3: TPanel;
     Panel4: TPanel;
-    btnCancelar: TSpeedButton;
-    btnSalvar: TSpeedButton;
+    btnInserir: TBitBtn;
+    BtnAlterar: TBitBtn;
+    BtnSalvar: TBitBtn;
+    BtnCancelar: TBitBtn;
+    btnExcluir: TBitBtn;
+    BtnFechar: TBitBtn;
+    dsTabela: TDataSource;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btnFecharClick(Sender: TObject);
-    procedure btnCancelarClick(Sender: TObject);
-    procedure btnSalvarMouseEnter(Sender: TObject);
-    procedure btnSalvarMouseLeave(Sender: TObject);
     procedure btnCancelarMouseEnter(Sender: TObject);
-    procedure btnCancelarMouseLeave(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -38,50 +44,12 @@ implementation
 {$R *.dfm}
 
 procedure TfrmCadastroBase.btnCancelarMouseEnter(Sender: TObject);
-begin
-  Panel4.Color := $002B2FC6;
-end;
-
-procedure TfrmCadastroBase.btnCancelarMouseLeave(Sender: TObject);
-begin
-  Panel4.Color := $004F53D9;
-end;
-
-procedure TfrmCadastroBase.btnFecharClick(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TfrmCadastroBase.btnSalvarMouseEnter(Sender: TObject);
-begin
-  Panel3.Color := $003E8E3E;
-end;
-
-procedure TfrmCadastroBase.btnSalvarMouseLeave(Sender: TObject);
-begin
-  Panel3.Color := $005CB85C;
+begin;
 end;
 
 procedure TfrmCadastroBase.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
-end;
-
-procedure TfrmCadastroBase.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-    if (Shift = [ssCtrl]) then
-  begin
-    case Key of
-      87:
-        Close; // Código desejado
-    end;
-  end;
-end;
-
-procedure TfrmCadastroBase.btnCancelarClick(Sender: TObject);
-begin
-  Close;
 end;
 
 end.

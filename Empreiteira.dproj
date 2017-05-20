@@ -107,29 +107,8 @@
         <DCCReference Include="uEstadoController.pas"/>
         <DCCReference Include="uEstadoDto.pas"/>
         <DCCReference Include="uEstadoModel.pas"/>
-        <DCCReference Include="uEstados.pas">
-            <Form>frmEstados</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uListagemBase.pas">
-            <Form>frmListagemBase</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="uPrincipal.pas">
             <Form>frmPrincipal</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uEstadosListagem.pas">
-            <Form>frmListagemEstados</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uEstadoControlerInserirAlterar.pas"/>
-        <DCCReference Include="uMunicipioListagem.pas">
-            <Form>frmListagemMunicipios</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uMunicipio.pas">
-            <Form>frmMunicipio</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uMunicipioModel.pas"/>
@@ -148,6 +127,19 @@
         <DCCReference Include="uBairrosControlerInserirAlterar.pas"/>
         <DCCReference Include="uBairrosModel.pas"/>
         <DCCReference Include="uBairrosDto.pas"/>
+        <DCCReference Include="uEstadoRegra.pas"/>
+        <DCCReference Include="uEstado.pas">
+            <Form>frmEstados</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uListagemBase.pas">
+            <Form>frmListagemBase</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uMunicipio.pas">
+            <Form>frmMunicipio</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

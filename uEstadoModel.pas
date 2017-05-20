@@ -20,18 +20,18 @@ type
 
     function VerificarExcluir(AId: integer): Boolean;
 
-    function Deletar(const AIDUF: Integer): Boolean;
+    function Deletar(const AIDUF: integer): Boolean;
 
     function ADDListaHash(var oEstado: TObjectDictionary<string,
       TEstadoDto>): Boolean;
 
-    function BuscarID: Integer;
+    function BuscarID: integer;
 
     function Ler(var AEstado: TEstadoDto): Boolean;
 
     procedure ListarEstados(var DsEstado: TDataSource);
 
-    function VerificarUF(UF: string): Boolean;
+    function VerificarUF(var AModel: TEstadoModel; AUF: String; out AId: integer): Boolean;
 
     function Pesquisar(ANome: String): Boolean;
 
@@ -94,7 +94,7 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-function TEstadoModel.BuscarID: Integer;
+function TEstadoModel.BuscarID: integer;
 var
   oQuery: TFDQuery;
 begin
@@ -116,7 +116,7 @@ begin
   oQueryListarEstados := TFDQuery.Create(nil);
 end;
 
-function TEstadoModel.Deletar(const AIDUF: Integer): Boolean;
+function TEstadoModel.Deletar(const AIDUF: integer): Boolean;
 begin
   Result := TSingletonConexao.GetInstancia.ExecSQL
     ('delete from uf where iduf = ' + IntToStr(AIDUF)) > 0;
@@ -192,7 +192,8 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select idMunicipio from municipio where municipio_iduf = ' + IntToStr(AId));
+    oQuery.Open('select idMunicipio from municipio where municipio_iduf = ' +
+      IntToStr(AId));
     if (oQuery.IsEmpty) then
       Result := True
     else
@@ -203,16 +204,19 @@ begin
   end;
 end;
 
-function TEstadoModel.VerificarUF(UF: string): Boolean;
+function TEstadoModel.VerificarUF(var AModel: TEstadoModel; AUF: String; out AId: integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select iduf  from uf where UF = ' + QuotedStr(UF));
+    oQuery.Open('select iduf  from uf where UF = ' + QuotedStr(AUF));
     if (not(oQuery.IsEmpty)) then
-      Result := True
+    begin
+      AId := oQuery.FieldByName('iduf').AsInteger;
+      Result := True;
+    end
     else
       Result := False;
   finally

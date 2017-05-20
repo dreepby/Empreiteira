@@ -8,13 +8,7 @@ uses
   uEstadoController in 'uEstadoController.pas',
   uEstadoDto in 'uEstadoDto.pas',
   uEstadoModel in 'uEstadoModel.pas',
-  uEstados in 'uEstados.pas' {frmEstados},
-  uListagemBase in 'uListagemBase.pas' {frmListagemBase},
   uPrincipal in 'uPrincipal.pas' {frmPrincipal},
-  uEstadosListagem in 'uEstadosListagem.pas' {frmListagemEstados},
-  uEstadoControlerInserirAlterar in 'uEstadoControlerInserirAlterar.pas',
-  uMunicipioListagem in 'uMunicipioListagem.pas' {frmListagemMunicipios},
-  uMunicipio in 'uMunicipio.pas' {frmMunicipio},
   uMunicipioModel in 'uMunicipioModel.pas',
   uMunicipioControler in 'uMunicipioControler.pas',
   uMunicipioDto in 'uMunicipioDto.pas',
@@ -24,7 +18,13 @@ uses
   uBairrosControler in 'uBairrosControler.pas',
   uBairrosControlerInserirAlterar in 'uBairrosControlerInserirAlterar.pas',
   uBairrosModel in 'uBairrosModel.pas',
-  uBairrosDto in 'uBairrosDto.pas';
+  uBairrosDto in 'uBairrosDto.pas',
+  uEstadoRegra in 'uEstadoRegra.pas',
+  uEstado in 'uEstado.pas' {frmEstados},
+  uListagemBase in 'uListagemBase.pas' {frmListagemBase},
+  uMunicipio in 'uMunicipio.pas' {frmMunicipio},
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
@@ -32,7 +32,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TfrmBairros, frmBairros);
-  Application.CreateForm(TfrmListagemBairro, frmListagemBairro);
   Application.Run;
 end.

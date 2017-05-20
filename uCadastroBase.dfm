@@ -1,93 +1,266 @@
 object frmCadastroBase: TfrmCadastroBase
   Left = 0
   Top = 0
-  BorderIcons = [biSystemMenu]
+  BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Cadastro Base'
-  ClientHeight = 331
-  ClientWidth = 515
+  ClientHeight = 389
+  ClientWidth = 764
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
+  Visible = True
   OnClose = FormClose
-  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 290
-    Width = 515
-    Height = 41
-    Align = alBottom
-    Color = clBtnHighlight
-    ParentBackground = False
+    Top = 0
+    Width = 764
+    Height = 57
+    Align = alTop
     TabOrder = 0
-    object Panel3: TPanel
-      Left = 338
-      Top = 6
-      Width = 73
-      Height = 27
-      Caption = 'Salvar'
-      Color = 6076508
+    object Label1: TLabel
+      Left = 32
+      Top = 14
+      Width = 63
+      Height = 23
+      Caption = 'Buscar:'
       Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindow
-      Font.Height = -11
+      Font.Color = clWindowText
+      Font.Height = -19
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentBackground = False
+      ParentFont = False
+    end
+    object edtPesquisa: TEdit
+      Left = 195
+      Top = 11
+      Width = 329
+      Height = 31
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ParentFont = False
       TabOrder = 0
-      object btnSalvar: TSpeedButton
-        Left = -24
-        Top = -8
-        Width = 97
-        Height = 41
-        Flat = True
-        OnMouseEnter = btnSalvarMouseEnter
-        OnMouseLeave = btnSalvarMouseLeave
-      end
     end
-    object Panel4: TPanel
-      Left = 417
-      Top = 6
-      Width = 72
-      Height = 27
-      Caption = 'Cancelar'
-      Color = 5198809
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWhite
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentBackground = False
-      ParentFont = False
+    object btnPesquisa: TButton
+      Left = 562
+      Top = 11
+      Width = 75
+      Height = 31
+      Caption = 'Pesquisar'
       TabOrder = 1
-      object btnCancelar: TSpeedButton
-        Left = 0
-        Top = -8
-        Width = 88
-        Height = 49
-        Flat = True
-        OnClick = btnCancelarClick
-        OnMouseEnter = btnCancelarMouseEnter
-        OnMouseLeave = btnCancelarMouseLeave
-      end
     end
   end
   object Panel2: TPanel
     Left = 0
-    Top = 0
-    Width = 515
-    Height = 290
+    Top = 57
+    Width = 764
+    Height = 277
     Align = alClient
-    Color = clBtnHighlight
-    ParentBackground = False
+    BevelOuter = bvNone
+    BorderWidth = 5
     TabOrder = 1
+    object PageControl1: TPageControl
+      Left = 5
+      Top = 5
+      Width = 754
+      Height = 267
+      ActivePage = tsTabela
+      Align = alClient
+      TabOrder = 0
+      object tsTabela: TTabSheet
+        Caption = '&Tabela'
+        object DBGrid1: TDBGrid
+          Left = 0
+          Top = 0
+          Width = 746
+          Height = 239
+          Align = alClient
+          DataSource = dsTabela
+          Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+        end
+      end
+      object tsDados: TTabSheet
+        Caption = '&Dados'
+        Enabled = False
+        ImageIndex = 1
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 334
+    Width = 764
+    Height = 55
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    object Panel4: TPanel
+      Left = 263
+      Top = 0
+      Width = 501
+      Height = 55
+      Align = alRight
+      BevelOuter = bvNone
+      TabOrder = 0
+      object btnInserir: TBitBtn
+        Left = 0
+        Top = 5
+        Width = 80
+        Height = 40
+        Hint = 'Insert'
+        Caption = '&Inserir'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          33333333FF33333333FF333993333333300033377F3333333777333993333333
+          300033F77FFF3333377739999993333333333777777F3333333F399999933333
+          33003777777333333377333993333333330033377F3333333377333993333333
+          3333333773333333333F333333333333330033333333F33333773333333C3333
+          330033333337FF3333773333333CC333333333FFFFF77FFF3FF33CCCCCCCCCC3
+          993337777777777F77F33CCCCCCCCCC3993337777777777377333333333CC333
+          333333333337733333FF3333333C333330003333333733333777333333333333
+          3000333333333333377733333333333333333333333333333333}
+        NumGlyphs = 2
+        TabOrder = 0
+      end
+      object BtnAlterar: TBitBtn
+        Left = 84
+        Top = 5
+        Width = 80
+        Height = 40
+        Hint = 'Edit'
+        Caption = '&Alterar'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333000000
+          000033333377777777773333330FFFFFFFF03FF3FF7FF33F3FF700300000FF0F
+          00F077F777773F737737E00BFBFB0FFFFFF07773333F7F3333F7E0BFBF000FFF
+          F0F077F3337773F3F737E0FBFBFBF0F00FF077F3333FF7F77F37E0BFBF00000B
+          0FF077F3337777737337E0FBFBFBFBF0FFF077F33FFFFFF73337E0BF0000000F
+          FFF077FF777777733FF7000BFB00B0FF00F07773FF77373377373330000B0FFF
+          FFF03337777373333FF7333330B0FFFF00003333373733FF777733330B0FF00F
+          0FF03333737F37737F373330B00FFFFF0F033337F77F33337F733309030FFFFF
+          00333377737FFFFF773333303300000003333337337777777333}
+        NumGlyphs = 2
+        TabOrder = 1
+      end
+      object BtnSalvar: TBitBtn
+        Left = 166
+        Top = 5
+        Width = 80
+        Height = 40
+        Hint = 'Post'
+        Caption = '&Salvar'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+          555555555555555555555555555555555555555555FF55555555555559055555
+          55555555577FF5555555555599905555555555557777F5555555555599905555
+          555555557777FF5555555559999905555555555777777F555555559999990555
+          5555557777777FF5555557990599905555555777757777F55555790555599055
+          55557775555777FF5555555555599905555555555557777F5555555555559905
+          555555555555777FF5555555555559905555555555555777FF55555555555579
+          05555555555555777FF5555555555557905555555555555777FF555555555555
+          5990555555555555577755555555555555555555555555555555}
+        NumGlyphs = 2
+        TabOrder = 2
+      end
+      object BtnCancelar: TBitBtn
+        Left = 248
+        Top = 5
+        Width = 80
+        Height = 40
+        Hint = 'Cancel'
+        Caption = '&Cancelar'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          3333333333FFFFF3333333333999993333333333F77777FFF333333999999999
+          33333337777FF377FF3333993370739993333377FF373F377FF3399993000339
+          993337777F777F3377F3393999707333993337F77737333337FF993399933333
+          399377F3777FF333377F993339903333399377F33737FF33377F993333707333
+          399377F333377FF3377F993333101933399377F333777FFF377F993333000993
+          399377FF3377737FF7733993330009993933373FF3777377F7F3399933000399
+          99333773FF777F777733339993707339933333773FF7FFF77333333999999999
+          3333333777333777333333333999993333333333377777333333}
+        NumGlyphs = 2
+        TabOrder = 3
+      end
+      object btnExcluir: TBitBtn
+        Left = 330
+        Top = 5
+        Width = 80
+        Height = 40
+        Hint = 'Delete'
+        Caption = '&Excluir'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00500005000555
+          555557777F777555F55500000000555055557777777755F75555005500055055
+          555577F5777F57555555005550055555555577FF577F5FF55555500550050055
+          5555577FF77577FF555555005050110555555577F757777FF555555505099910
+          555555FF75777777FF555005550999910555577F5F77777775F5500505509990
+          3055577F75F77777575F55005055090B030555775755777575755555555550B0
+          B03055555F555757575755550555550B0B335555755555757555555555555550
+          BBB35555F55555575F555550555555550BBB55575555555575F5555555555555
+          50BB555555555555575F555555555555550B5555555555555575}
+        NumGlyphs = 2
+        TabOrder = 4
+      end
+      object BtnFechar: TBitBtn
+        Left = 413
+        Top = 5
+        Width = 80
+        Height = 40
+        Caption = '&Fechar'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00330000000000
+          03333377777777777F333301BBBBBBBB033333773F3333337F3333011BBBBBBB
+          0333337F73F333337F33330111BBBBBB0333337F373F33337F333301110BBBBB
+          0333337F337F33337F333301110BBBBB0333337F337F33337F333301110BBBBB
+          0333337F337F33337F333301110BBBBB0333337F337F33337F333301110BBBBB
+          0333337F337F33337F333301110BBBBB0333337F337FF3337F33330111B0BBBB
+          0333337F337733337F333301110BBBBB0333337F337F33337F333301110BBBBB
+          0333337F3F7F33337F333301E10BBBBB0333337F7F7F33337F333301EE0BBBBB
+          0333337F777FFFFF7F3333000000000003333377777777777333}
+        NumGlyphs = 2
+        TabOrder = 5
+      end
+    end
+  end
+  object dsTabela: TDataSource
+    Left = 705
+    Top = 5
   end
 end

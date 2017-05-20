@@ -61,7 +61,6 @@ begin
     FreeAndNil(oListaEstados);
   end;
   inherited;
-  inherited;
 end;
 
 procedure TMunicipioControlerInserirAlterar.Limpar(var AMunicipio
