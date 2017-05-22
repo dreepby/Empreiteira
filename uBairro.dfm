@@ -3,7 +3,6 @@ inherited frmBairro: TfrmBairro
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel2: TPanel
-    ExplicitTop = 56
     inherited PageControl1: TPageControl
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
@@ -41,14 +40,21 @@ inherited frmBairro: TfrmBairro
         ExplicitHeight = 239
         object Label2: TLabel
           Left = 203
-          Top = 103
+          Top = 143
           Width = 43
           Height = 13
           Caption = 'Municipio'
         end
+        object Label3: TLabel
+          Left = 203
+          Top = 87
+          Width = 33
+          Height = 13
+          Caption = 'Estado'
+        end
         object edtNome: TLabeledEdit
           Left = 203
-          Top = 68
+          Top = 54
           Width = 329
           Height = 27
           EditLabel.Width = 27
@@ -65,7 +71,22 @@ inherited frmBairro: TfrmBairro
         end
         object cbMunicipio: TComboBox
           Left = 203
-          Top = 122
+          Top = 162
+          Width = 329
+          Height = 27
+          Enabled = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnKeyPress = cbMunicipioKeyPress
+        end
+        object cbEstado: TComboBox
+          Left = 203
+          Top = 106
           Width = 329
           Height = 27
           Font.Charset = DEFAULT_CHARSET
@@ -75,7 +96,6 @@ inherited frmBairro: TfrmBairro
           Font.Style = []
           ParentFont = False
           TabOrder = 1
-          OnKeyPress = cbMunicipioKeyPress
         end
       end
     end

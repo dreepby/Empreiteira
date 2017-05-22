@@ -13,6 +13,8 @@ type
     edtNome: TLabeledEdit;
     cbMunicipio: TComboBox;
     Label2: TLabel;
+    Label3: TLabel;
+    cbEstado: TComboBox;
     procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
     procedure cbMunicipioKeyPress(Sender: TObject; var Key: Char);
   private

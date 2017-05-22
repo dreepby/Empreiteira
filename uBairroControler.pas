@@ -5,16 +5,17 @@ interface
 uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
+  uEstadoModel;
 
 type
   TBairroControler = class
   private
-    oMunicipioModel: TMunicipioModel;
     oBairroModel: TBairroModel;
     oBairroDto: TBairroDto;
     oBairroRegra: TBairroRegra;
     oListaMunicipios: TObjectDictionary<string, TMunicipioDto>;
+    oListaEstados: TObjectDictionary<string, TEstadoDto>;
     frmBairro: TfrmBairro;
 
     procedure Excluir(Sender: TObject);
@@ -27,7 +28,9 @@ type
     procedure Pesquisar(Sender: TObject);
     procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure PopularComboBox;
+    procedure PopularComboBoxEstado;
+    procedure PopularComboBoxMunicipio(AID: Integer);
+    procedure OnExitCbEstado(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -71,7 +74,7 @@ begin
   frmBairro.Caption := 'Alteração de Bairro';
   frmBairro.edtNome.Text := frmBairro.DBGrid1.Fields[1].AsString;
 
-  PopularComboBox;
+  PopularComboBoxEstado;
 
   frmBairro.cbMunicipio.ItemIndex := frmBairro.cbMunicipio.Items.IndexOf
     (oBairroDto.oMunicipio.Nome);
@@ -96,6 +99,7 @@ begin
   frmBairro.BtnSalvar.Enabled := False;
   frmBairro.BtnCancelar.Enabled := False;
   frmBairro.edtNome.Text := EmptyStr;
+  frmBairro.cbEstado.ItemIndex := -1;
   frmBairro.cbMunicipio.ItemIndex := -1;
   frmBairro.Caption := 'Listagem de Bairros';
   oBairroRegra.Limpar(oBairroDto);
@@ -103,18 +107,16 @@ end;
 
 constructor TBairroControler.Create;
 begin
-  oMunicipioModel := TMunicipioModel.Create;
   oBairroModel := TBairroModel.Create;
   oBairroDto := TBairroDto.Create;
   oBairroRegra := TBairroRegra.Create;
   oListaMunicipios := TObjectDictionary<string, TMunicipioDto>.Create
     ([doOwnsValues]);
+  oListaEstados := TObjectDictionary<string, TEstadoDto>.Create([doOwnsValues]);
 end;
 
 destructor TBairroControler.Destroy;
 begin
-  if Assigned(oMunicipioModel) then
-    FreeAndNil(oMunicipioModel);
 
   if Assigned(oBairroModel) then
     FreeAndNil(oBairroModel);
@@ -131,6 +133,12 @@ begin
     FreeAndNil(oListaMunicipios);
   end;
 
+  if Assigned(oListaEstados) then
+  begin
+    oListaEstados.Clear;
+    FreeAndNil(oListaEstados);
+  end;
+
   if Assigned(frmBairro) then
   begin
     frmBairro.Close;
@@ -141,7 +149,25 @@ end;
 
 procedure TBairroControler.Excluir(Sender: TObject);
 begin
-
+  if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
+    [mbyes, mbno], 0) = mryes then
+  begin
+    if oBairroRegra.VerificarExcluir(oBairroModel,
+      frmBairro.DBGrid1.Fields[0].AsInteger) then
+    begin
+      if oBairroRegra.Deletar(oBairroModel,
+        frmBairro.DBGrid1.Fields[0].AsInteger) then
+      begin
+        ShowMessage('Excluido com sucesso.');
+        ListarBairros;
+      end
+      else
+        ShowMessage('Houve algum erro!!');
+    end
+    else
+      ShowMessage
+        ('Impossível excluir, pois existe um ou mais registros vinculados com esse!');
+  end;
 end;
 
 procedure TBairroControler.fecharBairro(Sender: TObject);
@@ -166,12 +192,18 @@ begin
   frmBairro.BtnSalvar.Enabled := True;
   frmBairro.BtnCancelar.Enabled := True;
   frmBairro.edtNome.SetFocus;
-  PopularComboBox;
+  PopularComboBoxEstado;
 end;
 
 procedure TBairroControler.ListarBairros;
 begin
   oBairroModel.ListarBairros(frmBairro.dsTabela);
+end;
+
+procedure TBairroControler.OnExitCbEstado(Sender: TObject);
+begin
+  PopularComboBoxMunicipio(oListaEstados.Items
+    [frmBairro.cbEstado.Items[frmBairro.cbEstado.ItemIndex]].IdUF);
 end;
 
 procedure TBairroControler.OnKeyDownForm(Sender: TObject; var Key: Word;
@@ -187,7 +219,7 @@ end;
 procedure TBairroControler.OnKeyPressEdtPesquisa(Sender: TObject;
   var Key: Char);
 begin
-    if Key = #8 then
+  if Key = #8 then
   begin
     if Length(Trim(frmBairro.edtPesquisa.Text)) = 1 then
       ListarBairros;
@@ -202,9 +234,40 @@ begin
 
 end;
 
-procedure TBairroControler.PopularComboBox;
+procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
+var
+  sIndice: String;
+  oMunicipioModel: TMunicipioModel;
 begin
+  oMunicipioModel := TMunicipioModel.Create;
+  oListaMunicipios.Clear;
+  if (oMunicipioModel.ADDListaHash(oListaMunicipios)) then
+  begin
+    for sIndice in oListaMunicipios.Keys do
+      frmBairro.cbMunicipio.AddItem(sIndice, oListaMunicipios);
+  end;
 
+  if Assigned(oMunicipioModel) then
+    FreeAndNil(oMunicipioModel);
+end;
+
+procedure TBairroControler.PopularComboBoxEstado;
+var
+  oEstadoModel: TEstadoModel;
+  sIndice: String;
+begin
+  oEstadoModel := TEstadoModel.Create;
+  oListaEstados.Clear;
+  frmBairro.cbEstado.Clear;
+  frmBairro.cbMunicipio.Clear;
+  if (oEstadoModel.ADDListaHash(oListaEstados)) then
+  begin
+    for sIndice in oListaEstados.Keys do
+      frmBairro.cbEstado.AddItem(sIndice, oListaEstados);
+  end;
+
+  if Assigned(oEstadoModel) then
+    FreeAndNil(oEstadoModel);
 end;
 
 procedure TBairroControler.Salvar(Sender: TObject);
@@ -215,7 +278,8 @@ end;
 initialization
 
 finalization
-  if Assigned(oBairroControler) then
-    FreeAndNil(oBairroControler);
+
+if Assigned(oBairroControler) then
+  FreeAndNil(oBairroControler);
 
 end.
