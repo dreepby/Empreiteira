@@ -4,7 +4,6 @@ inherited frmMunicipio: TfrmMunicipio
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
-      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24

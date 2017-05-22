@@ -52,7 +52,8 @@ begin
 
         // Atribui os valores
         oMunicipioDTO.idMunicipio := oQuery.FieldByName('idMunicipio').AsInteger;
-        oMunicipioDTO.Nome := oQuery.FieldByName('UF').AsString;
+        oMunicipioDTO.Nome := oQuery.FieldByName('Nome').AsString;
+        oMunicipioDTO.oEstado.IdUF := oQuery.FieldByName('Municipio_idUF').AsInteger;
 
         // Adiciona o objeto na lista hash
         oMunicipio.Add(oMunicipioDTO.Nome, oMunicipioDTO);

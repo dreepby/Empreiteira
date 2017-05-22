@@ -11,7 +11,6 @@ type
   TMunicipioControler = class
   private
     oListaEstados: TObjectDictionary<string, TEstadoDto>;
-    oModelEstado: TEstadoModel;
     oModelMunicipio: TMunicipioModel;
     oRegraMunicipio: TMunicipioRegra;
     oMunicipioDto: TMunicipioDto;
@@ -106,7 +105,6 @@ end;
 constructor TMunicipioControler.Create;
 begin
   oModelMunicipio := TMunicipioModel.Create;
-  oModelEstado := TEstadoModel.Create;
   oListaEstados := TObjectDictionary<string, TEstadoDto>.Create([doOwnsValues]);
   oRegraMunicipio := TMunicipioRegra.Create;
   oMunicipioDto := TMunicipioDto.Create;
@@ -116,9 +114,6 @@ destructor TMunicipioControler.Destroy;
 begin
   if Assigned(oModelMunicipio) then
     FreeAndNil(oModelMunicipio);
-
-  if Assigned(oModelEstado) then
-    FreeAndNil(oModelEstado);
 
   if Assigned(oRegraMunicipio) then
     FreeAndNil(oRegraMunicipio);
@@ -232,13 +227,19 @@ end;
 procedure TMunicipioControler.PopularComboBox;
 var
   sIndice: String;
+  oModelEstado: TEstadoModel;
 begin
+  oModelEstado := TEstadoModel.Create;
   oListaEstados.Clear;
+  frmMunicipio.cbEstado.Clear;
   if (oModelEstado.ADDListaHash(oListaEstados)) then
   begin
     for sIndice in oListaEstados.Keys do
       frmMunicipio.cbEstado.AddItem(sIndice, oListaEstados);
-  end
+  end;
+
+  if Assigned(oModelEstado) then
+    FreeAndNil(oModelEstado);
 end;
 
 procedure TMunicipioControler.Salvar(Sender: TObject);
