@@ -35,6 +35,8 @@ type
 
     function Pesquisar(ANome: String): Boolean;
 
+    function Buscar(ANome: String): Integer;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -92,6 +94,22 @@ begin
     IntToStr(AEstado.IdUF);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
+end;
+
+function TEstadoModel.Buscar(ANome: String): Integer;
+var
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select IdUF from UF where nome = '+QuotedStr(ANome));
+    if (not(oQuery.IsEmpty)) then
+      Result := oQuery.FieldByName('IdUF').AsInteger;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 end;
 
 function TEstadoModel.BuscarID: integer;
