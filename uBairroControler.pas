@@ -30,7 +30,7 @@ type
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure PopularComboBoxEstado;
     procedure PopularComboBoxMunicipio(AID: Integer);
-    procedure OnExitCbEstado(Sender: TObject);
+    procedure OnSelectCbEstado(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -63,19 +63,26 @@ begin
   frmBairro.btnPesquisa.OnClick := Pesquisar;
   frmBairro.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmBairro.OnKeyDown := OnKeyDownForm;
+  frmBairro.cbEstado.OnSelect := OnSelectCbEstado;
   frmBairro.Show;
 end;
 
 procedure TBairroControler.Alterar(Sender: TObject);
+var
+  sEstado: String;
+  oEstadoModel: TEstadoModel;
 begin
+  oEstadoModel := TEstadoModel.Create;
   oBairroDto.idBairro := frmBairro.DBGrid1.Fields[0].AsInteger;
   oBairroDto.oMunicipio.Nome := frmBairro.DBGrid1.Fields[2].AsString;
   frmBairro.tsDados.Enabled := True;
   frmBairro.Caption := 'Alteração de Bairro';
   frmBairro.edtNome.Text := frmBairro.DBGrid1.Fields[1].AsString;
-
+  sEstado := frmBairro.DBGrid1.Fields[3].AsString;
   PopularComboBoxEstado;
 
+  frmBairro.cbEstado.ItemIndex := frmBairro.cbEstado.Items.IndexOf(sEstado);
+  PopularComboBoxMunicipio(oEstadoModel.Buscar(sEstado));
   frmBairro.cbMunicipio.ItemIndex := frmBairro.cbMunicipio.Items.IndexOf
     (oBairroDto.oMunicipio.Nome);
 
@@ -86,6 +93,7 @@ begin
   frmBairro.btnExcluir.Enabled := False;
   frmBairro.BtnSalvar.Enabled := True;
   frmBairro.BtnCancelar.Enabled := True;
+  FreeAndNil(oEstadoModel);
 end;
 
 procedure TBairroControler.Cancelar(Sender: TObject);
@@ -102,6 +110,7 @@ begin
   frmBairro.cbEstado.ItemIndex := -1;
   frmBairro.cbMunicipio.ItemIndex := -1;
   frmBairro.Caption := 'Listagem de Bairros';
+  frmBairro.cbMunicipio.Enabled := False;
   oBairroRegra.Limpar(oBairroDto);
 end;
 
@@ -200,12 +209,6 @@ begin
   oBairroModel.ListarBairros(frmBairro.dsTabela);
 end;
 
-procedure TBairroControler.OnExitCbEstado(Sender: TObject);
-begin
-  PopularComboBoxMunicipio(oListaEstados.Items
-    [frmBairro.cbEstado.Items[frmBairro.cbEstado.ItemIndex]].IdUF);
-end;
-
 procedure TBairroControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -229,9 +232,22 @@ begin
     frmBairro.btnPesquisa.Click;
 end;
 
+procedure TBairroControler.OnSelectCbEstado(Sender: TObject);
+begin
+  PopularComboBoxMunicipio(oListaEstados.Items[frmBairro.cbEstado.Items
+    [frmBairro.cbEstado.ItemIndex]].IdUF);
+end;
+
 procedure TBairroControler.Pesquisar(Sender: TObject);
 begin
-
+  if (Trim(frmBairro.edtPesquisa.Text) <> EmptyStr) then
+  begin
+    if (oBairroRegra.Pesquisar(oBairroModel, frmBairro.edtPesquisa.Text) = False)
+    then
+      ShowMessage('Nenhum registro encontrado.');
+  end
+  else
+    ShowMessage('Campo pesquisa vazio.');
 end;
 
 procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
@@ -241,7 +257,9 @@ var
 begin
   oMunicipioModel := TMunicipioModel.Create;
   oListaMunicipios.Clear;
-  if (oMunicipioModel.ADDListaHash(oListaMunicipios)) then
+  frmBairro.cbMunicipio.Clear;
+  frmBairro.cbMunicipio.Enabled := True;
+  if (oMunicipioModel.ADDListaHash(oListaMunicipios, AID)) then
   begin
     for sIndice in oListaMunicipios.Keys do
       frmBairro.cbMunicipio.AddItem(sIndice, oListaMunicipios);
@@ -272,7 +290,29 @@ end;
 
 procedure TBairroControler.Salvar(Sender: TObject);
 begin
+  oBairroDto.Nome := Trim(frmBairro.edtNome.Text);
+  oBairroDto.oMunicipio.idMunicipio := oListaMunicipios.Items
+    [frmBairro.cbMunicipio.Items[frmBairro.cbMunicipio.ItemIndex]].idMunicipio;
 
+  if (oBairroDto.Nome <> '') and (frmBairro.cbEstado.ItemIndex <> -1) then
+  begin
+    ShowMessage(oBairroRegra.Salvar(oBairroModel, oBairroDto));
+
+    oBairroRegra.Limpar(oBairroDto);
+    frmBairro.edtNome.Text := EmptyStr;
+    frmBairro.cbEstado.ItemIndex := -1;
+    frmBairro.PageControl1.ActivePage := frmBairro.tsTabela;
+    frmBairro.tsTabela.Enabled := True;
+    frmBairro.btnInserir.Enabled := True;
+    frmBairro.BtnAlterar.Enabled := True;
+    frmBairro.btnExcluir.Enabled := True;
+    frmBairro.BtnSalvar.Enabled := False;
+    frmBairro.BtnCancelar.Enabled := False;
+    frmBairro.Caption := 'Listagem de Municipios';
+    ListarBairros;
+  end
+  else
+    ShowMessage('Prencha todos os campos');
 end;
 
 initialization

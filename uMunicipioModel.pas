@@ -20,7 +20,7 @@ type
     function VerificarMunicipio(AMunicipio: TMunicipioDto; out AId: integer): Boolean;
     function VerificarExcluir(AId: integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
-      TMunicipioDto>): Boolean;
+      TMunicipioDto>; const AID: Integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -31,7 +31,7 @@ implementation
 { TMunicipioModel }
 
 function TMunicipioModel.ADDListaHash(
-  var oMunicipio: TObjectDictionary<string, TMunicipioDto>): Boolean;
+  var oMunicipio: TObjectDictionary<string, TMunicipioDto>; const AID: Integer): Boolean;
 var
   oMunicipioDTO: TMunicipioDto;
   oQuery: TFDQuery;
@@ -40,7 +40,7 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select * from municipio');
+    oQuery.Open('select * from municipio where  Municipio_idUF ='+IntToStr(AID));
 
     if (not(oQuery.IsEmpty)) then
     begin

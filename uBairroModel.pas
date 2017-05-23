@@ -17,7 +17,7 @@ type
     procedure ListarBairros(var DsBairro: TDataSource);
     function Deletar(const AIDBairro: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
-    function VerificarBairro(ABairro: TBairroDto): Boolean;
+    function VerificarBairro(ABairro: TBairroDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
 
     constructor Create;
@@ -91,14 +91,14 @@ procedure TBairroModel.ListarBairros(var DsBairro: TDataSource);
 begin
   oQueryListaBairros.Connection := TSingletonConexao.GetInstancia;
   oQueryListaBairros.Open
-    ('select b.idBairro, b.nome, m.nome as nomeMunicipio from bairro b inner join municipio m on b.bairro_idMunicipio = m.idMunicipio');
+    ('select b.idBairro, b.nome, m.nome as nomeMunicipio, u.Nome as NomeEstado from bairro b inner join municipio m on b.bairro_idMunicipio = m.idMunicipio inner join uf u on m.Municipio_idUF = u.idUF');
   DsBairro.DataSet := oQueryListaBairros;
 end;
 
 function TBairroModel.Pesquisar(ANome: String): Boolean;
 begin
   oQueryListaBairros.Open
-    ('select b.idBairro, b.Nome, m.Nome from bairro b inner join municipio as m on b.bairro_idMunicipio = m.idMunicipio WHERE b.Nome LIKE "%'
+    ('select b.idBairro, b.Nome, m.Nome as nomeMunicipio from bairro b inner join municipio as m on b.bairro_idMunicipio = m.idMunicipio WHERE b.Nome LIKE "%'
     + ANome + '%"');
   if (not(oQueryListaBairros.IsEmpty)) then
   begin
@@ -112,7 +112,8 @@ begin
   end;
 end;
 
-function TBairroModel.VerificarBairro(ABairro: TBairroDto): Boolean;
+function TBairroModel.VerificarBairro(ABairro: TBairroDto;
+  out AId: Integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
@@ -122,8 +123,11 @@ begin
     oQuery.Open('select IdBairro from bairro where Nome=' +
       QuotedStr(ABairro.Nome) + ' AND bairro_idMunicipio=' +
       IntToStr(ABairro.oMunicipio.idMunicipio));
-    if (oQuery.IsEmpty) then
-      Result := True
+    if (not(oQuery.IsEmpty)) then
+    begin
+      AId := oQuery.FieldByName('IdBairro').AsInteger;
+      Result := True;
+    end
     else
       Result := False;
   finally
