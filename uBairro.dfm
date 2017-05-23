@@ -1,5 +1,5 @@
 inherited frmBairro: TfrmBairro
-  Caption = 'frmBairro'
+  Caption = 'Listagem de Bairros'
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel2: TPanel
