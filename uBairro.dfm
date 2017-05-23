@@ -21,14 +21,21 @@ inherited frmBairro: TfrmBairro
               Expanded = False
               FieldName = 'nome'
               Title.Caption = 'Nome'
-              Width = 307
+              Width = 295
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'nomeMunicipio'
               Title.Caption = 'Municipio'
-              Width = 331
+              Width = 233
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'nomeEstado'
+              Title.Caption = 'Estado'
+              Width = 115
               Visible = True
             end>
         end
