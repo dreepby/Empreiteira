@@ -4,10 +4,11 @@ interface
 
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
-  FireDAC.Comp.DataSet, uMunicipioDto, uClassSingletonConexao, System.Generics.Collections;
+  FireDAC.Comp.DataSet, uMunicipioDto, uClassSingletonConexao,
+  System.Generics.Collections, uMunicipioInterfaceModel;
 
 type
-  TMunicipioModel = class
+  TMunicipioModel = class(TInterfacedObject, IModelMunicipioInterface)
   private
     oQueryListarMunicipios: TFDQuery;
   public
@@ -17,10 +18,11 @@ type
     procedure ListarMunicipios(var DsEstado: TDataSource);
     function Deletar(const AIDMunicipio: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
-    function VerificarMunicipio(AMunicipio: TMunicipioDto; out AId: integer): Boolean;
-    function VerificarExcluir(AId: integer): Boolean;
+    function VerificarMunicipio(AMunicipio: TMunicipioDto;
+      out AId: Integer): Boolean;
+    function VerificarExcluir(AId: Integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
-      TMunicipioDto>; const AID: Integer): Boolean;
+      TMunicipioDto>; const AId: Integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -30,8 +32,8 @@ implementation
 
 { TMunicipioModel }
 
-function TMunicipioModel.ADDListaHash(
-  var oMunicipio: TObjectDictionary<string, TMunicipioDto>; const AID: Integer): Boolean;
+function TMunicipioModel.ADDListaHash(var oMunicipio
+  : TObjectDictionary<string, TMunicipioDto>; const AId: Integer): Boolean;
 var
   oMunicipioDTO: TMunicipioDto;
   oQuery: TFDQuery;
@@ -40,7 +42,8 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select * from municipio where  Municipio_idUF ='+IntToStr(AID));
+    oQuery.Open('select * from municipio where  Municipio_idUF =' +
+      IntToStr(AId));
 
     if (not(oQuery.IsEmpty)) then
     begin
@@ -51,9 +54,11 @@ begin
         oMunicipioDTO := TMunicipioDto.Create;
 
         // Atribui os valores
-        oMunicipioDTO.idMunicipio := oQuery.FieldByName('idMunicipio').AsInteger;
+        oMunicipioDTO.idMunicipio := oQuery.FieldByName('idMunicipio')
+          .AsInteger;
         oMunicipioDTO.Nome := oQuery.FieldByName('Nome').AsString;
-        oMunicipioDTO.oEstado.IdUF := oQuery.FieldByName('Municipio_idUF').AsInteger;
+        oMunicipioDTO.oEstado.IdUF := oQuery.FieldByName('Municipio_idUF')
+          .AsInteger;
 
         // Adiciona o objeto na lista hash
         oMunicipio.Add(oMunicipioDTO.Nome, oMunicipioDTO);
@@ -154,14 +159,15 @@ begin
   end;
 end;
 
-function TMunicipioModel.VerificarExcluir(AId: integer): Boolean;
+function TMunicipioModel.VerificarExcluir(AId: Integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select idBairro from bairro where bairro_idMunicipio = ' + IntToStr(AId));
+    oQuery.Open('select idBairro from bairro where bairro_idMunicipio = ' +
+      IntToStr(AId));
     if (oQuery.IsEmpty) then
       Result := True
     else
@@ -172,7 +178,8 @@ begin
   end;
 end;
 
-function TMunicipioModel.VerificarMunicipio(AMunicipio: TMunicipioDto; out AId: integer): Boolean;
+function TMunicipioModel.VerificarMunicipio(AMunicipio: TMunicipioDto;
+  out AId: Integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
@@ -180,7 +187,8 @@ begin
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select IdMunicipio from Municipio where Nome=' +
-      QuotedStr(AMunicipio.Nome) + ' AND Municipio_idUF='+IntToStr(AMunicipio.oEstado.IdUF));
+      QuotedStr(AMunicipio.Nome) + ' AND Municipio_idUF=' +
+      IntToStr(AMunicipio.oEstado.IdUF));
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('IdMunicipio').AsInteger;

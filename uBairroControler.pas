@@ -6,10 +6,10 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
-  uEstadoModel;
+  uEstadoModel, uInterfaceControler;
 
 type
-  TBairroControler = class
+  TBairroControler = class(TInterfacedObject, IControlerInterface)
   private
     oBairroModel: TBairroModel;
     oBairroDto: TBairroDto;

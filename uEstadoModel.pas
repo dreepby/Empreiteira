@@ -6,10 +6,10 @@ interface
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, System.Generics.Collections,
-  uEstadoDto, uClassSingletonConexao;
+  uEstadoDto, uClassSingletonConexao, uEstadoInterfaceModel;
 
 type
-  TEstadoModel = class
+  TEstadoModel = class(TInterfacedObject, IModelEstadoInterface)
   private
     oQueryListarEstados: TFDQuery;
   public
@@ -105,7 +105,9 @@ begin
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select IdUF from UF where nome = '+QuotedStr(ANome));
     if (not(oQuery.IsEmpty)) then
-      Result := oQuery.FieldByName('IdUF').AsInteger;
+      Result := oQuery.FieldByName('IdUF').AsInteger
+    else
+      Result := 0;
   finally
     if Assigned(oQuery) then
       FreeAndNil(oQuery);

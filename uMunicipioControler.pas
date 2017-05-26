@@ -5,10 +5,10 @@ interface
 uses
   System.SysUtils, Data.DB, System.Generics.Collections, uMunicipioDto,
   uMunicipioModel, uMunicipio, uEstadoDto, uEstadoModel, uMunicipioRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler;
 
 type
-  TMunicipioControler = class
+  TMunicipioControler = class(TInterfacedObject, IControlerInterface)
   private
     oListaEstados: TObjectDictionary<string, TEstadoDto>;
     oModelMunicipio: TMunicipioModel;

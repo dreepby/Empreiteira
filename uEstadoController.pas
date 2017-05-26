@@ -4,10 +4,10 @@ interface
 
 uses
   System.SysUtils, Data.DB, uEstadoDto, uEstadoModel, uEstado, uEstadoRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler;
 
 type
-  TEstadoControler = class
+  TEstadoControler = class(TInterfacedObject, IControlerInterface)
   private
     oModelEstado: TEstadoModel;
     oEstadoDto: TEstadoDto;

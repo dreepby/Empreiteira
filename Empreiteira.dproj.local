@@ -7,19 +7,19 @@
     <Transaction>2017/04/27 13:36:17.000.331,=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2017/04/27 13:44:04.000.911,=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2017/05/05 13:48:51.000.897,=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2017/05/05 13:49:14.000.346,D:\tcc\Empreiteira\Unit1.pas=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2017/05/05 13:49:14.000.346,D:\tcc\Empreiteira\Unit1.dfm=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2017/05/05 13:49:14.000.346,D:\tcc\Empreiteira\Unit1.pas=D:\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2017/05/05 13:49:27.000.528,D:\tcc\Empreiteira\Empreiteira.dproj=D:\Usuario\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>2017/05/05 13:49:43.000.393,=D:\tcc\Empreiteira\uClassConexaoBanco.pas</Transaction>
-    <Transaction>2017/05/05 13:49:43.000.362,=D:\tcc\Empreiteira\uCadastroBase.pas</Transaction>
     <Transaction>2017/05/05 13:49:43.000.440,=D:\tcc\Empreiteira\uClassFDConnection.pas</Transaction>
+    <Transaction>2017/05/05 13:49:43.000.362,=D:\tcc\Empreiteira\uCadastroBase.pas</Transaction>
+    <Transaction>2017/05/05 13:49:43.000.393,=D:\tcc\Empreiteira\uClassConexaoBanco.pas</Transaction>
     <Transaction>2017/05/05 13:49:47.000.979,=D:\tcc\Empreiteira\uClassSingletonConexao.pas</Transaction>
-    <Transaction>2017/05/05 13:49:48.000.447,=D:\tcc\Empreiteira\uEstados.pas</Transaction>
     <Transaction>2017/05/05 13:49:48.000.057,=D:\tcc\Empreiteira\uEstadoDto.pas</Transaction>
     <Transaction>2017/05/05 13:49:48.000.026,=D:\tcc\Empreiteira\uEstadoController.pas</Transaction>
     <Transaction>2017/05/05 13:49:48.000.120,=D:\tcc\Empreiteira\uEstadoModel.pas</Transaction>
-    <Transaction>2017/05/05 13:49:51.000.878,=D:\tcc\Empreiteira\uEstadosListagem.pas</Transaction>
+    <Transaction>2017/05/05 13:49:48.000.447,=D:\tcc\Empreiteira\uEstados.pas</Transaction>
     <Transaction>2017/05/05 13:49:51.000.909,=D:\tcc\Empreiteira\uListaEstado.pas</Transaction>
+    <Transaction>2017/05/05 13:49:51.000.878,=D:\tcc\Empreiteira\uEstadosListagem.pas</Transaction>
     <Transaction>2017/05/05 13:49:52.000.892,=D:\tcc\Empreiteira\uPrincipal.pas</Transaction>
     <Transaction>2017/05/05 13:49:52.000.548,=D:\tcc\Empreiteira\uListagemBase.pas</Transaction>
     <Transaction>2017/05/05 13:50:11.000.963,D:\tcc\Empreiteira\Unit1.pas=</Transaction>
@@ -28,13 +28,13 @@
     <Transaction>2017/05/05 13:54:36.000.205,D:\tcc\Empreiteira\uClassFDConnection.pas=</Transaction>
     <Transaction>2017/05/05 13:58:42.000.623,=D:\tcc\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/05 13:59:07.000.520,D:\tcc\Empreiteira\uEstadoControlerCad.pas=D:\tcc\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/05/05 14:03:11.000.895,D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.pas=D:\tcc\Empreiteira\uEstadosListagem.pas</Transaction>
     <Transaction>2017/05/05 14:03:11.000.895,D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.dfm=D:\tcc\Empreiteira\uEstadosListagem.dfm</Transaction>
-    <Transaction>2017/05/05 14:06:29.000.672,D:\tcc\Empreiteira\uListagemEstados.dfm=D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.dfm</Transaction>
+    <Transaction>2017/05/05 14:03:11.000.895,D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.pas=D:\tcc\Empreiteira\uEstadosListagem.pas</Transaction>
     <Transaction>2017/05/05 14:06:29.000.672,D:\tcc\Empreiteira\uListagemEstados.pas=D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.pas</Transaction>
+    <Transaction>2017/05/05 14:06:29.000.672,D:\tcc\Empreiteira\uListagemEstados.dfm=D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.dfm</Transaction>
     <Transaction>2017/05/05 14:06:46.000.317,D:\tcc\Empreiteira\uEstadoControlerInserirAlterar.pas=D:\tcc\Empreiteira\uEstadoControlerCad.pas</Transaction>
-    <Transaction>2017/05/05 14:10:29.000.273,D:\tcc\Empreiteira\uEstadosListagem.dfm=D:\tcc\Empreiteira\uListagemEstados.dfm</Transaction>
     <Transaction>2017/05/05 14:10:29.000.273,D:\tcc\Empreiteira\uEstadosListagem.pas=D:\tcc\Empreiteira\uListagemEstados.pas</Transaction>
+    <Transaction>2017/05/05 14:10:29.000.273,D:\tcc\Empreiteira\uEstadosListagem.dfm=D:\tcc\Empreiteira\uListagemEstados.dfm</Transaction>
     <Transaction>2017/05/10 19:30:26.000.797,=E:\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/10 19:30:49.000.805,E:\Empreiteira\Unit1.dfm=E:\Empreiteira\uMunicipioListagem.dfm</Transaction>
     <Transaction>2017/05/10 19:30:49.000.805,E:\Empreiteira\Unit1.pas=E:\Empreiteira\uMunicipioListagem.pas</Transaction>
@@ -50,8 +50,8 @@
     <Transaction>2017/05/10 19:36:39.000.338,=E:\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/10 19:37:31.000.736,E:\Empreiteira\Unit1.pas=E:\Empreiteira\uMunicipioControlerInserirAlterar.pas</Transaction>
     <Transaction>2017/05/11 22:03:30.000.279,=E:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/05/11 22:03:40.000.923,E:\Empreiteira\uBairro.pas=E:\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/11 22:03:40.000.923,E:\Empreiteira\uBairro.dfm=E:\Empreiteira\Unit1.dfm</Transaction>
+    <Transaction>2017/05/11 22:03:40.000.923,E:\Empreiteira\uBairro.pas=E:\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/11 22:03:56.000.551,=E:\Empreiteira\Unit1.pas</Transaction>
     <Transaction>2017/05/11 22:04:28.000.737,E:\Empreiteira\uBairrosListagem.dfm=E:\Empreiteira\Unit1.dfm</Transaction>
     <Transaction>2017/05/11 22:04:28.000.737,E:\Empreiteira\uBairrosListagem.pas=E:\Empreiteira\Unit1.pas</Transaction>
@@ -97,8 +97,18 @@
     <Transaction>2017/05/20 11:18:38.000.194,E:\Empreiteira\Unit1.dfm=E:\Empreiteira\uBairro.dfm</Transaction>
     <Transaction>2017/05/20 11:28:47.000.624,E:\Empreiteira\uBairrosDto.pas=E:\Empreiteira\uBairroDto.pas</Transaction>
     <Transaction>2017/05/20 11:29:41.000.300,E:\Empreiteira\uBairrosModel.pas=E:\Empreiteira\uBairroModel.pas</Transaction>
-    <Transaction>2017/05/20 14:20:06.828,=E:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/05/20 14:20:12.524,E:\Empreiteira\uBairroRegra.pas=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/20 14:20:06.000.828,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/20 14:20:12.000.524,E:\Empreiteira\uBairroRegra.pas=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 19:12:44.000.054,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 19:13:38.000.633,E:\Empreiteira\Unit1.pas=E:\Empreiteira\uInterfaceControler.pas</Transaction>
+    <Transaction>2017/05/25 19:34:33.175,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 19:34:52.254,E:\Empreiteira\uInterfaceModel.pas=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 19:47:28.826,E:\Empreiteira\uEstadoInterfaceModel.pas=E:\Empreiteira\uInterfaceModel.pas</Transaction>
+    <Transaction>2017/05/25 20:55:31.239,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 20:55:38.395,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 20:55:58.428,E:\Empreiteira\uMunicipioInterfaceModel.pas=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 20:58:36.506,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/05/25 20:58:58.384,E:\Empreiteira\uBairroInterfaceModel.pas=E:\Empreiteira\Unit1.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="uBairro.pas"/>
@@ -106,6 +116,7 @@
     <File Path="uBairroControler.pas"/>
     <File Path="uBairroDto.pas"/>
     <File Path="uBairroModel.pas"/>
+    <File Path="uBairroRegra.pas"/>
     <File Path="uCadastroBase.pas"/>
     <File Path="uCadastroBase.dfm"/>
     <File Path="uClassConexaoBanco.pas"/>
@@ -116,6 +127,7 @@
     <File Path="uEstadoDto.pas"/>
     <File Path="uEstadoModel.pas"/>
     <File Path="uEstadoRegra.pas"/>
+    <File Path="uInterfaceControler.pas"/>
     <File Path="uMunicipio.pas"/>
     <File Path="uMunicipio.dfm"/>
     <File Path="uMunicipioControler.pas"/>
@@ -124,6 +136,8 @@
     <File Path="uMunicipioRegra.pas"/>
     <File Path="uPrincipal.pas"/>
     <File Path="uPrincipal.dfm"/>
-    <File Path="uBairroRegra.pas"/>
+    <File Path="uEstadoInterfaceModel.pas"/>
+    <File Path="uMunicipioInterfaceModel.pas"/>
+    <File Path="uBairroInterfaceModel.pas"/>
   </ProjectSortOrder>
 </BorlandProject>

@@ -132,6 +132,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uBairroRegra.pas"/>
+        <DCCReference Include="uInterfaceControler.pas"/>
+        <DCCReference Include="uEstadoInterfaceModel.pas"/>
+        <DCCReference Include="uMunicipioInterfaceModel.pas"/>
+        <DCCReference Include="uBairroInterfaceModel.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

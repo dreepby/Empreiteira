@@ -22,7 +22,11 @@ uses
   Vcl.Styles,
   uMunicipioRegra in 'uMunicipioRegra.pas',
   uBairro in 'uBairro.pas' {frmBairro},
-  uBairroRegra in 'uBairroRegra.pas';
+  uBairroRegra in 'uBairroRegra.pas',
+  uInterfaceControler in 'uInterfaceControler.pas',
+  uEstadoInterfaceModel in 'uEstadoInterfaceModel.pas',
+  uMunicipioInterfaceModel in 'uMunicipioInterfaceModel.pas',
+  uBairroInterfaceModel in 'uBairroInterfaceModel.pas';
 
 {$R *.res}
 
