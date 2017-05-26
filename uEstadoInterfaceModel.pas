@@ -17,7 +17,7 @@ type
     function BuscarID: integer;
     function Ler(var AEstado: TEstadoDto): Boolean;
     procedure ListarEstados(var DsEstado: TDataSource);
-    function VerificarUF(AUF: String; out AId: integer): Boolean;
+    function VerificarUF(AUF: TEstadoDto; out AId: integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
     function Buscar(ANome: String): integer;
   end;

@@ -31,11 +31,11 @@ type
 
     procedure ListarEstados(var DsEstado: TDataSource);
 
-    function VerificarUF(AUF: String; out AId: integer): Boolean;
+    function VerificarUF(AUF: TEstadoDto; out AId: integer): Boolean;
 
     function Pesquisar(ANome: String): Boolean;
 
-    function Buscar(ANome: String): Integer;
+    function Buscar(ANome: String): integer;
 
     constructor Create;
     destructor Destroy; override;
@@ -96,14 +96,14 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-function TEstadoModel.Buscar(ANome: String): Integer;
+function TEstadoModel.Buscar(ANome: String): integer;
 var
   oQuery: TFDQuery;
 begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select IdUF from UF where nome = '+QuotedStr(ANome));
+    oQuery.Open('select IdUF from UF where nome = ' + QuotedStr(ANome));
     if (not(oQuery.IsEmpty)) then
       Result := oQuery.FieldByName('IdUF').AsInteger
     else
@@ -224,14 +224,15 @@ begin
   end;
 end;
 
-function TEstadoModel.VerificarUF(AUF: String; out AId: integer): Boolean;
+function TEstadoModel.VerificarUF(AUF: TEstadoDto; out AId: integer): Boolean;
 var
   oQuery: TFDQuery;
 begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select iduf  from uf where UF = ' + QuotedStr(AUF));
+    oQuery.Open('select iduf  from uf where UF = ' + QuotedStr(AUF.UF) +
+      ' or nome = ' + QuotedStr(AUF.Nome));
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('iduf').AsInteger;
