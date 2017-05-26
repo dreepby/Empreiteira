@@ -136,6 +136,14 @@
         <DCCReference Include="uEstadoInterfaceModel.pas"/>
         <DCCReference Include="uMunicipioInterfaceModel.pas"/>
         <DCCReference Include="uBairroInterfaceModel.pas"/>
+        <DCCReference Include="uCliente.pas">
+            <Form>frmCliente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uClienteControler.pas"/>
+        <DCCReference Include="uClienteDto.pas"/>
+        <DCCReference Include="uClienteModel.pas"/>
+        <DCCReference Include="uClienteInterfaceModel.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
