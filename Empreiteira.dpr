@@ -31,7 +31,8 @@ uses
   uClienteControler in 'uClienteControler.pas',
   uClienteDto in 'uClienteDto.pas',
   uClienteModel in 'uClienteModel.pas',
-  uClienteInterfaceModel in 'uClienteInterfaceModel.pas';
+  uClienteInterfaceModel in 'uClienteInterfaceModel.pas',
+  uClienteRegra in 'uClienteRegra.pas';
 
 {$R *.res}
 

@@ -19,6 +19,7 @@ type
     FTelefone: String;
     FRua: String;
     FCelular: String;
+    FNome: String;
     procedure SetCelular(const Value: String);
     procedure SetCep(const Value: String);
     procedure SetCnpj(const Value: String);
@@ -30,8 +31,10 @@ type
     procedure SetObservacao(const Value: String);
     procedure SetRua(const Value: String);
     procedure SetTelefone(const Value: String);
+    procedure SetNome(const Value: String);
   public
     property idCliente: Integer read FidCliente write SetidCliente;
+    property Nome: String read FNome write SetNome;
     property Cpf: String read FCpf write SetCpf;
     property Cnpj: String read FCnpj write SetCnpj;
     property Telefone: String read FTelefone write SetTelefone;
@@ -91,6 +94,11 @@ end;
 procedure TClienteDto.SetidCliente(const Value: Integer);
 begin
   FidCliente := Value;
+end;
+
+procedure TClienteDto.SetNome(const Value: String);
+begin
+  FNome := Value;
 end;
 
 procedure TClienteDto.SetNumero(const Value: Integer);

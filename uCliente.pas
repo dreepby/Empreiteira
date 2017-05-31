@@ -26,14 +26,12 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    cbPesquisa: TComboBox;
   private
     { Private declarations }
   public
     { Public declarations }
   end;
-
-var
-  frmCliente: TfrmCliente;
 
 implementation
 
