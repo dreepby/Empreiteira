@@ -21,13 +21,13 @@ type
     tsDados: TTabSheet;
     Panel3: TPanel;
     Panel4: TPanel;
+    dsTabela: TDataSource;
     btnInserir: TBitBtn;
     BtnAlterar: TBitBtn;
     BtnSalvar: TBitBtn;
     BtnCancelar: TBitBtn;
     btnExcluir: TBitBtn;
     BtnFechar: TBitBtn;
-    dsTabela: TDataSource;
     procedure btnCancelarMouseEnter(Sender: TObject);
   private
     { Private declarations }
