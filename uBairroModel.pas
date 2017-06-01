@@ -16,9 +16,9 @@ type
     function Inserir(var ABairro: TBairroDto): Boolean;
     procedure ListarBairros(var DsBairro: TDataSource);
     function Deletar(const AIDBairro: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function VerificarBairro(ABairro: TBairroDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
+    function Localizar(ATexto: String): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -89,28 +89,28 @@ end;
 
 procedure TBairroModel.ListarBairros(var DsBairro: TDataSource);
 begin
+  oQueryListaBairros.Filtered := False;
   oQueryListaBairros.Connection := TSingletonConexao.GetInstancia;
   oQueryListaBairros.Open
     ('select b.idBairro, b.nome, m.nome as nomeMunicipio, u.Nome as NomeEstado from bairro b inner join municipio m on b.bairro_idMunicipio = m.idMunicipio inner join uf u on m.Municipio_idUF = u.idUF');
   DsBairro.DataSet := oQueryListaBairros;
 end;
 
-function TBairroModel.Pesquisar(ANome: String): Boolean;
+function TBairroModel.Localizar(ATexto: String): Boolean;
 begin
-  oQueryListaBairros.Open
-    ('select b.idBairro, b.Nome, m.Nome as nomeMunicipio from bairro b inner join municipio as m on b.bairro_idMunicipio = m.idMunicipio WHERE b.Nome LIKE "%'
-    + ANome + '%"');
-  if (not(oQueryListaBairros.IsEmpty)) then
+  Result := True;
+  oQueryListaBairros.Filtered := False;
+  if ATexto.Trim <> EmptyStr then
   begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-    oQueryListaBairros.Open
-      ('select b.idBairro, b.nome, m.nome as nomeMunicipio from bairro b inner join municipio m on b.bairro_idMunicipio = m.idMunicipio');
+    oQueryListaBairros.Filter := 'UPPER(NOME) LIKE ''%'+UpperCase(ATexto.Trim)+'%''';
+    oQueryListaBairros.Filtered := True;
+    Result := oQueryListaBairros.RecordCount > 0;
+    if (not(Result)) then
+      oQueryListaBairros.Filtered := False;
   end;
 end;
+
+
 
 function TBairroModel.VerificarBairro(ABairro: TBairroDto;
   out AId: Integer): Boolean;

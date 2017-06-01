@@ -225,7 +225,10 @@ begin
   if Key = #8 then
   begin
     if Length(Trim(frmBairro.edtPesquisa.Text)) = 1 then
+      ListarBairros
+    else if Length(Trim(frmBairro.edtPesquisa.Text)) = 0 then
       ListarBairros;
+
   end;
 
   if Key = #13 then
@@ -240,14 +243,12 @@ end;
 
 procedure TBairroControler.Pesquisar(Sender: TObject);
 begin
-  if (Trim(frmBairro.edtPesquisa.Text) <> EmptyStr) then
-  begin
-    if (oBairroRegra.Pesquisar(oBairroModel, frmBairro.edtPesquisa.Text) = False)
-    then
-      ShowMessage('Nenhum registro encontrado.');
-  end
-  else
-    ShowMessage('Campo pesquisa vazio.');
+  try
+    oBairroRegra.Localizar(oBairroModel, frmBairro.edtPesquisa.Text);
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
 end;
 
 procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
