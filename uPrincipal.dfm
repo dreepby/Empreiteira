@@ -53,5 +53,9 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Bairros'
       OnExecute = actBairroExecute
     end
+    object actUsuario: TAction
+      Caption = 'Usuarios'
+      OnExecute = actUsuarioExecute
+    end
   end
 end
