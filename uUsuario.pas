@@ -8,15 +8,15 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
-  TfrmUsuarios = class(TfrmCadastroBase)
+  TfrmUsuario = class(TfrmCadastroBase)
+    edtNome: TLabeledEdit;
+    edtCPF: TLabeledEdit;
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
-var
-  frmUsuarios: TfrmUsuarios;
 
 implementation
 

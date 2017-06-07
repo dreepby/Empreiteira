@@ -22,6 +22,7 @@ type
     actBairro: TAction;
     Bairros1: TMenuItem;
     actUsuario: TAction;
+    Usuarios1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);

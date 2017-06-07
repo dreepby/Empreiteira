@@ -4,17 +4,21 @@ interface
 
 uses
 
-  System.SysUtils, uUsuarioDto, uUsuarioModel;
+  System.SysUtils, uUsuarioDto, uUsuarioModel, uUsuarioIntefaceModel, Data.DB;
 
 type
   TUsuarioRegra = class
   public
     procedure Limpar(AMunicipio: TUsuarioDto);
-    function VerificarExcluir(var AModel: TUsuarioModel;
+    procedure ListarUsuarios(const AModel: IModelUsuarioInterface;
+      var dsTabela: TDataSource);
+    function VerificarExcluir(const AModel: IModelUsuarioInterface;
       AId: Integer): Boolean;
-    function Deletar(var AModel: TUsuarioModel; AId: Integer): Boolean;
-    function Pesquisar(var AModel: TUsuarioModel; ANome: String): Boolean;
-    function Salvar(var AModel: TUsuarioModel;
+    function Deletar(const AModel: IModelUsuarioInterface;
+      AId: Integer): Boolean;
+    function Pesquisar(const AModel: IModelUsuarioInterface;
+      ANome: String): Boolean;
+    function Salvar(const AModel: IModelUsuarioInterface;
       AMunicipio: TUsuarioDto): String;
   end;
 
@@ -22,7 +26,7 @@ implementation
 
 { TUsuarioRegra }
 
-function TUsuarioRegra.Deletar(var AModel: TUsuarioModel;
+function TUsuarioRegra.Deletar(const AModel: IModelUsuarioInterface;
   AId: Integer): Boolean;
 begin
 
@@ -33,19 +37,25 @@ begin
 
 end;
 
-function TUsuarioRegra.Pesquisar(var AModel: TUsuarioModel;
+procedure TUsuarioRegra.ListarUsuarios(const AModel: IModelUsuarioInterface;
+  var dsTabela: TDataSource);
+begin
+  AModel.ListarUsuarios(DsTabela);
+end;
+
+function TUsuarioRegra.Pesquisar(const AModel: IModelUsuarioInterface;
   ANome: String): Boolean;
 begin
 
 end;
 
-function TUsuarioRegra.Salvar(var AModel: TUsuarioModel;
+function TUsuarioRegra.Salvar(const AModel: IModelUsuarioInterface;
   AMunicipio: TUsuarioDto): String;
 begin
 
 end;
 
-function TUsuarioRegra.VerificarExcluir(var AModel: TUsuarioModel;
+function TUsuarioRegra.VerificarExcluir(const AModel: IModelUsuarioInterface;
   AId: Integer): Boolean;
 begin
 

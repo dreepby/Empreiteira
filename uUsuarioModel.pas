@@ -5,10 +5,10 @@ interface
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, uUsuarioDto, uClassSingletonConexao,
-  System.Generics.Collections;
+  System.Generics.Collections, uUsuarioIntefaceModel;
 
 type
-  TUsuarioModel = class
+  TUsuarioModel = class(TInterfacedObject, IModelUsuarioInterface)
   private
     oQueryListarUsuarios: TFDQuery;
   public
@@ -28,8 +28,6 @@ type
   end;
 
 implementation
-
-{ TUsuarioModel }
 
 { TUsuarioModel }
 
@@ -71,7 +69,7 @@ end;
 
 constructor TUsuarioModel.Create;
 begin
-
+  oQueryListarUsuarios := TFDQuery.Create(nil);
 end;
 
 function TUsuarioModel.Deletar(const AidUsuario: Integer): Boolean;
@@ -82,7 +80,10 @@ end;
 
 destructor TUsuarioModel.Destroy;
 begin
+  oQueryListarUsuarios.Close;
 
+  if (Assigned(oQueryListarUsuarios)) then
+    FreeAndNil(oQueryListarUsuarios);
   inherited;
 end;
 
@@ -121,7 +122,6 @@ begin
       ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
   end;
 end;
-
 
 function TUsuarioModel.VerificarExcluir(AId: Integer): Boolean;
 begin

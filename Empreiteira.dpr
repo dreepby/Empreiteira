@@ -26,7 +26,13 @@ uses
   uInterfaceControler in 'uInterfaceControler.pas',
   uEstadoInterfaceModel in 'uEstadoInterfaceModel.pas',
   uMunicipioInterfaceModel in 'uMunicipioInterfaceModel.pas',
-  uBairroInterfaceModel in 'uBairroInterfaceModel.pas';
+  uBairroInterfaceModel in 'uBairroInterfaceModel.pas',
+  uUsuario in 'uUsuario.pas' {frmUsuario},
+  uUsuarioControler in 'uUsuarioControler.pas',
+  uUsuarioDto in 'uUsuarioDto.pas',
+  uUsuarioModel in 'uUsuarioModel.pas',
+  uUsuarioRegra in 'uUsuarioRegra.pas',
+  uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas';
 
 {$R *.res}
 
