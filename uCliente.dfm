@@ -2,7 +2,6 @@ inherited frmCliente: TfrmCliente
   Caption = 'Listagem de Clientes'
   ClientHeight = 553
   ClientWidth = 986
-  Position = poDesigned
   ExplicitWidth = 992
   ExplicitHeight = 581
   PixelsPerInch = 96
@@ -16,6 +15,7 @@ inherited frmCliente: TfrmCliente
   end
   inherited Panel1: TPanel
     Width = 986
+    ExplicitWidth = 986
     inherited Label1: TLabel
       Width = 96
       Caption = 'Buscar por '
@@ -34,11 +34,19 @@ inherited frmCliente: TfrmCliente
       ExplicitTop = 14
     end
     object cbPesquisa: TComboBox
-      Left = 134
-      Top = 19
+      Left = 126
+      Top = 14
       Width = 203
-      Height = 21
+      Height = 27
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemIndex = 0
+      ParentFont = False
       TabOrder = 2
+      Text = 'Nome do cliente'
       Items.Strings = (
         'Nome do cliente'
         'Rua'
@@ -51,15 +59,17 @@ inherited frmCliente: TfrmCliente
   inherited Panel2: TPanel
     Width = 986
     Height = 441
+    ExplicitWidth = 986
     ExplicitHeight = 441
     inherited PageControl1: TPageControl
       Width = 976
       Height = 431
+      ExplicitWidth = 976
       ExplicitHeight = 431
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
-        ExplicitWidth = 746
+        ExplicitWidth = 968
         ExplicitHeight = 403
         inherited DBGrid1: TDBGrid
           Width = 968
@@ -141,25 +151,25 @@ inherited frmCliente: TfrmCliente
       inherited tsDados: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
-        ExplicitWidth = 746
+        ExplicitWidth = 968
         ExplicitHeight = 403
         object Label2: TLabel
-          Left = 220
-          Top = 126
+          Left = 498
+          Top = 125
           Width = 33
           Height = 13
           Caption = 'Estado'
         end
         object Label3: TLabel
-          Left = 498
-          Top = 126
+          Left = 219
+          Top = 177
           Width = 43
           Height = 13
           Caption = 'Municipio'
         end
         object Label4: TLabel
-          Left = 220
-          Top = 178
+          Left = 498
+          Top = 177
           Width = 28
           Height = 13
           Caption = 'Bairro'
@@ -171,14 +181,14 @@ inherited frmCliente: TfrmCliente
           Height = 13
           Caption = 'Observa'#231#227'o'
         end
-        object edtCpf: TLabeledEdit
+        object edtNome: TLabeledEdit
           Left = 220
           Top = 48
           Width = 233
           Height = 27
-          EditLabel.Width = 19
+          EditLabel.Width = 76
           EditLabel.Height = 13
-          EditLabel.Caption = 'CPF'
+          EditLabel.Caption = 'Nome do cliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -203,14 +213,14 @@ inherited frmCliente: TfrmCliente
           ParentFont = False
           TabOrder = 1
         end
-        object frmTelefone: TLabeledEdit
+        object edtCpf: TLabeledEdit
           Left = 220
           Top = 96
           Width = 233
           Height = 27
-          EditLabel.Width = 42
+          EditLabel.Width = 19
           EditLabel.Height = 13
-          EditLabel.Caption = 'Telefone'
+          EditLabel.Caption = 'CPF'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -235,24 +245,64 @@ inherited frmCliente: TfrmCliente
           ParentFont = False
           TabOrder = 3
         end
-        object moObservacao: TMemo
-          Left = 498
-          Top = 293
+        object edtTelefone: TLabeledEdit
+          Left = 220
+          Top = 144
           Width = 233
-          Height = 89
+          Height = 27
+          EditLabel.Width = 42
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Telefone'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
-          Lines.Strings = (
-            '')
           ParentFont = False
           TabOrder = 4
         end
-        object edtRua: TLabeledEdit
+        object cbEstado: TComboBox
+          Left = 498
+          Top = 144
+          Width = 233
+          Height = 27
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+        end
+        object cbMunicipio: TComboBox
+          Left = 220
+          Top = 196
+          Width = 233
+          Height = 27
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 6
+        end
+        object cbBairro: TComboBox
           Left = 498
           Top = 196
+          Width = 233
+          Height = 27
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+        end
+        object edtRua: TLabeledEdit
+          Left = 220
+          Top = 244
           Width = 233
           Height = 27
           EditLabel.Width = 19
@@ -264,24 +314,7 @@ inherited frmCliente: TfrmCliente
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 5
-        end
-        object edtNumero: TLabeledEdit
-          Left = 220
-          Top = 244
-          Width = 233
-          Height = 27
-          EditLabel.Width = 77
-          EditLabel.Height = 13
-          EditLabel.Caption = 'Numero da casa'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          NumbersOnly = True
-          ParentFont = False
-          TabOrder = 6
+          TabOrder = 8
         end
         object edtComplemento: TLabeledEdit
           Left = 498
@@ -297,11 +330,28 @@ inherited frmCliente: TfrmCliente
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 9
+        end
+        object edtNumero: TLabeledEdit
+          Left = 220
+          Top = 292
+          Width = 233
+          Height = 27
+          EditLabel.Width = 77
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Numero da casa'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          NumbersOnly = True
+          ParentFont = False
+          TabOrder = 10
         end
         object edtCep: TLabeledEdit
           Left = 220
-          Top = 293
+          Top = 341
           Width = 233
           Height = 27
           EditLabel.Width = 19
@@ -313,46 +363,23 @@ inherited frmCliente: TfrmCliente
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 8
-        end
-        object cbEstado: TComboBox
-          Left = 220
-          Top = 145
-          Width = 233
-          Height = 27
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 9
-        end
-        object cbMunicipio: TComboBox
-          Left = 498
-          Top = 145
-          Width = 233
-          Height = 27
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 10
-        end
-        object cbBairro: TComboBox
-          Left = 220
-          Top = 197
-          Width = 233
-          Height = 27
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
           TabOrder = 11
+        end
+        object moObservacao: TMemo
+          Left = 498
+          Top = 293
+          Width = 233
+          Height = 89
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Lines.Strings = (
+            '')
+          MaxLength = 255
+          ParentFont = False
+          TabOrder = 12
         end
       end
     end
@@ -361,8 +388,10 @@ inherited frmCliente: TfrmCliente
     Top = 498
     Width = 986
     ExplicitTop = 498
+    ExplicitWidth = 986
     inherited Panel4: TPanel
       Left = 485
+      ExplicitLeft = 485
     end
   end
   inherited dsTabela: TDataSource

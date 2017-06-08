@@ -6,7 +6,7 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
-  uEstadoModel, uInterfaceControler;
+  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel;
 
 type
   TBairroControler = class(TInterfacedObject, IControlerInterface)
@@ -254,7 +254,7 @@ end;
 procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
 var
   sIndice: String;
-  oMunicipioModel: TMunicipioModel;
+  oMunicipioModel: IModelMunicipioInterface;
 begin
   oMunicipioModel := TMunicipioModel.Create;
   oListaMunicipios.Clear;
@@ -265,9 +265,6 @@ begin
     for sIndice in oListaMunicipios.Keys do
       frmBairro.cbMunicipio.AddItem(sIndice, oListaMunicipios);
   end;
-
-  if Assigned(oMunicipioModel) then
-    FreeAndNil(oMunicipioModel);
 end;
 
 procedure TBairroControler.PopularComboBoxEstado;

@@ -33,6 +33,9 @@ object frmPrincipal: TfrmPrincipal
       object Bairros1: TMenuItem
         Action = actBairro
       end
+      object Clientes1: TMenuItem
+        Action = actCliente
+      end
     end
     object Sobre1: TMenuItem
       Caption = 'Sobre'
@@ -52,6 +55,10 @@ object frmPrincipal: TfrmPrincipal
     object actBairro: TAction
       Caption = 'Bairros'
       OnExecute = actBairroExecute
+    end
+    object actCliente: TAction
+      Caption = 'Clientes'
+      OnExecute = actClienteExecute
     end
   end
 end

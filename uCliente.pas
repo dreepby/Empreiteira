@@ -9,24 +9,25 @@ uses
 
 type
   TfrmCliente = class(TfrmCadastroBase)
-    edtCpf: TLabeledEdit;
-    edtCnpj: TLabeledEdit;
-    frmTelefone: TLabeledEdit;
-    edtCelular: TLabeledEdit;
-    moObservacao: TMemo;
-    edtRua: TLabeledEdit;
-    edtNumero: TLabeledEdit;
-    edtComplemento: TLabeledEdit;
-    edtCep: TLabeledEdit;
-    cbEstado: TComboBox;
-    cbMunicipio: TComboBox;
-    cbBairro: TComboBox;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     Label5: TLabel;
-    Label6: TLabel;
     cbPesquisa: TComboBox;
+    edtNome: TLabeledEdit;
+    edtCnpj: TLabeledEdit;
+    edtCpf: TLabeledEdit;
+    edtCelular: TLabeledEdit;
+    edtTelefone: TLabeledEdit;
+    cbEstado: TComboBox;
+    Label2: TLabel;
+    cbMunicipio: TComboBox;
+    Label3: TLabel;
+    cbBairro: TComboBox;
+    Label4: TLabel;
+    edtRua: TLabeledEdit;
+    edtComplemento: TLabeledEdit;
+    edtNumero: TLabeledEdit;
+    edtCep: TLabeledEdit;
+    moObservacao: TMemo;
+    Label6: TLabel;
   private
     { Private declarations }
   public

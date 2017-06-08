@@ -4,10 +4,11 @@ interface
 
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
-  FireDAC.Comp.DataSet, uBairroDto, uClassSingletonConexao;
+  FireDAC.Comp.DataSet, uBairroDto, uClassSingletonConexao,
+  uBairroInterfaceModel, System.Generics.Collections;
 
 type
-  TBairroModel = class
+  TBairroModel = class(TInterfacedObject, IModelBairroInterface)
   private
     oQueryListaBairros: TFDQuery;
   public
@@ -19,6 +20,8 @@ type
     function VerificarBairro(ABairro: TBairroDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String): Boolean;
+    function ADDListaHash(var oLista: TObjectDictionary<string,
+      TBairroDto>; const AId: Integer): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -27,6 +30,50 @@ type
 implementation
 
 { TBairrosModel }
+
+function TBairroModel.ADDListaHash(
+  var oLista: TObjectDictionary<string, TBairroDto>;
+  const AId: Integer): Boolean;
+var
+  oBairroDTO: TBairroDto;
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select * from bairro where  bairro_idMunicipio =' +
+      IntToStr(AId));
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oBairroDTO := TBairroDto.Create;
+
+        // Atribui os valores
+        oBairroDTO.idBairro := oQuery.FieldByName('idBairro')
+          .AsInteger;
+        oBairroDTO.Nome := oQuery.FieldByName('Nome').AsString;
+        oBairroDTO.oMunicipio.idMunicipio := oQuery.FieldByName('bairro_idMunicipio')
+          .AsInteger;
+
+        // Adiciona o objeto na lista hash
+        oLista.Add(oBairroDTO.Nome, oBairroDTO);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+
+end;
 
 function TBairroModel.Alterar(var ABairro: TBairroDto): Boolean;
 var
@@ -102,15 +149,14 @@ begin
   oQueryListaBairros.Filtered := False;
   if ATexto.Trim <> EmptyStr then
   begin
-    oQueryListaBairros.Filter := 'UPPER(NOME) LIKE ''%'+UpperCase(ATexto.Trim)+'%''';
+    oQueryListaBairros.Filter := 'UPPER(NOME) LIKE ''%' +
+      UpperCase(ATexto.Trim) + '%''';
     oQueryListaBairros.Filtered := True;
     Result := oQueryListaBairros.RecordCount > 0;
     if (not(Result)) then
       oQueryListaBairros.Filtered := False;
   end;
 end;
-
-
 
 function TBairroModel.VerificarBairro(ABairro: TBairroDto;
   out AId: Integer): Boolean;

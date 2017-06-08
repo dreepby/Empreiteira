@@ -3,7 +3,7 @@ unit uClienteDto;
 interface
 
 uses
-  uBairroDto, System.SysUtils;
+  uBairroDto, System.SysUtils, uEstadoDto, uMunicipioDto;
 
 type
   TClienteDto = class
@@ -20,6 +20,8 @@ type
     FRua: String;
     FCelular: String;
     FNome: String;
+    FoEstado: TEstadoDto;
+    FoMunicipio: TMunicipioDto;
     procedure SetCelular(const Value: String);
     procedure SetCep(const Value: String);
     procedure SetCnpj(const Value: String);
@@ -32,6 +34,8 @@ type
     procedure SetRua(const Value: String);
     procedure SetTelefone(const Value: String);
     procedure SetNome(const Value: String);
+    procedure SetoEstado(const Value: TEstadoDto);
+    procedure SetoMunicipio(const Value: TMunicipioDto);
   public
     property idCliente: Integer read FidCliente write SetidCliente;
     property Nome: String read FNome write SetNome;
@@ -45,6 +49,8 @@ type
     property Complemento: String read FComplemento write SetComplemento;
     property Cep: String read FCep write SetCep;
     property oBairro: TBairroDto read FoBairro write SetoBairro;
+    property oMunicipio: TMunicipioDto read FoMunicipio write SetoMunicipio;
+    property oEstado: TEstadoDto read FoEstado write SetoEstado;
 
     constructor Create;
     destructor Destroy; override;
@@ -57,12 +63,20 @@ implementation
 constructor TClienteDto.Create;
 begin
   FoBairro := TBairroDto.Create;
+  FoMunicipio := TMunicipioDto.Create;
+  FoEstado := TEstadoDto.Create;
 end;
 
 destructor TClienteDto.Destroy;
 begin
-  if(Assigned(FoBairro)) then
+  if (Assigned(FoBairro)) then
     FreeAndNil(FoBairro);
+
+  if (Assigned(FoMunicipio)) then
+    FreeAndNil(FoMunicipio);
+
+  if (Assigned(FoEstado)) then
+    FreeAndNil(FoEstado);
   inherited;
 end;
 
@@ -114,6 +128,16 @@ end;
 procedure TClienteDto.SetObservacao(const Value: String);
 begin
   FObservacao := Value;
+end;
+
+procedure TClienteDto.SetoEstado(const Value: TEstadoDto);
+begin
+  FoEstado := Value;
+end;
+
+procedure TClienteDto.SetoMunicipio(const Value: TMunicipioDto);
+begin
+  FoMunicipio := Value;
 end;
 
 procedure TClienteDto.SetRua(const Value: String);
