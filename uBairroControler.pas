@@ -6,7 +6,7 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
-  uEstadoModel, uInterfaceControler;
+  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel;
 
 type
   TBairroControler = class(TInterfacedObject, IControlerInterface)
@@ -225,7 +225,10 @@ begin
   if Key = #8 then
   begin
     if Length(Trim(frmBairro.edtPesquisa.Text)) = 1 then
+      ListarBairros
+    else if Length(Trim(frmBairro.edtPesquisa.Text)) = 0 then
       ListarBairros;
+
   end;
 
   if Key = #13 then
@@ -240,20 +243,18 @@ end;
 
 procedure TBairroControler.Pesquisar(Sender: TObject);
 begin
-  if (Trim(frmBairro.edtPesquisa.Text) <> EmptyStr) then
-  begin
-    if (oBairroRegra.Pesquisar(oBairroModel, frmBairro.edtPesquisa.Text) = False)
-    then
-      ShowMessage('Nenhum registro encontrado.');
-  end
-  else
-    ShowMessage('Campo pesquisa vazio.');
+  try
+    oBairroRegra.Localizar(oBairroModel, frmBairro.edtPesquisa.Text);
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
 end;
 
 procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
 var
   sIndice: String;
-  oMunicipioModel: TMunicipioModel;
+  oMunicipioModel: IModelMunicipioInterface;
 begin
   oMunicipioModel := TMunicipioModel.Create;
   oListaMunicipios.Clear;
@@ -264,9 +265,6 @@ begin
     for sIndice in oListaMunicipios.Keys do
       frmBairro.cbMunicipio.AddItem(sIndice, oListaMunicipios);
   end;
-
-  if Assigned(oMunicipioModel) then
-    FreeAndNil(oMunicipioModel);
 end;
 
 procedure TBairroControler.PopularComboBoxEstado;

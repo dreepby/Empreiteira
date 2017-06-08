@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls, uMunicipioControler, uBairroControler;
+  Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uClienteControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -21,10 +21,13 @@ type
     Municipios1: TMenuItem;
     actBairro: TAction;
     Bairros1: TMenuItem;
+    actCliente: TAction;
+    Clientes1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
     procedure actBairroExecute(Sender: TObject);
+    procedure actClienteExecute(Sender: TObject);
   private
     { Private declarations }
     procedure WMClose(var Message: TWMClose); message WM_Close;
@@ -51,6 +54,13 @@ begin
   if not(Assigned(oBairroControler)) then
     oBairroControler := TBairroControler.Create;
   oBairroControler.abrirForm;
+end;
+
+procedure TfrmPrincipal.actClienteExecute(Sender: TObject);
+begin
+   if not(Assigned(oClienteControler)) then
+    oClienteControler := TClienteControler.Create;
+  oClienteControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);

@@ -10,8 +10,8 @@ type
   public
     procedure Limpar(ABairro: TBairroDto);
     function VerificarExcluir(var AModel: TBairroModel; AId: Integer): Boolean;
+    function Localizar(const AModel: TBairroModel; ATexto: String): Boolean;
     function Deletar(var AModel: TBairroModel; AId: Integer): Boolean;
-    function Pesquisar(var AModel: TBairroModel; ANome: String): Boolean;
     function Salvar(var AModel: TBairroModel; ABairro: TBairroDto): String;
 
   end;
@@ -33,11 +33,14 @@ begin
   ABairro.oMunicipio.Nome := EmptyStr;
 end;
 
-function TBairroRegra.Pesquisar(var AModel: TBairroModel;
-  ANome: String): Boolean;
+function TBairroRegra.Localizar(const AModel: TBairroModel; ATexto: String): Boolean;
 begin
-  Result := AModel.Pesquisar(ANome);
+  Result := AModel.Localizar(ATexto);
+  if not(Result) then
+    raise Exception.Create('Nenhum registro encontrado.');
 end;
+
+
 
 function TBairroRegra.Salvar(var AModel: TBairroModel;
   ABairro: TBairroDto): String;
