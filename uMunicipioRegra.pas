@@ -3,24 +3,24 @@ unit uMunicipioRegra;
 interface
 
 uses
-  uMunicipioDto, System.SysUtils, uMunicipioModel;
+  uMunicipioDto, System.SysUtils, uMunicipioModel, uMunicipioInterfaceModel;
 
 type
   TMunicipioRegra = class
   public
     procedure Limpar(AMunicipio: TMunicipioDto);
-    function VerificarExcluir(var AModel: TMunicipioModel;
+    function VerificarExcluir(var AModel: IModelMunicipioInterface;
       AId: Integer): Boolean;
-    function Deletar(var AModel: TMunicipioModel; AId: Integer): Boolean;
-    function Pesquisar(var AModel: TMunicipioModel; ANome: String): Boolean;
-    function Salvar(var AModel: TMunicipioModel; AMunicipio: TMunicipioDto): String;
+    function Deletar(var AModel: IModelMunicipioInterface; AId: Integer): Boolean;
+    function Pesquisar(var AModel: IModelMunicipioInterface; ANome: String): Boolean;
+    function Salvar(var AModel: IModelMunicipioInterface; AMunicipio: TMunicipioDto): String;
   end;
 
 implementation
 
 { TMunicipioRegra }
 
-function TMunicipioRegra.Deletar(var AModel: TMunicipioModel;
+function TMunicipioRegra.Deletar(var AModel: IModelMunicipioInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
@@ -35,13 +35,13 @@ begin
   AMunicipio.oEstado.UF := EmptyStr;
 end;
 
-function TMunicipioRegra.Pesquisar(var AModel: TMunicipioModel;
+function TMunicipioRegra.Pesquisar(var AModel: IModelMunicipioInterface;
   ANome: String): Boolean;
 begin
   Result := AModel.Pesquisar(ANome);
 end;
 
-function TMunicipioRegra.Salvar(var AModel: TMunicipioModel;
+function TMunicipioRegra.Salvar(var AModel: IModelMunicipioInterface;
   AMunicipio: TMunicipioDto): String;
 var
   VerificarID: Integer;
@@ -85,7 +85,7 @@ begin
   end;
 end;
 
-function TMunicipioRegra.VerificarExcluir(var AModel: TMunicipioModel;
+function TMunicipioRegra.VerificarExcluir(var AModel: IModelMunicipioInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.VerificarExcluir(AId);

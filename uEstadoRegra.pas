@@ -3,24 +3,24 @@ unit uEstadoRegra;
 interface
 
 uses
-  uEstadoDto, System.SysUtils, uEstadoModel;
+  uEstadoDto, System.SysUtils, uEstadoModel, uEstadoInterfaceModel;
 
 type
   TEstadoRegra = class
 
   public
     procedure Limpar(var AEstado: TEstadoDto);
-    function Salvar(var AModel: TEstadoModel; AEstado: TEstadoDto): String;
-    function Pesquisar(var AModel: TEstadoModel; ANome: String): Boolean;
-    function VerificarExcluir(var AModel: TEstadoModel; AId: Integer): Boolean;
-    function Deletar(var AModel: TEstadoModel; AId: Integer): Boolean;
+    function Salvar(var AModel: IModelEstadoInterface; AEstado: TEstadoDto): String;
+    function Pesquisar(var AModel: IModelEstadoInterface; ANome: String): Boolean;
+    function VerificarExcluir(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
+    function Deletar(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
   end;
 
 implementation
 
 { TEstadoRegra }
 
-function TEstadoRegra.Deletar(var AModel: TEstadoModel; AId: Integer): Boolean;
+function TEstadoRegra.Deletar(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
 end;
@@ -32,13 +32,13 @@ begin
   AEstado.UF := EmptyStr;
 end;
 
-function TEstadoRegra.Pesquisar(var AModel: TEstadoModel;
+function TEstadoRegra.Pesquisar(var AModel: IModelEstadoInterface;
   ANome: String): Boolean;
 begin
   Result := AModel.Pesquisar(ANome);
 end;
 
-function TEstadoRegra.Salvar(var AModel: TEstadoModel;
+function TEstadoRegra.Salvar(var AModel: IModelEstadoInterface;
   AEstado: TEstadoDto): String;
 var
   VerificarID: Integer;
@@ -82,7 +82,7 @@ begin
   end;
 end;
 
-function TEstadoRegra.VerificarExcluir(var AModel: TEstadoModel;
+function TEstadoRegra.VerificarExcluir(var AModel: IModelEstadoInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.VerificarExcluir(AId);

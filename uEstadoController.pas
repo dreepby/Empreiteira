@@ -4,12 +4,12 @@ interface
 
 uses
   System.SysUtils, Data.DB, uEstadoDto, uEstadoModel, uEstado, uEstadoRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler, uEstadoInterfaceModel;
 
 type
   TEstadoControler = class(TInterfacedObject, IControlerInterface)
   private
-    oModelEstado: TEstadoModel;
+    oModelEstado: IModelEstadoInterface;
     oEstadoDto: TEstadoDto;
     oRegraEstado: TEstadoRegra;
     frmEstados: TfrmEstados;
@@ -108,9 +108,6 @@ begin
 
   if Assigned(oRegraEstado) then
     FreeAndNil(oRegraEstado);
-
-  if Assigned(oModelEstado) then
-    FreeAndNil(oModelEstado);
 
   if Assigned(frmEstados) then
   begin

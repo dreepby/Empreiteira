@@ -6,12 +6,12 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
-  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel;
+  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel, uBairroInterfaceModel;
 
 type
   TBairroControler = class(TInterfacedObject, IControlerInterface)
   private
-    oBairroModel: TBairroModel;
+    oBairroModel: IModelBairroInterface;
     oBairroDto: TBairroDto;
     oBairroRegra: TBairroRegra;
     oListaMunicipios: TObjectDictionary<string, TMunicipioDto>;
@@ -126,9 +126,6 @@ end;
 
 destructor TBairroControler.Destroy;
 begin
-
-  if Assigned(oBairroModel) then
-    FreeAndNil(oBairroModel);
 
   if Assigned(oBairroRegra) then
     FreeAndNil(oBairroRegra);

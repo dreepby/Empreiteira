@@ -5,13 +5,14 @@ interface
 uses
   System.SysUtils, Data.DB, System.Generics.Collections, uMunicipioDto,
   uMunicipioModel, uMunicipio, uEstadoDto, uEstadoModel, uMunicipioRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler,
+  uMunicipioInterfaceModel, uEstadoInterfaceModel;
 
 type
   TMunicipioControler = class(TInterfacedObject, IControlerInterface)
   private
     oListaEstados: TObjectDictionary<string, TEstadoDto>;
-    oModelMunicipio: TMunicipioModel;
+    oModelMunicipio: IModelMunicipioInterface;
     oRegraMunicipio: TMunicipioRegra;
     oMunicipioDto: TMunicipioDto;
     frmMunicipio: TfrmMunicipio;
@@ -112,8 +113,6 @@ end;
 
 destructor TMunicipioControler.Destroy;
 begin
-  if Assigned(oModelMunicipio) then
-    FreeAndNil(oModelMunicipio);
 
   if Assigned(oRegraMunicipio) then
     FreeAndNil(oRegraMunicipio);
@@ -227,7 +226,7 @@ end;
 procedure TMunicipioControler.PopularComboBox;
 var
   sIndice: String;
-  oModelEstado: TEstadoModel;
+  oModelEstado: IModelEstadoInterface;
 begin
   oModelEstado := TEstadoModel.Create;
   oListaEstados.Clear;
@@ -237,9 +236,6 @@ begin
     for sIndice in oListaEstados.Keys do
       frmMunicipio.cbEstado.AddItem(sIndice, oListaEstados);
   end;
-
-  if Assigned(oModelEstado) then
-    FreeAndNil(oModelEstado);
 end;
 
 procedure TMunicipioControler.Salvar(Sender: TObject);

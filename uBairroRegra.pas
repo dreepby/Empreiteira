@@ -3,16 +3,16 @@ unit uBairroRegra;
 interface
 
 uses
-  uBairroDto, System.SysUtils, uBairroModel;
+  uBairroDto, System.SysUtils, uBairroModel, uBairroInterfaceModel;
 
 type
   TBairroRegra = class
   public
     procedure Limpar(ABairro: TBairroDto);
-    function VerificarExcluir(var AModel: TBairroModel; AId: Integer): Boolean;
-    function Localizar(const AModel: TBairroModel; ATexto: String): Boolean;
-    function Deletar(var AModel: TBairroModel; AId: Integer): Boolean;
-    function Salvar(var AModel: TBairroModel; ABairro: TBairroDto): String;
+    function VerificarExcluir(var AModel: IModelBairroInterface; AId: Integer): Boolean;
+    function Localizar(const AModel: IModelBairroInterface; ATexto: String): Boolean;
+    function Deletar(var AModel: IModelBairroInterface; AId: Integer): Boolean;
+    function Salvar(var AModel: IModelBairroInterface; ABairro: TBairroDto): String;
 
   end;
 
@@ -20,7 +20,7 @@ implementation
 
 { TBairroRegra }
 
-function TBairroRegra.Deletar(var AModel: TBairroModel; AId: Integer): Boolean;
+function TBairroRegra.Deletar(var AModel: IModelBairroInterface; AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
 end;
@@ -33,7 +33,7 @@ begin
   ABairro.oMunicipio.Nome := EmptyStr;
 end;
 
-function TBairroRegra.Localizar(const AModel: TBairroModel; ATexto: String): Boolean;
+function TBairroRegra.Localizar(const AModel: IModelBairroInterface; ATexto: String): Boolean;
 begin
   Result := AModel.Localizar(ATexto);
   if not(Result) then
@@ -42,7 +42,7 @@ end;
 
 
 
-function TBairroRegra.Salvar(var AModel: TBairroModel;
+function TBairroRegra.Salvar(var AModel: IModelBairroInterface;
   ABairro: TBairroDto): String;
 var
   VerificarID: Integer;
@@ -84,7 +84,7 @@ begin
   end;
 end;
 
-function TBairroRegra.VerificarExcluir(var AModel: TBairroModel;
+function TBairroRegra.VerificarExcluir(var AModel: IModelBairroInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.VerificarExcluir(AId);
