@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uClienteControler;
+  Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uClienteControler,
+  uAmbienteControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -23,11 +24,14 @@ type
     Bairros1: TMenuItem;
     actCliente: TAction;
     Clientes1: TMenuItem;
+    actAmbiente: TAction;
+    actAmbiente1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
     procedure actBairroExecute(Sender: TObject);
     procedure actClienteExecute(Sender: TObject);
+    procedure actAmbienteExecute(Sender: TObject);
   private
     { Private declarations }
     procedure WMClose(var Message: TWMClose); message WM_Close;
@@ -58,7 +62,7 @@ end;
 
 procedure TfrmPrincipal.actClienteExecute(Sender: TObject);
 begin
-   if not(Assigned(oClienteControler)) then
+  if not(Assigned(oClienteControler)) then
     oClienteControler := TClienteControler.Create;
   oClienteControler.abrirForm;
 end;
@@ -75,6 +79,13 @@ begin
   if not(Assigned(oMunicipioControler)) then
     oMunicipioControler := TMunicipioControler.Create;
   oMunicipioControler.abrirForm;
+end;
+
+procedure TfrmPrincipal.actAmbienteExecute(Sender: TObject);
+begin
+  if not(Assigned(oAmbienteControler)) then
+    oAmbienteControler := TAmbienteControler.Create;
+  oAmbienteControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);

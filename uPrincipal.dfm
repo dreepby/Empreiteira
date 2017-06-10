@@ -36,6 +36,9 @@ object frmPrincipal: TfrmPrincipal
       object Clientes1: TMenuItem
         Action = actCliente
       end
+      object actAmbiente1: TMenuItem
+        Action = actAmbiente
+      end
     end
     object Sobre1: TMenuItem
       Caption = 'Sobre'
@@ -59,6 +62,10 @@ object frmPrincipal: TfrmPrincipal
     object actCliente: TAction
       Caption = 'Clientes'
       OnExecute = actClienteExecute
+    end
+    object actAmbiente: TAction
+      Caption = 'Ambiente'
+      OnExecute = actAmbienteExecute
     end
   end
 end

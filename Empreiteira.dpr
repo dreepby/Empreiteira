@@ -32,7 +32,13 @@ uses
   uClienteDto in 'uClienteDto.pas',
   uClienteModel in 'uClienteModel.pas',
   uClienteInterfaceModel in 'uClienteInterfaceModel.pas',
-  uClienteRegra in 'uClienteRegra.pas';
+  uClienteRegra in 'uClienteRegra.pas',
+  uAmbiente in 'uAmbiente.pas' {frmAmbiente},
+  uAmbienteControler in 'uAmbienteControler.pas',
+  uAmbienteModel in 'uAmbienteModel.pas',
+  uAmbienteRegra in 'uAmbienteRegra.pas',
+  uAmbienteDto in 'uAmbienteDto.pas',
+  uAmbienteInterfaceModel in 'uAmbienteInterfaceModel.pas';
 
 {$R *.res}
 
