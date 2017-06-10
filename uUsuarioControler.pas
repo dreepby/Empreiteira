@@ -71,9 +71,12 @@ begin
   oUsuarioDto.Nome := frmUsuario.DBGrid1.Fields[1].AsString;
   oUsuarioDto.CPF := frmUsuario.DBGrid1.Fields[2].AsString;
   frmUsuario.Caption := 'Alteração de Usuario';
+  frmUsuario.edtNome.Text := frmUsuario.DBGrid1.Fields[1].AsString;
+  frmUsuario.edtCPF.Text := frmUsuario.DBGrid1.Fields[2].AsString;
 
   frmUsuario.PageControl1.ActivePage := frmUsuario.tsDados;
   frmUsuario.tsTabela.Enabled := False;
+  frmUsuario.tsDados.Enabled := True;
   frmUsuario.btnInserir.Enabled := False;
   frmUsuario.BtnAlterar.Enabled := False;
   frmUsuario.btnExcluir.Enabled := False;
@@ -124,7 +127,25 @@ end;
 
 procedure TUsuarioControler.Excluir(Sender: TObject);
 begin
-
+if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
+    [mbyes, mbno], 0) = mryes then
+  begin
+    if oRegraUsuario.VerificarExcluir(oModelUsuario,
+      frmUsuario.DBGrid1.Fields[0].AsInteger) then
+    begin
+      if oRegraUsuario.Deletar(oModelUsuario,
+        frmUsuario.DBGrid1.Fields[0].AsInteger) then
+      begin
+        ShowMessage('Excluido com sucesso.');
+        ListarUsuarios;
+      end
+      else
+        ShowMessage('Houve algum erro!!');
+    end
+    else
+      ShowMessage
+        ('Impossível excluir, pois existe um ou mais registros vinculados com esse!');
+  end;
 end;
 
 procedure TUsuarioControler.fecharUsuario(Sender: TObject);
@@ -186,19 +207,28 @@ begin
 
   if (oUsuarioDto.Nome <> EmptyStr) and (oUsuarioDto.CPF <> EmptyStr) then
   begin
-    ShowMessage(oRegraUsuario.Salvar(oModelUsuario, oUsuarioDto));
+    try
+      if (oRegraUsuario.Salvar(oModelUsuario, oUsuarioDto)) then
+      begin
+        ShowMessage('Salvo com sucesso');
+        oRegraUsuario.Limpar(oUsuarioDto);
+        frmUsuario.edtNome.Text := EmptyStr;
+        frmUsuario.edtCPF.Text := EmptyStr;
+        frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
+        frmUsuario.tsTabela.Enabled := True;
+        frmUsuario.btnInserir.Enabled := True;
+        frmUsuario.BtnAlterar.Enabled := True;
+        frmUsuario.btnExcluir.Enabled := True;
+        frmUsuario.BtnSalvar.Enabled := False;
+        frmUsuario.BtnCancelar.Enabled := False;
+        frmUsuario.Caption := 'Listagem de Usuários';
+        ListarUsuarios;
+      end;
+    except
+      on E: Exception do
+        ShowMessage(E.Message);
 
-    oRegraUsuario.Limpar(oUsuarioDto);
-    frmUsuario.edtNome.Text := EmptyStr;
-    frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
-    frmUsuario.tsTabela.Enabled := True;
-    frmUsuario.btnInserir.Enabled := True;
-    frmUsuario.BtnAlterar.Enabled := True;
-    frmUsuario.btnExcluir.Enabled := True;
-    frmUsuario.BtnSalvar.Enabled := False;
-    frmUsuario.BtnCancelar.Enabled := False;
-    frmUsuario.Caption := 'Listagem de Usuários';
-    ListarUsuarios;
+    end
   end
   else
     ShowMessage('Prencha todos os campos');

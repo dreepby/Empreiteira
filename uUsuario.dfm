@@ -13,6 +13,12 @@ inherited frmUsuario: TfrmUsuario
           Columns = <
             item
               Expanded = False
+              FieldName = 'idUsuario'
+              Title.Caption = 'C'#243'digo'
+              Visible = True
+            end
+            item
+              Expanded = False
               FieldName = 'Nome'
               Width = 397
               Visible = True

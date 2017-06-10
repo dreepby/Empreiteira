@@ -20,7 +20,7 @@ type
     function Pesquisar(ANome: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
-    function ADDListaHash(var oMunicipio: TObjectDictionary<string,
+    function ADDListaHash(var oUsuario: TObjectDictionary<string,
       TUsuarioDto>; const AId: Integer): Boolean;
 
     constructor Create;
@@ -31,7 +31,7 @@ implementation
 
 { TUsuarioModel }
 
-function TUsuarioModel.ADDListaHash(var oMunicipio
+function TUsuarioModel.ADDListaHash(var oUsuario
   : TObjectDictionary<string, TUsuarioDto>; const AId: Integer): Boolean;
 begin
 
@@ -124,14 +124,45 @@ begin
 end;
 
 function TUsuarioModel.VerificarExcluir(AId: Integer): Boolean;
+var
+  oQuery: TFDQuery;
 begin
-
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idReforma from Reforma where Escritor_idUsuario = ' +
+      IntToStr(AId) + ' or Atendente_idUsuario = '+ IntToStr(AId));
+    if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 end;
 
 function TUsuarioModel.VerificarUsuario(AUsuario: TUsuarioDto;
   out AId: Integer): Boolean;
+var
+  oQuery: TFDQuery;
 begin
-
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select IdUsuario from Usuario where CPF=' +
+      (AUsuario.CPF));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      AId := oQuery.FieldByName('IdUsuario').AsInteger;
+      Result := True;
+    end
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 end;
 
 end.
