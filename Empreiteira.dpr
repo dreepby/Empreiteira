@@ -33,7 +33,7 @@ uses
   uUsuarioModel in 'uUsuarioModel.pas',
   uUsuarioRegra in 'uUsuarioRegra.pas',
   uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas',
-  ValidarDados in 'ValidarDados.pas';
+  uValidaCPF in 'uValidaCPF.pas';
 
 {$R *.res}
 
