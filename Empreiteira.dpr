@@ -38,7 +38,14 @@ uses
   uAmbienteModel in 'uAmbienteModel.pas',
   uAmbienteRegra in 'uAmbienteRegra.pas',
   uAmbienteDto in 'uAmbienteDto.pas',
-  uAmbienteInterfaceModel in 'uAmbienteInterfaceModel.pas';
+  uAmbienteInterfaceModel in 'uAmbienteInterfaceModel.pas',
+  uUsuario in 'uUsuario.pas' {frmUsuario},
+  uUsuarioControler in 'uUsuarioControler.pas',
+  uUsuarioDto in 'uUsuarioDto.pas',
+  uUsuarioModel in 'uUsuarioModel.pas',
+  uUsuarioRegra in 'uUsuarioRegra.pas',
+  uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas',
+  uValidaCPF in 'uValidaCPF.pas';
 
 {$R *.res}
 

@@ -33,11 +33,17 @@ object frmPrincipal: TfrmPrincipal
       object Bairros1: TMenuItem
         Action = actBairro
       end
+      object Usuarios1: TMenuItem
+        Action = actUsuario
+      end
       object Clientes1: TMenuItem
         Action = actCliente
       end
-      object actAmbiente1: TMenuItem
+      object Ambientes1: TMenuItem
         Action = actAmbiente
+      end
+      object Produtos1: TMenuItem
+        Action = actProduto
       end
     end
     object Sobre1: TMenuItem
@@ -59,13 +65,20 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Bairros'
       OnExecute = actBairroExecute
     end
+    object actUsuario: TAction
+      Caption = 'Usuarios'
+      OnExecute = actUsuarioExecute
+    end
     object actCliente: TAction
       Caption = 'Clientes'
       OnExecute = actClienteExecute
     end
     object actAmbiente: TAction
-      Caption = 'Ambiente'
+      Caption = 'Ambientes'
       OnExecute = actAmbienteExecute
+    end
+    object actProduto: TAction
+      Caption = 'Produtos'
     end
   end
 end

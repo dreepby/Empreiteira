@@ -7,8 +7,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
-  Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uClienteControler,
-  uAmbienteControler;
+  Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uUsuarioControler,
+  uClienteControler, uAmbienteControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -22,14 +22,19 @@ type
     Municipios1: TMenuItem;
     actBairro: TAction;
     Bairros1: TMenuItem;
+    actUsuario: TAction;
     actCliente: TAction;
-    Clientes1: TMenuItem;
     actAmbiente: TAction;
-    actAmbiente1: TMenuItem;
+    Usuarios1: TMenuItem;
+    Clientes1: TMenuItem;
+    Ambientes1: TMenuItem;
+    actProduto: TAction;
+    Produtos1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
     procedure actBairroExecute(Sender: TObject);
+    procedure actUsuarioExecute(Sender: TObject);
     procedure actClienteExecute(Sender: TObject);
     procedure actAmbienteExecute(Sender: TObject);
   private
@@ -53,6 +58,13 @@ begin
     Application.Terminate;
 end;
 
+procedure TfrmPrincipal.actAmbienteExecute(Sender: TObject);
+begin
+  if not(Assigned(oAmbienteControler)) then
+    oAmbienteControler := TAmbienteControler.Create;
+  oAmbienteControler.abrirForm;
+end;
+
 procedure TfrmPrincipal.actBairroExecute(Sender: TObject);
 begin
   if not(Assigned(oBairroControler)) then
@@ -62,9 +74,9 @@ end;
 
 procedure TfrmPrincipal.actClienteExecute(Sender: TObject);
 begin
-  if not(Assigned(oClienteControler)) then
-    oClienteControler := TClienteControler.Create;
-  oClienteControler.abrirForm;
+  if not(Assigned(oUsuarioControler)) then
+    oUsuarioControler := TUsuarioControler.Create;
+  oUsuarioControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);
@@ -81,11 +93,11 @@ begin
   oMunicipioControler.abrirForm;
 end;
 
-procedure TfrmPrincipal.actAmbienteExecute(Sender: TObject);
+procedure TfrmPrincipal.actUsuarioExecute(Sender: TObject);
 begin
-  if not(Assigned(oAmbienteControler)) then
-    oAmbienteControler := TAmbienteControler.Create;
-  oAmbienteControler.abrirForm;
+  if not(Assigned(oUsuarioControler)) then
+    oUsuarioControler := TUsuarioControler.Create;
+  oUsuarioControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
