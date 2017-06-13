@@ -6,7 +6,7 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections,
   uUsuario, uUsuarioDto, uUsuarioModel, uUsuarioRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler,
-  uUsuarioIntefaceModel;
+  uUsuarioIntefaceModel, uValidaCPF;
 
 type
   TUsuarioControler = class(TInterfacedObject, IControlerInterface)
@@ -15,6 +15,7 @@ type
     oModelUsuario: IModelUsuarioInterface;
     oRegraUsuario: TUsuarioRegra;
     oUsuarioDto: TUsuarioDto;
+    oValidaCPF: TValidaCPF;
     frmUsuario: TfrmUsuario;
 
     procedure ListarUsuarios;
@@ -27,7 +28,6 @@ type
     procedure Pesquisar(Sender: TObject);
     procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure PopularComboBox;
 
   public
     procedure AbrirForm;
@@ -86,6 +86,7 @@ end;
 
 procedure TUsuarioControler.Cancelar(Sender: TObject);
 begin
+
   frmUsuario.tsTabela.Enabled := True;
   frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
   frmUsuario.tsDados.Enabled := False;
@@ -95,8 +96,8 @@ begin
   frmUsuario.BtnSalvar.Enabled := False;
   frmUsuario.BtnCancelar.Enabled := False;
   frmUsuario.edtNome.Text := EmptyStr;
+  frmUsuario.edtCPF.Text := EmptyStr;
   frmUsuario.Caption := 'Listagem de Usuários';
-  oRegraUsuario.Limpar(oUsuarioDto);
 end;
 
 constructor TUsuarioControler.Create;
@@ -104,6 +105,7 @@ begin
   oModelUsuario := TUsuarioModel.Create;
   oRegraUsuario := TUsuarioRegra.Create;
   oUsuarioDto := TUsuarioDto.Create;
+  oValidaCPF := TValidaCPF.Create;
 end;
 
 destructor TUsuarioControler.Destroy;
@@ -114,8 +116,8 @@ begin
   if Assigned(oRegraUsuario) then
     FreeAndNil(oRegraUsuario);
 
-  // if Assigned(oModelUsuario) then
-  // FreeAndNil(oModelUsuario);
+  if Assigned(oValidaCPF) then
+    FreeAndNil(oValidaCPF);
 
   if (Assigned(frmUsuario)) then
   begin
@@ -127,7 +129,7 @@ end;
 
 procedure TUsuarioControler.Excluir(Sender: TObject);
 begin
-if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
+  if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
     [mbyes, mbno], 0) = mryes then
   begin
     if oRegraUsuario.VerificarExcluir(oModelUsuario,
@@ -195,10 +197,7 @@ begin
 
 end;
 
-procedure TUsuarioControler.PopularComboBox;
-begin
 
-end;
 
 procedure TUsuarioControler.Salvar(Sender: TObject);
 begin
@@ -206,30 +205,34 @@ begin
   oUsuarioDto.CPF := Trim(frmUsuario.edtCPF.Text);
 
   if (oUsuarioDto.Nome <> EmptyStr) and (oUsuarioDto.CPF <> EmptyStr) then
-  begin
-    try
-      if (oRegraUsuario.Salvar(oModelUsuario, oUsuarioDto)) then
-      begin
-        ShowMessage('Salvo com sucesso');
-        oRegraUsuario.Limpar(oUsuarioDto);
-        frmUsuario.edtNome.Text := EmptyStr;
-        frmUsuario.edtCPF.Text := EmptyStr;
-        frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
-        frmUsuario.tsTabela.Enabled := True;
-        frmUsuario.btnInserir.Enabled := True;
-        frmUsuario.BtnAlterar.Enabled := True;
-        frmUsuario.btnExcluir.Enabled := True;
-        frmUsuario.BtnSalvar.Enabled := False;
-        frmUsuario.BtnCancelar.Enabled := False;
-        frmUsuario.Caption := 'Listagem de Usuários';
-        ListarUsuarios;
-      end;
-    except
-      on E: Exception do
-        ShowMessage(E.Message);
+    if (oValidaCPF.ValidarCPF(oUsuarioDto.CPF)) then
 
+    begin
+      try
+        if (oRegraUsuario.Salvar(oModelUsuario, oUsuarioDto)) then
+        begin
+          ShowMessage('Salvo com sucesso');
+          oRegraUsuario.Limpar(oUsuarioDto);
+          frmUsuario.edtNome.Text := EmptyStr;
+          frmUsuario.edtCPF.Text := EmptyStr;
+          frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
+          frmUsuario.tsTabela.Enabled := True;
+          frmUsuario.btnInserir.Enabled := True;
+          frmUsuario.BtnAlterar.Enabled := True;
+          frmUsuario.btnExcluir.Enabled := True;
+          frmUsuario.BtnSalvar.Enabled := False;
+          frmUsuario.BtnCancelar.Enabled := False;
+          frmUsuario.Caption := 'Listagem de Usuários';
+          ListarUsuarios;
+        end;
+      except
+        on E: Exception do
+          ShowMessage(E.Message);
+
+      end
     end
-  end
+    else
+      ShowMessage('O CPF digitado é inválido')
   else
     ShowMessage('Prencha todos os campos');
 end;

@@ -4,6 +4,7 @@ inherited frmUsuario: TfrmUsuario
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
+      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -32,13 +33,20 @@ inherited frmUsuario: TfrmUsuario
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
+        ExplicitLeft = -5
+        ExplicitTop = 16
         ExplicitWidth = 746
         ExplicitHeight = 239
+        object Label2: TLabel
+          Left = 259
+          Top = 99
+          Width = 19
+          Height = 13
+          Caption = 'CPF'
+        end
         object edtNome: TLabeledEdit
-          Left = 312
-          Top = 80
+          Left = 259
+          Top = 56
           Width = 217
           Height = 21
           EditLabel.Width = 27
@@ -46,15 +54,15 @@ inherited frmUsuario: TfrmUsuario
           EditLabel.Caption = 'Nome'
           TabOrder = 0
         end
-        object edtCPF: TLabeledEdit
-          Left = 312
-          Top = 128
-          Width = 217
+        object edtCPF: TMaskEdit
+          Left = 259
+          Top = 120
+          Width = 214
           Height = 21
-          EditLabel.Width = 19
-          EditLabel.Height = 13
-          EditLabel.Caption = 'CPF'
+          EditMask = '999.999.999-99;0;_'
+          MaxLength = 14
           TabOrder = 1
+          Text = ''
         end
       end
     end

@@ -32,7 +32,8 @@ uses
   uUsuarioDto in 'uUsuarioDto.pas',
   uUsuarioModel in 'uUsuarioModel.pas',
   uUsuarioRegra in 'uUsuarioRegra.pas',
-  uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas';
+  uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas',
+  ValidarDados in 'ValidarDados.pas';
 
 {$R *.res}
 

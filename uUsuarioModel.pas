@@ -42,7 +42,7 @@ var
   sSql: String;
 begin
   sSql := 'update Usuario set nome = ' + QuotedStr(AUsuario.Nome) +
-    '     , CPF = ' + (AUsuario.CPF) + ' where idUsuario = ' +
+    '     , CPF = "' + (AUsuario.CPF) + '" where idUsuario = ' +
     IntToStr(AUsuario.idUsuario);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
@@ -151,7 +151,7 @@ begin
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select IdUsuario from Usuario where CPF=' +
-      (AUsuario.CPF));
+      (QuotedStr(AUsuario.CPF)));
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('IdUsuario').AsInteger;
