@@ -12,6 +12,7 @@ type
     edtNome: TLabeledEdit;
     edtCPF: TMaskEdit;
     Label2: TLabel;
+    cbPesquisa: TComboBox;
   private
     { Private declarations }
   public

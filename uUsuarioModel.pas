@@ -17,12 +17,14 @@ type
     function Inserir(var AUsuario: TUsuarioDto): Boolean;
     procedure ListarUsuarios(var DsUsuario: TDataSource);
     function Deletar(const AidUsuario: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
+    function Localizar(ATexto, ACampo: String): Boolean;
+    function Pesquisar(const AModel: IModelUsuarioInterface;
+      ANome: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
-    function ADDListaHash(var oUsuario: TObjectDictionary<string,
-      TUsuarioDto>; const AId: Integer): Boolean;
-
+    function ADDListaHash(var oUsuario: TObjectDictionary<string, TUsuarioDto>;
+      const AId: Integer): Boolean;
+    procedure DesativarFiltro;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -78,6 +80,11 @@ begin
     ('delete from usuario where idusuario = ' + IntToStr(AidUsuario)) > 0;
 end;
 
+procedure TUsuarioModel.DesativarFiltro;
+begin
+  oQueryListarUsuarios.Filtered := False;
+end;
+
 destructor TUsuarioModel.Destroy;
 begin
   oQueryListarUsuarios.Close;
@@ -101,26 +108,34 @@ end;
 
 procedure TUsuarioModel.ListarUsuarios(var DsUsuario: TDataSource);
 begin
+  oQueryListarUsuarios.Filtered := False;
   oQueryListarUsuarios.Connection := TSingletonConexao.GetInstancia;
   oQueryListarUsuarios.Open('select * from usuario');
   DsUsuario.DataSet := oQueryListarUsuarios;
 
 end;
 
-function TUsuarioModel.Pesquisar(ANome: String): Boolean;
+
+
+function TUsuarioModel.Localizar(ATexto, ACampo: String): Boolean;
 begin
-  oQueryListarUsuarios.Open('SELECT * FROM USUARIO where Nome LIKE "%' +
-    ANome + '%"');
-  if (not(oQueryListarUsuarios.IsEmpty)) then
+Result := True;
+  oQueryListarUsuarios.Filtered := False;
+  if ATexto.Trim <> EmptyStr then
   begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-    oQueryListarUsuarios.Open
-      ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
+    oQueryListarUsuarios.Filter := 'UPPER(' + ACampo + ') LIKE ''%' +
+      UpperCase(ATexto.Trim) + '%''';
+    oQueryListarUsuarios.Filtered := True;
+    Result := oQueryListarUsuarios.RecordCount > 0;
+    if (not(Result)) then
+      oQueryListarUsuarios.Filtered := False;
   end;
+end;
+
+function TUsuarioModel.Pesquisar(const AModel: IModelUsuarioInterface;
+  ANome: String): Boolean;
+begin
+
 end;
 
 function TUsuarioModel.VerificarExcluir(AId: Integer): Boolean;
@@ -131,7 +146,7 @@ begin
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select idReforma from Reforma where Escritor_idUsuario = ' +
-      IntToStr(AId) + ' or Atendente_idUsuario = '+ IntToStr(AId));
+      IntToStr(AId) + ' or Atendente_idUsuario = ' + IntToStr(AId));
     if (oQuery.IsEmpty) then
       Result := True
     else

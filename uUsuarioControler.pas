@@ -172,7 +172,7 @@ begin
   frmUsuario.BtnSalvar.Enabled := True;
   frmUsuario.BtnCancelar.Enabled := True;
   frmUsuario.edtNome.SetFocus;
-  PopularComboBox;
+
 end;
 
 procedure TUsuarioControler.ListarUsuarios;
@@ -184,20 +184,39 @@ procedure TUsuarioControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 
+  if Key = VK_F2 then
+    frmUsuario.edtPesquisa.SetFocus;
+
+  if Key = VK_F5 then
+    ListarUsuarios;
+
 end;
 
 procedure TUsuarioControler.OnKeyPressEdtPesquisa(Sender: TObject;
   var Key: Char);
 begin
+  if Key = #8 then
+  begin
+    if Length(Trim(frmUsuario.edtPesquisa.Text)) = 1 then
+      oRegraUsuario.DesativarFiltro(oModelUsuario)
+    else if Length(Trim(frmUsuario.edtPesquisa.Text)) = 0 then
+      oRegraUsuario.DesativarFiltro(oModelUsuario);
+  end;
 
+  if Key = #13 then
+    frmUsuario.btnPesquisa.Click;
 end;
 
 procedure TUsuarioControler.Pesquisar(Sender: TObject);
 begin
-
+  try
+    oRegraUsuario.Localizar(oModelUsuario, frmUsuario.edtPesquisa.Text,
+      frmUsuario.cbPesquisa.Items[frmUsuario.cbPesquisa.ItemIndex]);
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
 end;
-
-
 
 procedure TUsuarioControler.Salvar(Sender: TObject);
 begin

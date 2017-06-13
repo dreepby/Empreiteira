@@ -2,9 +2,29 @@ inherited frmUsuario: TfrmUsuario
   Caption = 'Listagem de Usu'#225'rios'
   PixelsPerInch = 96
   TextHeight = 13
+  inherited Panel1: TPanel
+    object cbPesquisa: TComboBox
+      Left = 101
+      Top = 14
+      Width = 88
+      Height = 22
+      Style = csOwnerDrawFixed
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 2
+      Text = 'Nome'
+      Items.Strings = (
+        'Nome'
+        'CPF')
+    end
+  end
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
-      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -33,8 +53,8 @@ inherited frmUsuario: TfrmUsuario
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = -5
-        ExplicitTop = 16
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 746
         ExplicitHeight = 239
         object Label2: TLabel
@@ -56,13 +76,13 @@ inherited frmUsuario: TfrmUsuario
         end
         object edtCPF: TMaskEdit
           Left = 259
-          Top = 120
-          Width = 214
+          Top = 118
+          Width = 208
           Height = 21
-          EditMask = '999.999.999-99;0;_'
+          EditMask = '999.999.999-99;1;_'
           MaxLength = 14
           TabOrder = 1
-          Text = ''
+          Text = '   .   .   -  '
         end
       end
     end

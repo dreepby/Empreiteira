@@ -12,11 +12,14 @@ type
     function Inserir(var AUsuario: TUsuarioDto): Boolean;
     procedure ListarUsuarios(var DsUsuario: TDataSource);
     function Deletar(const AidUsuario: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
+    function Pesquisar(const AModel: IModelUsuarioInterface;
+      ANome: String): Boolean;
+    function Localizar(ATexto, ACampo: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
       TUsuarioDto>; const AId: Integer): Boolean;
+    procedure DesativarFiltro;
   end;
 
 implementation

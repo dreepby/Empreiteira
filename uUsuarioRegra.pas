@@ -16,10 +16,11 @@ type
       AId: Integer): Boolean;
     function Deletar(const AModel: IModelUsuarioInterface;
       AId: Integer): Boolean;
-    function Pesquisar(const AModel: IModelUsuarioInterface;
-      ANome: String): Boolean;
+    function Localizar(const AModel: IModelUsuarioInterface;
+      ATexto, ACampo: String): Boolean;
     function Salvar(const AModel: IModelUsuarioInterface;
       AUsuario: TUsuarioDto): Boolean;
+    procedure DesativarFiltro(const AModel: IModelUsuarioInterface);
   end;
 
 implementation
@@ -30,6 +31,11 @@ function TUsuarioRegra.Deletar(const AModel: IModelUsuarioInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
+end;
+
+procedure TUsuarioRegra.DesativarFiltro(const AModel: IModelUsuarioInterface);
+begin
+  AModel.DesativarFiltro;
 end;
 
 procedure TUsuarioRegra.Limpar(AUsuario: TUsuarioDto);
@@ -45,10 +51,17 @@ begin
   AModel.ListarUsuarios(dsTabela);
 end;
 
-function TUsuarioRegra.Pesquisar(const AModel: IModelUsuarioInterface;
-  ANome: String): Boolean;
+function TUsuarioRegra.Localizar(const AModel: IModelUsuarioInterface;
+  ATexto, ACampo: String): Boolean;
 begin
-
+  if Trim(ATexto) = EmptyStr then
+    raise Exception.Create('Campo de pesquisa vazio.')
+  else
+  begin
+    Result := AModel.Localizar(ATexto, ACampo);
+  end;
+  if not(Result) then
+    raise Exception.Create('Nenhum registro encontrado.');
 end;
 
 function TUsuarioRegra.Salvar(const AModel: IModelUsuarioInterface;
