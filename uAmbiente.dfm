@@ -4,6 +4,28 @@ inherited frmAmbiente: TfrmAmbiente
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
+      inherited tsTabela: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
+        ExplicitWidth = 746
+        ExplicitHeight = 239
+        inherited DBGrid1: TDBGrid
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'idAmbientes'
+              Title.Caption = 'C'#243'digo'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Descricao'
+              Title.Caption = 'Descri'#231#227'o'
+              Width = 643
+              Visible = True
+            end>
+        end
+      end
       inherited tsDados: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
