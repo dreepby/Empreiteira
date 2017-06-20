@@ -45,7 +45,13 @@ uses
   uUsuarioModel in 'uUsuarioModel.pas',
   uUsuarioRegra in 'uUsuarioRegra.pas',
   uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas',
-  uValidaCPF in 'uValidaCPF.pas';
+  uValidaCPF in 'uValidaCPF.pas',
+  uProduto in 'uProduto.pas' {frmProduto},
+  uProdutoModel in 'uProdutoModel.pas',
+  uProdutoDto in 'uProdutoDto.pas',
+  uProdutoRegra in 'uProdutoRegra.pas',
+  uProdutoControler in 'uProdutoControler.pas',
+  uProdutoInterfaceModel in 'uProdutoInterfaceModel.pas';
 
 {$R *.res}
 
@@ -53,5 +59,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TfrmProduto, frmProduto);
   Application.Run;
 end.
