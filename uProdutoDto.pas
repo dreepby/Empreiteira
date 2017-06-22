@@ -11,13 +11,16 @@ type
     procedure SetDescricao(const Value: String);
     procedure SetidProduto(const Value: integer);
     procedure SetPreco(const Value: Currency);
+
   public
-    property idProduto: integer   read FidProduto write SetidProduto;
-    property Descricao: String    read FDescricao write SetDescricao;
-    property Preco : Currency read FPreco write SetPreco;
+    property idProduto: integer read FidProduto write SetidProduto;
+    property Descricao: String read FDescricao write SetDescricao;
+    property Preco: Currency read FPreco write SetPreco;
   end;
 
 implementation
+
+{ TProdutoDto }
 
 { TProdutoDto }
 

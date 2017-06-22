@@ -12,12 +12,11 @@ type
     function Inserir(var AProduto: TProdutoDto): Boolean;
     procedure ListarProdutos(var DsTabela: TDataSource);
     function Deletar(const AIDProduto: Integer): Boolean;
-    function VerificarProduto(AProduto: TProdutoDto;
-      out AId: Integer): Boolean;
+    function VerificarProduto(AProduto: TProdutoDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String): Boolean;
-    function ADDListaHash(var oLista: TObjectDictionary<string,
-      TProdutoDto>): Boolean;
+    function BuscarProduto(AProduto: TProdutoDto): Boolean;
+
   end;
 
 implementation

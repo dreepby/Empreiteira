@@ -17,12 +17,20 @@ type
       AId: Integer): Boolean;
     function Salvar(const AModel: IModelProdutoInterface;
       AProduto: TProdutoDto): Boolean;
+    function BuscarProduto(const AModel: IModelProdutoInterface;
+      AProduto: TProdutoDto): Boolean;
 
-  end;
+    end;
 
 implementation
 
 { TProdutoRegra }
+
+function TProdutoRegra.BuscarProduto(const AModel: IModelProdutoInterface;
+  AProduto: TProdutoDto): Boolean;
+begin
+  Result := AModel.BuscarProduto(AProduto);
+end;
 
 function TProdutoRegra.Deletar(const AModel: IModelProdutoInterface;
   AId: Integer): Boolean;
@@ -49,7 +57,7 @@ procedure TProdutoRegra.Limpar(AProduto: TProdutoDto);
 begin
   AProduto.idProduto := 0;
   AProduto.Descricao := EmptyStr;
-  AProduto.Preco := EmptyStr;
+  AProduto.Preco := 0;
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;

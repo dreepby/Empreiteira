@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
   Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uUsuarioControler,
-  uClienteControler, uAmbienteControler;
+  uClienteControler, uAmbienteControler, uProdutoControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -37,6 +37,8 @@ type
     procedure actUsuarioExecute(Sender: TObject);
     procedure actClienteExecute(Sender: TObject);
     procedure actAmbienteExecute(Sender: TObject);
+    procedure actProdutoExecute(Sender: TObject);
+
   private
     { Private declarations }
     procedure WMClose(var Message: TWMClose); message WM_Close;
@@ -93,6 +95,13 @@ begin
   oMunicipioControler.abrirForm;
 end;
 
+procedure TfrmPrincipal.actProdutoExecute(Sender: TObject);
+begin
+  if not(Assigned(oProdutoControler)) then
+    oProdutoControler := TProdutoControler.Create;
+  oProdutoControler.abrirForm;
+end;
+
 procedure TfrmPrincipal.actUsuarioExecute(Sender: TObject);
 begin
   if not(Assigned(oUsuarioControler)) then
@@ -115,5 +124,7 @@ begin
     exit;
   end;
 end;
+
+
 
 end.

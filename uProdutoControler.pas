@@ -34,6 +34,9 @@ type
     destructor Destroy; override;
   end;
 
+var
+  oProdutoControler: TProdutoControler;
+
 implementation
 
 { TProdutoControler }
@@ -63,53 +66,67 @@ procedure TProdutoControler.Alterar(Sender: TObject);
 begin
   oProdutoDto.idProduto := frmProduto.DBGrid1.Fields[0].AsInteger;
 
-  frmProduto.tsDados.Enabled := True;
-  frmProduto.Caption := 'Alteração de Produto';
-  frmProduto.edtDescricao.Text := frmProduto.DBGrid1.Fields[1].AsString;
-  frmProduto.PageControl1.ActivePage := frmProduto.tsDados;
-  frmProduto.tsTabela.Enabled := False;
-  frmProduto.btnInserir.Enabled := False;
-  frmProduto.BtnAlterar.Enabled := False;
-  frmProduto.btnExcluir.Enabled := False;
-  frmProduto.BtnSalvar.Enabled := True;
-  frmProduto.BtnCancelar.Enabled := True;
+  if oProdutoRegra.BuscarProduto(oProdutoModel, oProdutoDto) then
+  begin
+    frmProduto.tsDados.Enabled := True;
+    frmProduto.Caption := 'Alteração de Produto';
+    frmProduto.PageControl1.ActivePage := frmProduto.tsDados;
+    frmProduto.tsTabela.Enabled := False;
+    frmProduto.btnInserir.Enabled := False;
+    frmProduto.BtnAlterar.Enabled := False;
+    frmProduto.btnExcluir.Enabled := False;
+    frmProduto.BtnSalvar.Enabled := True;
+    frmProduto.BtnCancelar.Enabled := True;
+    frmProduto.edtDescricao.Text := oProdutoDto.Descricao;
+    frmProduto.edtPreco.Text := CurrToStr(oProdutoDto.Preco)
+  end
+  else
+    ShowMessage('Nenhum registro encontrado');
+
 end;
 
 procedure TProdutoControler.Cancelar(Sender: TObject);
 begin
-
+  frmProduto.tsTabela.Enabled := True;
+  frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
+  frmProduto.tsDados.Enabled := False;
+  frmProduto.btnInserir.Enabled := True;
+  frmProduto.BtnAlterar.Enabled := True;
+  frmProduto.btnExcluir.Enabled := True;
+  frmProduto.BtnSalvar.Enabled := False;
+  frmProduto.BtnCancelar.Enabled := False;
+  frmProduto.edtDescricao.Text := EmptyStr;
+  frmProduto.edtPreco.Text := EmptyStr;
+  frmProduto.Caption := 'Listagem de Produtos';
 end;
 
 constructor TProdutoControler.Create;
 begin
-
+  oProdutoModel := TProdutoModel.Create;
+  oProdutoRegra := TProdutoRegra.Create;
+  oProdutoDto := TProdutoDto.Create;
 end;
 
 destructor TProdutoControler.Destroy;
 begin
-   if Assigned(oProdutoRegra) then
-    FreeAndNil(oProdutoRegra);
-
-  if Assigned(oListaProdutos) then
-  begin
-    oListaProdutos.Clear;
-    FreeAndNil(oListaProdutos);
-  end;
-
   if Assigned(oProdutoDto) then
     FreeAndNil(oProdutoDto);
 
-  if Assigned(frmProduto) then
+  if Assigned(oProdutoRegra) then
+    FreeAndNil(oProdutoRegra);
+
+  if (Assigned(frmProduto)) then
   begin
     frmProduto.Close;
     FreeAndNil(frmProduto);
   end;
+
   inherited;
 end;
 
 procedure TProdutoControler.Excluir(Sender: TObject);
 begin
- if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
+  if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
     [mbyes, mbno], 0) = mryes then
   begin
     if oProdutoRegra.VerificarExcluir(oProdutoModel,
@@ -132,12 +149,26 @@ end;
 
 procedure TProdutoControler.fecharProduto(Sender: TObject);
 begin
+  if (not(Assigned(frmProduto))) then
+    exit;
 
+  oProdutoRegra.Limpar(oProdutoDto);
+  frmProduto.Close;
+  FreeAndNil(frmProduto);
 end;
 
 procedure TProdutoControler.Inserir(Sender: TObject);
 begin
-
+  frmProduto.tsDados.Enabled := True;
+  frmProduto.Caption := 'Cadastro de Produto';
+  frmProduto.PageControl1.ActivePage := frmProduto.tsDados;
+  frmProduto.tsTabela.Enabled := False;
+  frmProduto.btnInserir.Enabled := False;
+  frmProduto.BtnAlterar.Enabled := False;
+  frmProduto.btnExcluir.Enabled := False;
+  frmProduto.BtnSalvar.Enabled := True;
+  frmProduto.BtnCancelar.Enabled := True;
+  frmProduto.edtDescricao.SetFocus;
 end;
 
 procedure TProdutoControler.ListarProdutos;
@@ -164,34 +195,46 @@ end;
 
 procedure TProdutoControler.Salvar(Sender: TObject);
 begin
-   oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
-  if (oProdutoDto.Descricao <> EmptyStr) and (oProdutoDto.Preco > 0) then
-  begin
-    try
-      if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto)) then
-      begin
-        ShowMessage('Salvo com sucesso');
-        oProdutoRegra.Limpar(oProdutoDto);
-        frmProduto.edtDescricao.Text := EmptyStr;
-        frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
-        frmProduto.tsTabela.Enabled := True;
-        frmProduto.btnInserir.Enabled := True;
-        frmProduto.BtnAlterar.Enabled := True;
-        frmProduto.btnExcluir.Enabled := True;
-        frmProduto.BtnSalvar.Enabled := False;
-        frmProduto.BtnCancelar.Enabled := False;
-        frmProduto.Caption := 'Listagem de Produtos';
-        ListarProdutos;
-      end;
-    except
-      on E: Exception do
-        ShowMessage(E.Message);
+  oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
+  oProdutoDto.Preco := StrToCurr(frmProduto.edtPreco.Text);
+  if (frmProduto.edtDescricao.Text <> EmptyStr) then
+    if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) then
 
+    begin
+      try
+        if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto)) then
+        begin
+          oProdutoRegra.Limpar(oProdutoDto);
+          frmProduto.edtDescricao.Text := EmptyStr;
+          frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
+          frmProduto.tsTabela.Enabled := True;
+          frmProduto.btnInserir.Enabled := True;
+          frmProduto.BtnAlterar.Enabled := True;
+          frmProduto.btnExcluir.Enabled := True;
+          oProdutoRegra.Limpar(oProdutoDto);
+          frmProduto.BtnSalvar.Enabled := False;
+          frmProduto.BtnCancelar.Enabled := False;
+          frmProduto.Caption := 'Listagem de Produtos';
+          ListarProdutos;
+        end;
+      except
+        on E: Exception do
+          ShowMessage(E.Message);
+
+      end
     end
-  end
+    else
+      ShowMessage('Insira um valor válido.')
   else
     ShowMessage('Prencha o campo Descrição.');
 
 end;
+
+initialization
+
+finalization
+
+if Assigned(oProdutoControler) then
+  FreeAndNil(oProdutoControler);
 
 end.

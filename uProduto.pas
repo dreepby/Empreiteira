@@ -12,9 +12,9 @@ type
   TfrmProduto = class(TfrmCadastroBase)
     edtDescricao: TLabeledEdit;
     CheckListBox1: TCheckListBox;
-    edtPreco: TMaskEdit;
     Label2: TLabel;
     CheckListBox2: TCheckListBox;
+    edtPreco: TEdit;
   private
     { Private declarations }
   public
