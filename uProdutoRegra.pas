@@ -16,8 +16,8 @@ type
       ATexto: String): Boolean;
     function Deletar(const AModel: IModelProdutoInterface;
       AId: Integer): Boolean;
-    function Salvar(const AModel: IModelProdutoInterface;
-      AProduto: TProdutoDto): Boolean;
+    function Salvar(const AModel: IModelProdutoInterface; AProduto: TProdutoDto;
+      AAmbientes: array of Integer): Boolean;
     function BuscarProduto(const AModel: IModelProdutoInterface;
       AProduto: TProdutoDto): Boolean;
     function SalvarAmbientes(AAmbientes: array of Integer;
@@ -64,7 +64,7 @@ begin
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;
-  AProduto: TProdutoDto): Boolean;
+  AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
 var
   VerificarID: Integer;
 begin
@@ -74,7 +74,14 @@ begin
     begin
       AProduto.idProduto := AModel.BuscarID;
       if (AModel.Inserir(AProduto)) then
-        Result := True
+      begin
+        begin
+          if SalvarAmbientes(AAmbientes, AProduto) then
+            Result := True
+          else
+            raise Exception.Create('Ocorreu algum erro!')
+        end;
+      end
       else
         raise Exception.Create('Ocorreu algum erro!')
     end
@@ -87,7 +94,12 @@ begin
     begin
       if VerificarID = AProduto.idProduto then
         If AModel.Alterar(AProduto) then
-          Result := True
+        begin
+          if SalvarAmbientes(AAmbientes, AProduto) then
+            Result := True
+          else
+            raise Exception.Create('Ocorreu algum erro!')
+        end
         else
           raise Exception.Create('Ocorreu algum erro!')
       else
@@ -109,24 +121,25 @@ end;
 function TProdutoRegra.SalvarAmbientes(AAmbientes: array of Integer;
   AProduto: TProdutoDto): Boolean;
 var
-  i: Integer;
+  i, count: Integer;
   oProdutoAmbienteModel: IModelProdutoAmbienteInterface;
   oProdutoAmbienteDto: TProdutoAmbienteDto;
 begin
-  Result := False;
   oProdutoAmbienteDto := TProdutoAmbienteDto.Create;
-  i := Length(AAmbientes);
+  count := Length(AAmbientes) - 2;
   oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
   oProdutoAmbienteDto.oProduto.idProduto := AProduto.idProduto;
-  for i := 0 to i do
+  for i := 0 to count do
   begin
-    // chamar função buscarid do model produtoAmbiente e colocar na property IdAmbienteProduto
-    oProdutoAmbienteDto. := AAmbientes[i];
+    oProdutoAmbienteDto.IdProdutoAmbiente := oProdutoAmbienteModel.BuscarID;
     oProdutoAmbienteDto.oAmbiente.idAmbiente := AAmbientes[i];
-    if oProdutoAmbienteModel.Inserir() then
+    if oProdutoAmbienteModel.Inserir(oProdutoAmbienteDto) then
       Result := True
     else
+    begin
+      Result := False;
       exit;
+    end;
   end;
   if Assigned(oProdutoAmbienteDto) then
     FreeAndNil(oProdutoAmbienteDto);

@@ -54,9 +54,12 @@ function TProdutoAmbienteModel.Inserir(var AProdutoAmbiente
 var
   sSql: String;
 begin
-  sSql := 'insert into ProdutoAmbiente (idProduto_Ambiente, Produto_IdProduto, Produto_IdAmbientes) values ('
-    + IntToStr(AProdutoAmbiente.IdProduto) + ', ' + QuotedStr(AProdutoAmbiente.oProduto.idProduto) + ', ' +
-    QuotedStr(AProdutoAmbiente.oAmbiente.idAmbiente) + ')';
+  sSql := 'insert into Produto_Ambiente (idProduto_Ambiente, Produto_IdProduto, Ambientes_IdAmbientes) values ('
+    + IntToStr(AProdutoAmbiente.IdProdutoAmbiente) + ', ' +
+    IntToStr(AProdutoAmbiente.oProduto.idProduto) + ', ' +
+    IntToStr(AProdutoAmbiente.oAmbiente.idAmbiente) + ')';
+
+  Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
 function TProdutoAmbienteModel.VerificarExcluir(AId: integer): Boolean;

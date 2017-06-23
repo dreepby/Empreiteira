@@ -151,11 +151,12 @@ end;
 function TProdutoModel.Inserir(var AProduto: TProdutoDto): Boolean;
 var
   sSql: String;
-  Preco: String;
+
 begin
+
   sSql := 'insert into Produto (idProduto, Descricao, Preco) values (' +
     IntToStr(AProduto.idProduto) + ',' + QuotedStr(AProduto.Descricao) + ', ' +
-    Preco + ');';
+    AProduto.Preco + ')';
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 

@@ -11,9 +11,9 @@ type
     function VerificarExcluir(AId: integer): Boolean;
     function Deletar(const AProdutoAmbiente: integer): Boolean;
     function BuscarID: integer;
-    function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto; out AId: integer): Boolean;
-   end;
-
+    function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto;
+      out AId: integer): Boolean;
+  end;
 
 implementation
 

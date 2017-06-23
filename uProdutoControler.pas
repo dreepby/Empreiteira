@@ -255,7 +255,7 @@ begin
 
       begin
         try
-          if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto)) then
+          if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto, AmbientesReforma)) then
           begin
             oProdutoRegra.Limpar(oProdutoDto);
             frmProduto.edtDescricao.Text := EmptyStr;

@@ -11,11 +11,12 @@ type
     FoProduto: TProdutoDto;
     FIdProdutoAmbiente: Integer;
     FoAmbiente: TAmbienteDto;
-    procedure SetIdProdutoAmbiente(const Value: Integer);
+
     procedure SetoAmbiente(const Value: TAmbienteDto);
     procedure SetoProduto(const Value: TProdutoDto);
+    procedure SetIdProdutoAmbiente(const Value: Integer);
   public
-    property IdProdutoAmbiente: Integer read FIdProdutoAmbiente write SetIdProdutoAmbiente;
+    property IdProdutoAmbiente: Integer  read FIdProdutoAmbiente write SetIdProdutoAmbiente;
     property oProduto: TProdutoDto read FoProduto write SetoProduto;
     property oAmbiente: TAmbienteDto read FoAmbiente write SetoAmbiente;
 
@@ -45,9 +46,13 @@ begin
   inherited;
 end;
 
+
+
+
+
 procedure TProdutoAmbienteDto.SetIdProdutoAmbiente(const Value: Integer);
 begin
-  SetIdProdutoAmbiente := Value;
+  FIdProdutoAmbiente := Value;
 end;
 
 procedure TProdutoAmbienteDto.SetoAmbiente(const Value: TAmbienteDto);
