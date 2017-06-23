@@ -13,8 +13,9 @@ type
     edtDescricao: TLabeledEdit;
     CheckListBox1: TCheckListBox;
     Label2: TLabel;
-    CheckListBox2: TCheckListBox;
+    clbAmbientes: TCheckListBox;
     edtPreco: TEdit;
+    Label3: TLabel;
   private
     { Private declarations }
   public

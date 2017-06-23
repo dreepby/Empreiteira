@@ -3,7 +3,8 @@ unit uProdutoRegra;
 interface
 
 uses
-  uProdutoDto, System.SysUtils, uProdutoInterfaceModel;
+  uProdutoDto, System.SysUtils, uProdutoInterfaceModel,
+  uProdutoAmbienteInterfaceModel, uProdutoAmbienteModel, uProdutoAmbienteDto;
 
 type
   TProdutoRegra = class
@@ -19,8 +20,10 @@ type
       AProduto: TProdutoDto): Boolean;
     function BuscarProduto(const AModel: IModelProdutoInterface;
       AProduto: TProdutoDto): Boolean;
+    function SalvarAmbientes(AAmbientes: array of Integer;
+      AProduto: TProdutoDto): Boolean;
 
-    end;
+  end;
 
 implementation
 
@@ -57,7 +60,7 @@ procedure TProdutoRegra.Limpar(AProduto: TProdutoDto);
 begin
   AProduto.idProduto := 0;
   AProduto.Descricao := EmptyStr;
-  AProduto.Preco := 0;
+  AProduto.Preco := EmptyStr;
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;
@@ -101,6 +104,32 @@ begin
     end;
   end;
 
+end;
+
+function TProdutoRegra.SalvarAmbientes(AAmbientes: array of Integer;
+  AProduto: TProdutoDto): Boolean;
+var
+  i: Integer;
+  oProdutoAmbienteModel: IModelProdutoAmbienteInterface;
+  oProdutoAmbienteDto: TProdutoAmbienteDto;
+begin
+  Result := False;
+  oProdutoAmbienteDto := TProdutoAmbienteDto.Create;
+  i := Length(AAmbientes);
+  oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
+  oProdutoAmbienteDto.oProduto.idProduto := AProduto.idProduto;
+  for i := 0 to i do
+  begin
+    // chamar função buscarid do model produtoAmbiente e colocar na property IdAmbienteProduto
+    oProdutoAmbienteDto. := AAmbientes[i];
+    oProdutoAmbienteDto.oAmbiente.idAmbiente := AAmbientes[i];
+    if oProdutoAmbienteModel.Inserir() then
+      Result := True
+    else
+      exit;
+  end;
+  if Assigned(oProdutoAmbienteDto) then
+    FreeAndNil(oProdutoAmbienteDto);
 end;
 
 function TProdutoRegra.VerificarExcluir(var AModel: IModelProdutoInterface;

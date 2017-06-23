@@ -7,20 +7,20 @@ type
   private
     FidProduto: integer;
     FDescricao: String;
-    FPreco: Currency;
+    FPreco: String;
     procedure SetDescricao(const Value: String);
     procedure SetidProduto(const Value: integer);
-    procedure SetPreco(const Value: Currency);
+    procedure SetPreco(const Value: String);
 
   public
     property idProduto: integer read FidProduto write SetidProduto;
     property Descricao: String read FDescricao write SetDescricao;
-    property Preco: Currency read FPreco write SetPreco;
+    property Preco: String read FPreco write SetPreco;
+
+
   end;
 
 implementation
-
-{ TProdutoDto }
 
 { TProdutoDto }
 
@@ -34,7 +34,7 @@ begin
   FidProduto := Value;
 end;
 
-procedure TProdutoDto.SetPreco(const Value: Currency);
+procedure TProdutoDto.SetPreco(const Value: String);
 begin
   FPreco := Value;
 end;

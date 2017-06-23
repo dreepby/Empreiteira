@@ -4,6 +4,7 @@ inherited frmProduto: TfrmProduto
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
+      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -28,7 +29,7 @@ inherited frmProduto: TfrmProduto
               Expanded = False
               FieldName = 'Preco'
               Title.Caption = 'Pre'#231'o'
-              Width = 63
+              Width = 79
               Visible = True
             end>
         end
@@ -39,8 +40,8 @@ inherited frmProduto: TfrmProduto
         ExplicitWidth = 746
         ExplicitHeight = 239
         object Label2: TLabel
-          Left = 150
-          Top = 111
+          Left = 264
+          Top = 110
           Width = 39
           Height = 19
           Caption = 'Pre'#231'o'
@@ -51,8 +52,21 @@ inherited frmProduto: TfrmProduto
           Font.Style = []
           ParentFont = False
         end
+        object Label3: TLabel
+          Left = 488
+          Top = 0
+          Width = 75
+          Height = 19
+          Caption = 'Ambientes'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
         object edtDescricao: TLabeledEdit
-          Left = 149
+          Left = 264
           Top = 78
           Width = 217
           Height = 27
@@ -88,18 +102,24 @@ inherited frmProduto: TfrmProduto
           ParentFont = False
           TabOrder = 2
         end
-        object CheckListBox2: TCheckListBox
+        object clbAmbientes: TCheckListBox
           Left = 488
-          Top = 3
+          Top = 32
           Width = 255
-          Height = 233
+          Height = 204
           BorderStyle = bsNone
-          ItemHeight = 13
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemHeight = 19
+          ParentFont = False
           TabOrder = 3
         end
         object edtPreco: TEdit
-          Left = 149
-          Top = 136
+          Left = 264
+          Top = 134
           Width = 217
           Height = 27
           Font.Charset = DEFAULT_CHARSET

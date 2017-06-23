@@ -21,6 +21,8 @@ type
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String): Boolean;
     function BuscarProduto(AProduto: TProdutoDto): Boolean;
+    function ADDListaHash(var oProduto: TObjectDictionary<string,
+      TProdutoDto>): Boolean;
     constructor Create;
     destructor Destroy; override;
 
@@ -30,12 +32,54 @@ implementation
 
 { TProdutoModel }
 
+function TProdutoModel.ADDListaHash(
+  var oProduto: TObjectDictionary<string, TProdutoDto>): Boolean;
+var
+  oProdutoDTO: TProdutoDto;
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idProduto, Descricao, Preco from Produto');
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oProdutoDTO := TProdutoDto.Create;
+
+        // Atribui os valores
+        oProdutoDTO.idProduto := oQuery.FieldByName('idProduto')
+          .AsInteger;
+        oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
+        oProdutoDTO.Preco := oQuery.FieldByName('Preco')
+          .AsString;
+
+        // Adiciona o objeto na lista hash
+        oProduto.Add(oProdutoDTO.Descricao, oProdutoDto);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+
+end;
+
 function TProdutoModel.Alterar(var AProduto: TProdutoDto): Boolean;
 var
   sSql: String;
 begin
   sSql := 'update produto set Descricao = ' + QuotedStr(AProduto.Descricao) +
-    '     , Preco = ' + CurrToStr(AProduto.Preco) + ' where idProduto = ' +
+    '     , Preco = ' + (AProduto.Preco) + ' where idProduto = ' +
     IntToStr(AProduto.idProduto);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
@@ -73,7 +117,7 @@ begin
     begin
       Result := True;
       AProduto.Descricao := oQuery.FieldByName('Descricao').AsString;
-      AProduto.Preco := oQuery.FieldByName('Preco').AsCurrency;
+      AProduto.Preco := oQuery.FieldByName('Preco').AsString;
     end;
 
   finally
@@ -107,12 +151,11 @@ end;
 function TProdutoModel.Inserir(var AProduto: TProdutoDto): Boolean;
 var
   sSql: String;
-  Preco : String;
+  Preco: String;
 begin
-  Preco := StringReplace(CurrToStr(AProduto.Preco), ',','.', [rfReplaceAll, rfIgnoreCase]);
   sSql := 'insert into Produto (idProduto, Descricao, Preco) values (' +
-    IntToStr(AProduto.idProduto) + ', ' + QuotedStr(AProduto.Descricao) + ', ' +
-    Preco  + ')';
+    IntToStr(AProduto.idProduto) + ',' + QuotedStr(AProduto.Descricao) + ', ' +
+    Preco + ');';
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 
@@ -132,8 +175,24 @@ begin
 end;
 
 function TProdutoModel.VerificarExcluir(AId: Integer): Boolean;
+var
+  oQuery: TFDQuery;
 begin
-
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select pa.idProduto_Ambiente from produto_ambiente pa  ' +
+      'inner join produto p on p.idProduto = pa.Produto_idProduto and p.idProduto = '
+      + IntToStr(AId) +
+      ' left join produtoreforma pr on pr.Produto_idProduto = p.idProduto');
+    if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 end;
 
 function TProdutoModel.VerificarProduto(AProduto: TProdutoDto;

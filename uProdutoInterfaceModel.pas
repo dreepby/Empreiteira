@@ -16,6 +16,8 @@ type
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String): Boolean;
     function BuscarProduto(AProduto: TProdutoDto): Boolean;
+    function ADDListaHash(var oProduto: TObjectDictionary<string,
+      TProdutoDto>): Boolean;
 
   end;
 

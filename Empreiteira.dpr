@@ -51,7 +51,10 @@ uses
   uProdutoDto in 'uProdutoDto.pas',
   uProdutoRegra in 'uProdutoRegra.pas',
   uProdutoControler in 'uProdutoControler.pas',
-  uProdutoInterfaceModel in 'uProdutoInterfaceModel.pas';
+  uProdutoInterfaceModel in 'uProdutoInterfaceModel.pas',
+  uProdutoAmbienteDto in 'uProdutoAmbienteDto.pas',
+  uProdutoAmbienteModel in 'uProdutoAmbienteModel.pas',
+  uProdutoAmbienteInterfaceModel in 'uProdutoAmbienteInterfaceModel.pas';
 
 {$R *.res}
 
