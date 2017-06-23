@@ -15,8 +15,8 @@ type
     function Localizar(ATexto, ACampo: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
-    function ADDListaHash(var oMunicipio: TObjectDictionary<string,
-      TUsuarioDto>; const AId: Integer): Boolean;
+    function ADDListaHash(var oUsuario: TObjectDictionary<string,
+      TUsuarioDto>): Boolean;
     procedure DesativarFiltro;
   end;
 

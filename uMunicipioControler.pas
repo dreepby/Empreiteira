@@ -68,16 +68,15 @@ end;
 procedure TMunicipioControler.Alterar(Sender: TObject);
 begin
   oMunicipioDto.idMunicipio := frmMunicipio.DBGrid1.Fields[0].AsInteger;
-  oMunicipioDto.oEstado.Nome := frmMunicipio.DBGrid1.Fields[2].AsString;
+//  oMunicipioDto.oEstado.Nome := frmMunicipio.DBGrid1.Fields[2].AsString;
   frmMunicipio.tsDados.Enabled := True;
   frmMunicipio.Caption := 'Alteração de Municipio';
   frmMunicipio.edtNome.Text := frmMunicipio.DBGrid1.Fields[1].AsString;
 
   PopularComboBox;
-
-  frmMunicipio.cbEstado.ItemIndex := frmMunicipio.cbEstado.Items.IndexOf
-    (oMunicipioDto.oEstado.Nome);
-
+  //frmMunicipio.cbEstado.Items.Objects[frmMunicipio.cbEstado.ItemIndex]);
+  frmMunicipio.cbEstado.ItemIndex := frmMunicipio.cbEstado.Items.IndexOfObject(TObject(2));
+      //buscar no banco procurar pelo id do estado
   frmMunicipio.PageControl1.ActivePage := frmMunicipio.tsDados;
   frmMunicipio.tsTabela.Enabled := False;
   frmMunicipio.btnInserir.Enabled := False;
@@ -225,7 +224,7 @@ end;
 
 procedure TMunicipioControler.PopularComboBox;
 var
-  sIndice: String;
+  oIndice: TEstadoDto;
   oModelEstado: IModelEstadoInterface;
 begin
   oModelEstado := TEstadoModel.Create;
@@ -233,16 +232,19 @@ begin
   frmMunicipio.cbEstado.Clear;
   if (oModelEstado.ADDListaHash(oListaEstados)) then
   begin
-    for sIndice in oListaEstados.Keys do
-      frmMunicipio.cbEstado.AddItem(sIndice, oListaEstados);
+    for oIndice in oListaEstados.Values do
+      frmMunicipio.cbEstado.AddItem(oIndice.Nome, TObject(oIndice.IdUF));
   end;
 end;
 
 procedure TMunicipioControler.Salvar(Sender: TObject);
 begin
   oMunicipioDto.Nome := Trim(frmMunicipio.edtNome.Text);
-  oMunicipioDto.oEstado.IdUF := oListaEstados.Items
-    [frmMunicipio.cbEstado.Items[frmMunicipio.cbEstado.ItemIndex]].IdUF;
+
+  oMunicipioDto.oEstado.IdUF := Integer(frmMunicipio.cbEstado.Items.Objects[frmMunicipio.cbEstado.ItemIndex]);
+
+//  oListaEstados.Item
+//    [frmMunicipio.cbEstado.Items[frmMunicipio.cbEstado.ItemIndex]].IdUF;
 
   if (oMunicipioDto.Nome <> '') and (frmMunicipio.cbEstado.ItemIndex <> -1) then
   begin

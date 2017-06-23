@@ -390,8 +390,8 @@ inherited frmCliente: TfrmCliente
     ExplicitTop = 498
     ExplicitWidth = 986
     inherited Panel4: TPanel
-      Left = 485
-      ExplicitLeft = 485
+      Left = 231
+      ExplicitLeft = 231
     end
   end
   inherited dsTabela: TDataSource

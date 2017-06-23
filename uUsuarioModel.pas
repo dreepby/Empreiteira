@@ -20,8 +20,8 @@ type
     function Localizar(ATexto, ACampo: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
-    function ADDListaHash(var oUsuario: TObjectDictionary<string, TUsuarioDto>;
-      const AId: Integer): Boolean;
+    function ADDListaHash(var oUsuario: TObjectDictionary<string,
+      TUsuarioDto>): Boolean;
     procedure DesativarFiltro;
     constructor Create;
     destructor Destroy; override;
@@ -32,8 +32,42 @@ implementation
 { TUsuarioModel }
 
 function TUsuarioModel.ADDListaHash(var oUsuario
-  : TObjectDictionary<string, TUsuarioDto>; const AId: Integer): Boolean;
+  : TObjectDictionary<string, TUsuarioDto>): Boolean;
+var
+  oUsuarioDTO: TUsuarioDto;
+  oQuery: TFDQuery;
 begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idUsuario, nome, cpf from usuario');
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oUsuarioDTO := TUsuarioDto.Create;
+
+        // Atribui os valores
+        oUsuarioDTO.idUsuario := oQuery.FieldByName('idUsuario').AsInteger;
+        oUsuarioDTO.CPF := oQuery.FieldByName('cpf').AsString;
+        oUsuarioDTO.Nome := oQuery.FieldByName('nome').AsString;
+
+        // Adiciona o objeto na lista hash
+        oUsuario.Add(oUsuarioDTO.Nome, oUsuarioDTO);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
 
 end;
 

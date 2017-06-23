@@ -45,7 +45,22 @@ uses
   uUsuarioModel in 'uUsuarioModel.pas',
   uUsuarioRegra in 'uUsuarioRegra.pas',
   uUsuarioIntefaceModel in 'uUsuarioIntefaceModel.pas',
-  uValidaCPF in 'uValidaCPF.pas';
+  uValidaCPF in 'uValidaCPF.pas',
+  uReforma in 'uReforma.pas' {frmReforma},
+  uReformaControler in 'uReformaControler.pas',
+  uReformaDto in 'uReformaDto.pas',
+  uReformaModel in 'uReformaModel.pas',
+  uReformaRegra in 'uReformaRegra.pas',
+  uReformaInterfaceModel in 'uReformaInterfaceModel.pas',
+  uDetalhesReforma in 'uDetalhesReforma.pas' {frmDetalhesReforma},
+  uDetalhesCliente in 'uDetalhesCliente.pas' {frmDetalhesCliente},
+  uDetalhesClienteControler in 'uDetalhesClienteControler.pas',
+  uDetalhesClienteModel in 'uDetalhesClienteModel.pas',
+  uDetalhesClienteRegra in 'uDetalhesClienteRegra.pas',
+  uDetalhesClienteInterfaceModel in 'uDetalhesClienteInterfaceModel.pas',
+  uAmbienteReformaModel in 'uAmbienteReformaModel.pas',
+  uAmbienteReformaInterfaceModel in 'uAmbienteReformaInterfaceModel.pas',
+  uAmbienteReformaDto in 'uAmbienteReformaDto.pas';
 
 {$R *.res}
 

@@ -23,6 +23,8 @@ type
     function Localizar(ATexto: String; ACampo: String): Boolean;
     procedure DesativarFiltro;
     function BuscarRegistro(var ACliente: TClienteDto): Boolean;
+    function BuscarRegistroIdCpf(AValor: String): Integer;
+    function BuscarRegistroIdCnpj(AValor: String): Integer;
 
     constructor Create;
     destructor Destroy; override;
@@ -44,7 +46,7 @@ begin
     ', Numero = ' + IntToStr(ACliente.Numero) + ', Complemento = ' +
     QuotedStr(ACliente.Complemento) + ', CEP = ' + QuotedStr(ACliente.Cep) +
     ', cliente_idBairro = ' + IntToStr(ACliente.oBairro.idBairro) +
-    ' WHERE idCliente = '+IntToStr(ACliente.idCliente);
+    ' WHERE idCliente = ' + IntToStr(ACliente.idCliente);
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
@@ -98,6 +100,42 @@ begin
     end
     else
       Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
+function TClienteModel.BuscarRegistroIdCnpj(AValor: String): Integer;
+var
+  oQuery: TFDQuery;
+begin
+  Result := 0;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idCliente as ID from cliente where CNPJ = ' +
+      QuotedStr(AValor));
+    if (not(oQuery.IsEmpty)) then
+      Result := oQuery.FieldByName('ID').AsInteger;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
+function TClienteModel.BuscarRegistroIdCpf(AValor: String): Integer;
+var
+  oQuery: TFDQuery;
+begin
+  Result := 0;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select idCliente as ID from cliente where CPF = ' +
+      QuotedStr(AValor));
+    if (not(oQuery.IsEmpty)) then
+      Result := oQuery.FieldByName('ID').AsInteger;
   finally
     if Assigned(oQuery) then
       FreeAndNil(oQuery);
@@ -211,10 +249,20 @@ var
   oQuery: TFDQuery;
 begin
   oQuery := TFDQuery.Create(nil);
+  Result := False;
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select idCliente from cliente where CPF = ' +
-      QuotedStr(ACliente.Cpf) + ' or CNPJ = ' + QuotedStr(ACliente.Cnpj));
+    if ACliente.Cpf <> EmptyStr then
+    begin
+      oQuery.Open('select idCliente from cliente where CPF = ' +
+        QuotedStr(ACliente.Cpf));
+    end
+    else if ACliente.Cnpj <> EmptyStr then
+    begin
+      oQuery.Open('select idCliente from cliente where CNPJ = ' +
+        QuotedStr(ACliente.Cnpj));
+    end;
+
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('idCliente').AsInteger;

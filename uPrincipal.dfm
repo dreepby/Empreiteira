@@ -45,6 +45,9 @@ object frmPrincipal: TfrmPrincipal
       object Produtos1: TMenuItem
         Action = actProduto
       end
+      object Reformas1: TMenuItem
+        Action = actReforma
+      end
     end
     object Sobre1: TMenuItem
       Caption = 'Sobre'
@@ -79,6 +82,10 @@ object frmPrincipal: TfrmPrincipal
     end
     object actProduto: TAction
       Caption = 'Produtos'
+    end
+    object actReforma: TAction
+      Caption = 'Reformas'
+      OnExecute = actReformaExecute
     end
   end
 end

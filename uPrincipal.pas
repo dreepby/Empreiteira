@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
   Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uUsuarioControler,
-  uClienteControler, uAmbienteControler;
+  uClienteControler, uAmbienteControler, uReformaControler;
 
 type
   TfrmPrincipal = class(TForm)
@@ -30,6 +30,8 @@ type
     Ambientes1: TMenuItem;
     actProduto: TAction;
     Produtos1: TMenuItem;
+    actReforma: TAction;
+    Reformas1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
@@ -37,6 +39,7 @@ type
     procedure actUsuarioExecute(Sender: TObject);
     procedure actClienteExecute(Sender: TObject);
     procedure actAmbienteExecute(Sender: TObject);
+    procedure actReformaExecute(Sender: TObject);
   private
     { Private declarations }
     procedure WMClose(var Message: TWMClose); message WM_Close;
@@ -74,9 +77,9 @@ end;
 
 procedure TfrmPrincipal.actClienteExecute(Sender: TObject);
 begin
-  if not(Assigned(oUsuarioControler)) then
-    oUsuarioControler := TUsuarioControler.Create;
-  oUsuarioControler.abrirForm;
+  if not(Assigned(oClienteControler)) then
+    oClienteControler := TClienteControler.Create;
+  oClienteControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actEstadosExecute(Sender: TObject);
@@ -91,6 +94,13 @@ begin
   if not(Assigned(oMunicipioControler)) then
     oMunicipioControler := TMunicipioControler.Create;
   oMunicipioControler.abrirForm;
+end;
+
+procedure TfrmPrincipal.actReformaExecute(Sender: TObject);
+begin
+  if not(Assigned(oReformaControler)) then
+    oReformaControler := TReformaControler.Create;
+  oReformaControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actUsuarioExecute(Sender: TObject);
