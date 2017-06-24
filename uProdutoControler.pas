@@ -84,6 +84,8 @@ begin
     frmProduto.BtnCancelar.Enabled := True;
     frmProduto.edtDescricao.Text := oProdutoDto.Descricao;
     frmProduto.edtPreco.Text := (oProdutoDto.Preco)
+    // Buscar id dos ambientes por function :)
+    //frmProduto.clbAmbientes.ItemIndex := frmProduto.clbAmbientes.Items.IndexOfObject(oProdutoDto.)
   end
   else
     ShowMessage('Nenhum registro encontrado');
@@ -203,22 +205,30 @@ end;
 
 procedure TProdutoControler.Pesquisar(Sender: TObject);
 begin
-
+ {{ if (Trim(frmProduto.edtPesquisa.Text) <> EmptyStr) then
+  begin
+    if (oRegraMunicipio.Pesquisar(oModelMunicipio,
+      frmMunicipio.edtPesquisa.Text) = False) then
+      ShowMessage('Nenhum registro encontrado.');
+  end
+  else
+    ShowMessage('Campo pesquisa vazio.');}
 end;
 
 procedure TProdutoControler.popularCheckListBox;
 var
   oAmbienteModel: IModelAmbienteInterface;
-  sIndice: String;
+  oIndice: TAmbienteDto;
 begin
   oAmbienteModel := TAmbienteModel.Create;
   oListaAmbientes.Clear;
   frmProduto.clbAmbientes.Clear;
   if (oAmbienteModel.ADDListaHash(oListaAmbientes)) then
   begin
-    for sIndice in oListaAmbientes.Keys do
-      frmProduto.clbAmbientes.AddItem(sIndice, oListaAmbientes);
+    for oIndice in oListaAmbientes.Values do
+      frmProduto.clbAmbientes.AddItem(oIndice.Descricao, TObject(oIndice.idAmbiente));
   end;
+
 end;
 
 procedure TProdutoControler.Salvar(Sender: TObject);
@@ -284,9 +294,9 @@ begin
         ShowMessage('Insira um valor válido.')
       end
 
-  else
-    ShowMessage('Prencha o campo Descrição.');
-end;
+    else
+      ShowMessage('Prencha o campo Descrição.');
+  end;
 end;
 
 initialization
