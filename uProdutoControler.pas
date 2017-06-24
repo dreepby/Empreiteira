@@ -224,7 +224,7 @@ end;
 procedure TProdutoControler.Salvar(Sender: TObject);
 var
   sTeste: String;
-  i: Integer;
+  i, iV: Integer;
   iCount: Integer;
   iCountArray: Integer;
 begin
@@ -251,36 +251,42 @@ begin
     oProdutoDto.Preco := StringReplace((frmProduto.edtPreco.Text), ',', '.',
       [rfReplaceAll]);
     if (frmProduto.edtDescricao.Text <> EmptyStr) then
-      if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) then
 
-      begin
-        try
-          if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto, AmbientesReforma)) then
-          begin
-            oProdutoRegra.Limpar(oProdutoDto);
-            frmProduto.edtDescricao.Text := EmptyStr;
-            frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
-            frmProduto.tsTabela.Enabled := True;
-            frmProduto.btnInserir.Enabled := True;
-            frmProduto.BtnAlterar.Enabled := True;
-            frmProduto.btnExcluir.Enabled := True;
-            oProdutoRegra.Limpar(oProdutoDto);
-            frmProduto.BtnSalvar.Enabled := False;
-            frmProduto.BtnCancelar.Enabled := False;
-            frmProduto.Caption := 'Listagem de Produtos';
-            ListarProdutos;
-          end;
-        except
-          on E: Exception do
-            ShowMessage(E.Message);
+      try
+        if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) and
+          (TryStrToInt(frmProduto.edtPreco.Text, iV)) then
 
+        begin
+          try
+            if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto,
+              AmbientesReforma)) then
+            begin
+              oProdutoRegra.Limpar(oProdutoDto);
+              frmProduto.edtDescricao.Text := EmptyStr;
+              frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
+              frmProduto.tsTabela.Enabled := True;
+              frmProduto.btnInserir.Enabled := True;
+              frmProduto.BtnAlterar.Enabled := True;
+              frmProduto.btnExcluir.Enabled := True;
+              oProdutoRegra.Limpar(oProdutoDto);
+              frmProduto.BtnSalvar.Enabled := False;
+              frmProduto.BtnCancelar.Enabled := False;
+              frmProduto.Caption := 'Listagem de Produtos';
+              ListarProdutos;
+            end;
+          except
+            on E: Exception do
+              ShowMessage(E.Message);
+
+          end
         end
-      end
-      else
+      except
         ShowMessage('Insira um valor válido.')
-    else
-      ShowMessage('Prencha o campo Descrição.');
-  end;
+      end
+
+  else
+    ShowMessage('Prencha o campo Descrição.');
+end;
 end;
 
 initialization

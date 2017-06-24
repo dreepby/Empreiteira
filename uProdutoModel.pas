@@ -32,8 +32,8 @@ implementation
 
 { TProdutoModel }
 
-function TProdutoModel.ADDListaHash(
-  var oProduto: TObjectDictionary<string, TProdutoDto>): Boolean;
+function TProdutoModel.ADDListaHash(var oProduto
+  : TObjectDictionary<string, TProdutoDto>): Boolean;
 var
   oProdutoDTO: TProdutoDto;
   oQuery: TFDQuery;
@@ -53,14 +53,12 @@ begin
         oProdutoDTO := TProdutoDto.Create;
 
         // Atribui os valores
-        oProdutoDTO.idProduto := oQuery.FieldByName('idProduto')
-          .AsInteger;
+        oProdutoDTO.idProduto := oQuery.FieldByName('idProduto').AsInteger;
         oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
-        oProdutoDTO.Preco := oQuery.FieldByName('Preco')
-          .AsString;
+        oProdutoDTO.Preco := oQuery.FieldByName('Preco').AsString;
 
         // Adiciona o objeto na lista hash
-        oProduto.Add(oProdutoDTO.Descricao, oProdutoDto);
+        oProduto.Add(oProdutoDTO.Descricao, oProdutoDTO);
 
         // Vai para o próximo registro
         oQuery.Next;
@@ -133,9 +131,51 @@ begin
 end;
 
 function TProdutoModel.Deletar(const AIDProduto: Integer): Boolean;
+var
+  i, iCount: Integer;
+  sSql: String;
+  iCodigos: Array of Integer;
+  oQuery: TFDQuery;
+  bValida: Boolean;
 begin
-  Result := TSingletonConexao.GetInstancia.ExecSQL
-    ('delete from produto where idProduto = ' + IntToStr(AIDProduto)) > 0;
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open
+      ('SELECT idProduto_Ambiente FROM produto_ambiente WHERE Produto_idProduto = '
+      + IntToStr(AIDProduto));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      SetLength(iCodigos, oQuery.RecordCount);
+      iCount := 0;
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        iCodigos[iCount] := oQuery.FieldByName('idProduto_Ambiente').AsInteger;
+        oQuery.Next;
+        if not(oQuery.Eof) then
+          iCount := +1;
+      end;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+  for i := 0 to iCount do
+  begin
+    bValida := TSingletonConexao.GetInstancia.ExecSQL
+      ('delete from produto_ambiente where idProduto_ambiente = ' +
+      IntToStr(iCodigos[i])) > 0;
+
+    if bValida = False then
+      exit;
+  end;
+  if bValida then
+  begin
+    Result := TSingletonConexao.GetInstancia.ExecSQL
+      ('delete from produto where idProduto = ' + IntToStr(AIDProduto)) > 0;
+  end;
 end;
 
 destructor TProdutoModel.Destroy;
@@ -178,14 +218,13 @@ end;
 function TProdutoModel.VerificarExcluir(AId: Integer): Boolean;
 var
   oQuery: TFDQuery;
+  aDados: array of Integer;
 begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select pa.idProduto_Ambiente from produto_ambiente pa  ' +
-      'inner join produto p on p.idProduto = pa.Produto_idProduto and p.idProduto = '
-      + IntToStr(AId) +
-      ' left join produtoreforma pr on pr.Produto_idProduto = p.idProduto');
+    oQuery.Open('select p.idproduto from produto p  ' +
+      'inner join ProdutoReforma pr on pr.produto_idproduto = p.idproduto');
     if (oQuery.IsEmpty) then
       Result := True
     else

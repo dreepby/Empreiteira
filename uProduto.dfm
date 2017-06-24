@@ -4,7 +4,6 @@ inherited frmProduto: TfrmProduto
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
-      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -36,7 +35,7 @@ inherited frmProduto: TfrmProduto
       end
       inherited tsDados: TTabSheet
         ExplicitLeft = 4
-        ExplicitTop = 24
+        ExplicitTop = 27
         ExplicitWidth = 746
         ExplicitHeight = 239
         object Label2: TLabel
