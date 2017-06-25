@@ -163,6 +163,27 @@
         <DCCReference Include="uUsuarioRegra.pas"/>
         <DCCReference Include="uUsuarioIntefaceModel.pas"/>
         <DCCReference Include="uValidaCPF.pas"/>
+        <DCCReference Include="uReforma.pas">
+            <Form>frmReforma</Form>
+        </DCCReference>
+        <DCCReference Include="uReformaControler.pas"/>
+        <DCCReference Include="uReformaDto.pas"/>
+        <DCCReference Include="uReformaModel.pas"/>
+        <DCCReference Include="uReformaRegra.pas"/>
+        <DCCReference Include="uReformaInterfaceModel.pas"/>
+        <DCCReference Include="uDetalhesReforma.pas">
+            <Form>frmDetalhesReforma</Form>
+        </DCCReference>
+        <DCCReference Include="uDetalhesCliente.pas">
+            <Form>frmDetalhesCliente</Form>
+        </DCCReference>
+        <DCCReference Include="uDetalhesClienteControler.pas"/>
+        <DCCReference Include="uDetalhesClienteModel.pas"/>
+        <DCCReference Include="uDetalhesClienteRegra.pas"/>
+        <DCCReference Include="uDetalhesClienteInterfaceModel.pas"/>
+        <DCCReference Include="uAmbienteReformaModel.pas"/>
+        <DCCReference Include="uAmbienteReformaInterfaceModel.pas"/>
+        <DCCReference Include="uAmbienteReformaDto.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -197,27 +218,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -568,12 +574,27 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>

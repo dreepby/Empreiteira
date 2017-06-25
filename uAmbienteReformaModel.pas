@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, System.Generics.Collections,
-  uAmbienteReformaDto, uClassSingletonConexao, uAmbienteReformaInterfaceModel;
+  uAmbienteReformaDto, uClassSingletonConexao, uAmbienteReformaInterfaceModel,
+  uAmbienteDto;
 
 type
   TAmbienteReformaModel = class(TInterfacedObject,
@@ -16,6 +17,8 @@ type
     function VerificarAmbienteReforma(AAmbienteReforma: TAmbienteReformaDto;
       out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
+    function BuscarRegistrosReforma(var oLista
+      : TObjectDictionary<string, TAmbienteDto>; AidReforma: Integer): Boolean;
   end;
 
 implementation
@@ -39,6 +42,47 @@ begin
   end;
 end;
 
+function TAmbienteReformaModel.BuscarRegistrosReforma
+  (var oLista: TObjectDictionary<string, TAmbienteDto>; AidReforma: Integer): Boolean;
+var
+  oAmbienteDTO: TAmbienteDto;
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open
+      ('SELECT a.idAmbientes, a.Descricao FROM ambienteReforma ar INNER' +
+      ' JOIN Ambiente a ON ar.Ambiente_idAmbientes = a.idAmbientes WHERE ' +
+      'Ambiente_idReforma = '+IntToStr(AidReforma));
+
+    if (not(oQuery.IsEmpty)) then
+    begin
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        // Instancia do objeto
+        oAmbienteDTO := TAmbienteDto.Create;
+
+        // Atribui os valores
+        oAmbienteDTO.idAmbiente := oQuery.FieldByName('idAmbientes').AsInteger;
+        oAmbienteDTO.Descricao := oQuery.FieldByName('descricao').AsString;
+
+        // Adiciona o objeto na lista hash
+        oLista.Add(oAmbienteDTO.Descricao, oAmbienteDTO);
+
+        // Vai para o próximo registro
+        oQuery.Next;
+      end;
+      Result := True;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
 function TAmbienteReformaModel.Deletar(const AidReforma: Integer): Boolean;
 begin
   Result := TSingletonConexao.GetInstancia.ExecSQL
@@ -53,7 +97,8 @@ var
 begin
   sSql := 'insert into AmbienteReforma (idAmbienteReforma, Ambiente_IdReforma, Ambiente_idAmbientes) values ('
     + IntToStr(AAmbienteReforma.IdAmbienteReforma) + ', ' +
-    QuotedStr(AAmbienteReforma.oReforma.idReforma) + ', ' + QuotedStr(AAmbienteReforma.oAmbiente.idAmbiente) + ')';
+    IntToStr(AAmbienteReforma.oReforma.idReforma) + ', ' +
+    IntToStr(AAmbienteReforma.oAmbiente.idAmbiente) + ')';
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;

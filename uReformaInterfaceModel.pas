@@ -8,10 +8,8 @@ uses
 type
   IModelReformaInterface = interface
     function BuscarID: Integer;
-    function Alterar(var AReforma: TReformaDto;
-      AAmbientes: Array of Integer): Boolean;
-    function Inserir(var AReforma: TReformaDto;
-      AAmbientes: Array of Integer): Boolean;
+    function Alterar(var AReforma: TReformaDto): Boolean;
+    function Inserir(var AReforma: TReformaDto): Boolean;
     procedure ListarReformas(var DsTabela: TDataSource);
     function Deletar(const AID: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;

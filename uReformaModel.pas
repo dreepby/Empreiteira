@@ -13,10 +13,8 @@ type
     oQueryListarReformas: TFDQuery;
   public
     function BuscarID: Integer;
-    function Alterar(var AReforma: TReformaDto;
-      AAmbientes: Array of Integer): Boolean;
-    function Inserir(var AReforma: TReformaDto;
-      AAmbientes: Array of Integer): Boolean;
+    function Alterar(var AReforma: TReformaDto): Boolean;
+    function Inserir(var AReforma: TReformaDto): Boolean;
     procedure ListarReformas(var DsTabela: TDataSource);
     function Deletar(const AID: Integer): Boolean;
     function Pesquisar(ANome: String): Boolean;
@@ -38,8 +36,7 @@ begin
 
 end;
 
-function TReformaModel.Alterar(var AReforma: TReformaDto;
-  AAmbientes: Array of Integer): Boolean;
+function TReformaModel.Alterar(var AReforma: TReformaDto): Boolean;
 begin
 
 end;
@@ -81,10 +78,20 @@ begin
   inherited;
 end;
 
-function TReformaModel.Inserir(var AReforma: TReformaDto;
-  AAmbientes: Array of Integer): Boolean;
+function TReformaModel.Inserir(var AReforma: TReformaDto): Boolean;
+var
+  sSql: String;
 begin
+  sSql := 'insert into reforma (idReforma, observacao, datadopedido, datadeentrega,'
+    + ' pedinte_idCliente, escritor_idusuario, atendente_idUsuario) values (' +
+    IntToStr(AReforma.idReforma) + ', ' + QuotedStr(AReforma.observacao) + ', '
+    + QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDoPedido)) + ', ' +
+    QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDeEntrega)) + ', ' +
+    IntToStr(AReforma.oCliente.idCliente) + ', ' +
+    IntToStr(AReforma.oEscritor.idUsuario) + ', ' +
+    IntToStr(AReforma.oAtendente.idUsuario) + ')';
 
+  Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
 procedure TReformaModel.ListarReformas(var DsTabela: TDataSource);

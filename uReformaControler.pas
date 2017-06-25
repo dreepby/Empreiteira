@@ -8,7 +8,8 @@ uses
   Dialogs, System.UITypes, System.Classes, Winapi.Windows,
   uInterfaceControler, uReformaInterfaceModel, uDetalhesClienteControler,
   uAmbienteInterfaceModel, uAmbienteModel, uAmbienteDto, uClienteDto,
-  uClienteRegra, uUsuarioDto, uUsuarioModel, uUsuarioIntefaceModel;
+  uClienteRegra, uUsuarioDto, uUsuarioModel, uUsuarioIntefaceModel,
+  uAmbienteReformaModel, uAmbienteReformaInterfaceModel;
 
 type
   TReformaControler = class(TInterfacedObject, IControlerInterface)
@@ -18,6 +19,7 @@ type
     oReformaRegra: TReformaRegra;
     oListaReformas: TObjectDictionary<string, TReformaDto>;
     oListaAmbientes: TObjectDictionary<string, TAmbienteDto>;
+    oListaAmbientesReformas: TObjectDictionary<string, TAmbienteDto>;
     oListaUsuarios: TObjectDictionary<string, TUsuarioDto>;
     frmReforma: TfrmReforma;
     oDetalhesClienteControler: TDetalhesClienteControler;
@@ -39,6 +41,8 @@ type
     procedure PesquisarClientePorCnpj(Sender: TObject);
     procedure popularCheckListBox;
     procedure PopularComboBoxAtendenteUsuario;
+    procedure PopularComboBoxAmbientes(AIdReforma: Integer);
+    procedure PopularComboBoxProdutos;
   public
     procedure abrirForm;
 
@@ -58,6 +62,7 @@ begin
   if (not(Assigned(frmReforma))) then
     frmReforma := TfrmReforma.Create(nil);
 
+  frmReforma.tsProdutos.TabVisible := False;
   frmReforma.tsDados.Enabled := False;
   frmReforma.BtnSalvar.Enabled := False;
   frmReforma.BtnCancelar.Enabled := False;
@@ -138,6 +143,12 @@ begin
     FreeAndNil(oListaAmbientes);
   end;
 
+  if Assigned(oListaAmbientesReformas) then
+  begin
+    oListaAmbientesReformas.Clear;
+    FreeAndNil(oListaAmbientesReformas);
+  end;
+
   if Assigned(oReformaDto) then
     FreeAndNil(oReformaDto);
 
@@ -211,7 +222,11 @@ end;
 procedure TReformaControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+  if Key = VK_F2 then
+    frmReforma.edtPesquisa.SetFocus;
 
+  if Key = VK_F5 then
+    ListarReformas;
 end;
 
 procedure TReformaControler.OnKeyPressEdtPesquisa(Sender: TObject;
@@ -286,6 +301,29 @@ begin
   end;
 end;
 
+procedure TReformaControler.PopularComboBoxAmbientes(AIdReforma: Integer);
+var
+  oAmbienteReformaModel: IModelAmbienteReformaInterface;
+  oIndice: TAmbienteDto;
+begin
+  oAmbienteReformaModel := TAmbienteReformaModel.Create;
+  frmReforma.cbAmbiente.Clear;
+  oListaAmbientesReformas := TObjectDictionary<string, TAmbienteDto>.Create
+    ([doOwnsValues]);
+
+  if oAmbienteReformaModel.BuscarRegistrosReforma(oListaAmbientesReformas,
+    oReformaDto.idReforma) then
+  begin
+    for oIndice in oListaAmbientesReformas.Values do
+    begin
+      frmReforma.cbAmbiente.AddItem(oIndice.Descricao,
+        TObject(oIndice.idAmbiente));
+      frmReforma.cbAmbiente.ItemIndex := 0;
+    end;
+  end;
+
+end;
+
 procedure TReformaControler.PopularComboBoxAtendenteUsuario;
 var
   oIndice: TUsuarioDto;
@@ -299,10 +337,35 @@ begin
   begin
     for oIndice in oListaUsuarios.Values do
     begin
-      frmReforma.cbAtedente.AddItem(oIndice.Nome, TObject(oIndice.idUsuario));
-      frmReforma.cbUsuario.AddItem(oIndice.Nome, TObject(oIndice.idUsuario));
+      frmReforma.cbAtedente.AddItem(oIndice.Nome + ' - ' + oIndice.Cpf,
+        TObject(oIndice.idUsuario));
+      frmReforma.cbUsuario.AddItem(oIndice.Nome + ' - ' + oIndice.Cpf,
+        TObject(oIndice.idUsuario));
     end;
   end;
+end;
+
+procedure TReformaControler.PopularComboBoxProdutos;
+var
+  oAmbienteReformaModel: IModelAmbienteReformaInterface;
+  oIndice: TAmbienteDto;
+begin
+  oAmbienteReformaModel := TAmbienteReformaModel.Create;
+  frmReforma.cbAmbiente.Clear;
+  oListaAmbientesReformas := TObjectDictionary<string, TAmbienteDto>.Create
+    ([doOwnsValues]);
+
+  if oAmbienteReformaModel.BuscarRegistrosReforma(oListaAmbientesReformas,
+    oReformaDto.idReforma) then
+  begin
+    for oIndice in oListaAmbientesReformas.Values do
+    begin
+      frmReforma.cbAmbiente.AddItem(oIndice.Descricao,
+        TObject(oIndice.idAmbiente));
+      frmReforma.cbAmbiente.ItemIndex := 0;
+    end;
+  end;
+
 end;
 
 procedure TReformaControler.Salvar(Sender: TObject);
@@ -344,24 +407,23 @@ begin
         begin
           oReformaDto.oCliente.Cpf := frmReforma.edtCpf.Text;
           oReformaDto.oCliente.Cnpj := frmReforma.edtCnpj.Text;
+          oReformaDto.oEscritor.idUsuario :=
+            Integer(frmReforma.cbUsuario.Items.Objects
+            [frmReforma.cbUsuario.ItemIndex]);
+          oReformaDto.oAtendente.idUsuario :=
+            Integer(frmReforma.cbAtedente.Items.Objects
+            [frmReforma.cbAtedente.ItemIndex]);
+          oReformaDto.observacao := frmReforma.moObservacao.Lines.Text;
           try
             if oReformaRegra.Salvar(oReformaModel, oReformaDto, AmbientesReforma)
             then
             begin
-              frmReforma.tsTabela.Enabled := True;
-              frmReforma.tsDados.Enabled := False;
-              frmReforma.edtCpf.Text := EmptyStr;
-              frmReforma.edtCnpj.Text := EmptyStr;
-              oReformaRegra.Limpar(oReformaDto);
-              frmReforma.PageControl1.ActivePage := frmReforma.tsTabela;
-              frmReforma.tsTabela.Enabled := True;
-              frmReforma.btnInserir.Enabled := True;
-              frmReforma.BtnAlterar.Enabled := True;
-              frmReforma.btnExcluir.Enabled := True;
-              frmReforma.BtnSalvar.Enabled := False;
-              frmReforma.BtnCancelar.Enabled := False;
-              frmReforma.Caption := 'Listagem de Reformas';
               ListarReformas;
+              frmReforma.tsPedido.TabVisible := False;
+              frmReforma.tsProdutos.TabVisible := True;
+              frmReforma.pageControl2.ActivePage := frmReforma.tsProdutos;
+              PopularComboBoxAmbientes(oReformaDto.idReforma);
+
             end;
           except
             on E: Exception do

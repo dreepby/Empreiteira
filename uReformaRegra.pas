@@ -4,7 +4,8 @@ interface
 
 uses
   uReformaDto, System.SysUtils, uReformaModel, uReformaInterfaceModel,
-  uClienteInterfaceModel, uClienteModel;
+  uClienteInterfaceModel, uClienteModel, uAmbienteReformaDto,
+  uAmbienteReformaInterfaceModel, uAmbienteReformaModel;
 
 type
   TReformaRegra = class
@@ -18,7 +19,8 @@ type
       ANome: String): Boolean;
     function Salvar(const AModel: IModelReformaInterface; AReforma: TReformaDto;
       AAmbientes: Array of Integer): Boolean;
-    procedure SalvarAmbientes(AAmbientes: Array of Integer; AReforma: TReformaDto);
+    function SalvarAmbientes(AAmbientes: Array of Integer;
+      AReforma: TReformaDto): Boolean;
   end;
 
 implementation
@@ -73,7 +75,7 @@ begin
         AReforma.oCliente.idCliente := iCodigoCPF;
         if AReforma.idReforma > 0 then
         begin
-          if AModel.Alterar(AReforma, AAmbientes) then
+          if AModel.Alterar(AReforma) then
             Result := True
           else
             raise Exception.Create('Ocorreu algum erro.');
@@ -81,8 +83,13 @@ begin
         else
         begin
           AReforma.idReforma := AModel.BuscarID;
-          if AModel.Inserir(AReforma, AAmbientes) then
-            Result := True
+          if AModel.Inserir(AReforma) then
+          begin
+            if SalvarAmbientes(AAmbientes, AReforma) then
+              Result := True
+            else
+              raise Exception.Create('Ocorreu algum erro!')
+          end
           else
             raise Exception.Create('Ocorreu algum erro.');
         end;
@@ -98,7 +105,7 @@ begin
         AReforma.oCliente.idCliente := iCodigoCnpj;
       if AReforma.idReforma > 0 then
       begin
-        if AModel.Alterar(AReforma, AAmbientes) then
+        if AModel.Alterar(AReforma) then
           Result := True
         else
           raise Exception.Create('Ocorreu algum erro.');
@@ -106,8 +113,13 @@ begin
       else
       begin
         AReforma.idReforma := AModel.BuscarID;
-        if AModel.Inserir(AReforma, AAmbientes) then
-          Result := True
+        if AModel.Inserir(AReforma) then
+        begin
+          if SalvarAmbientes(AAmbientes, AReforma) then
+            Result := True
+          else
+            raise Exception.Create('Ocorreu algum erro!')
+        end
         else
           raise Exception.Create('Ocorreu algum erro.');
       end;
@@ -116,15 +128,31 @@ begin
   end;
 end;
 
-procedure TReformaRegra.SalvarAmbientes(AAmbientes: array of Integer;
-  AReforma: TReformaDto);
+function TReformaRegra.SalvarAmbientes(AAmbientes: array of Integer;
+  AReforma: TReformaDto): Boolean;
 var
-  i: Integer;
+  i, count: Integer;
+  oAmbienteReformaModel: IModelAmbienteReformaInterface;
+  oAmbienteReformaDto: TAmbienteReformaDto;
 begin
-  i := Length(AAmbientes);
-
-  for I := 0 to i do
-    //
+  oAmbienteReformaDto := TAmbienteReformaDto.Create;
+  count := Length(AAmbientes) - 2;
+  oAmbienteReformaModel := TAmbienteReformaModel.Create;
+  oAmbienteReformaDto.oReforma.idReforma := AReforma.idReforma;
+  for i := 0 to count do
+  begin
+    oAmbienteReformaDto.IdAmbienteReforma := oAmbienteReformaModel.BuscarID;
+    oAmbienteReformaDto.oAmbiente.idAmbiente := AAmbientes[i];
+    if oAmbienteReformaModel.Inserir(oAmbienteReformaDto) then
+      Result := True
+    else
+    begin
+      Result := False;
+      exit;
+    end;
+  end;
+  if Assigned(oAmbienteReformaDto) then
+    FreeAndNil(oAmbienteReformaDto);
 end;
 
 function TReformaRegra.VerificarExcluir(const AModel: IModelReformaInterface;
