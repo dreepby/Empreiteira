@@ -54,7 +54,8 @@ uses
   uProdutoInterfaceModel in 'uProdutoInterfaceModel.pas',
   uProdutoAmbienteDto in 'uProdutoAmbienteDto.pas',
   uProdutoAmbienteModel in 'uProdutoAmbienteModel.pas',
-  uProdutoAmbienteInterfaceModel in 'uProdutoAmbienteInterfaceModel.pas';
+  uProdutoAmbienteInterfaceModel in 'uProdutoAmbienteInterfaceModel.pas',
+  uArrayAmbientes in 'uArrayAmbientes.pas';
 
 {$R *.res}
 
