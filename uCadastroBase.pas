@@ -13,7 +13,6 @@ type
     Panel1: TPanel;
     Label1: TLabel;
     edtPesquisa: TEdit;
-    btnPesquisa: TButton;
     Panel2: TPanel;
     PageControl1: TPageControl;
     tsTabela: TTabSheet;
@@ -29,6 +28,7 @@ type
     btnExcluir: TBitBtn;
     BtnFechar: TBitBtn;
     procedure btnCancelarMouseEnter(Sender: TObject);
+    procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
   private
     { Private declarations }
   public
@@ -44,6 +44,12 @@ implementation
 
 procedure TfrmCadastroBase.btnCancelarMouseEnter(Sender: TObject);
 begin;
+end;
+
+procedure TfrmCadastroBase.PageControl1Changing(Sender: TObject;
+  var AllowChange: Boolean);
+begin
+  AllowChange := False;
 end;
 
 end.

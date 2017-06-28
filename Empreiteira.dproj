@@ -174,16 +174,25 @@
         <DCCReference Include="uDetalhesReforma.pas">
             <Form>frmDetalhesReforma</Form>
         </DCCReference>
-        <DCCReference Include="uDetalhesCliente.pas">
-            <Form>frmDetalhesCliente</Form>
-        </DCCReference>
-        <DCCReference Include="uDetalhesClienteControler.pas"/>
-        <DCCReference Include="uDetalhesClienteModel.pas"/>
-        <DCCReference Include="uDetalhesClienteRegra.pas"/>
-        <DCCReference Include="uDetalhesClienteInterfaceModel.pas"/>
         <DCCReference Include="uAmbienteReformaModel.pas"/>
         <DCCReference Include="uAmbienteReformaInterfaceModel.pas"/>
         <DCCReference Include="uAmbienteReformaDto.pas"/>
+        <DCCReference Include="uProduto.pas">
+            <Form>frmProduto</Form>
+        </DCCReference>
+        <DCCReference Include="uProdutoModel.pas"/>
+        <DCCReference Include="uProdutoDto.pas"/>
+        <DCCReference Include="uProdutoRegra.pas"/>
+        <DCCReference Include="uProdutoControler.pas"/>
+        <DCCReference Include="uProdutoInterfaceModel.pas"/>
+        <DCCReference Include="uProdutoAmbienteDto.pas"/>
+        <DCCReference Include="uProdutoAmbienteModel.pas"/>
+        <DCCReference Include="uProdutoAmbienteInterfaceModel.pas"/>
+        <DCCReference Include="uListagemClientes.pas">
+            <Form>frmListagemClientes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uListagemClientesController.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

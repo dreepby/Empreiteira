@@ -6,10 +6,11 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uReformaDto,
   uReformaModel, uReforma, uReformaRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows,
-  uInterfaceControler, uReformaInterfaceModel, uDetalhesClienteControler,
+  uInterfaceControler, uReformaInterfaceModel,
   uAmbienteInterfaceModel, uAmbienteModel, uAmbienteDto, uClienteDto,
   uClienteRegra, uUsuarioDto, uUsuarioModel, uUsuarioIntefaceModel,
-  uAmbienteReformaModel, uAmbienteReformaInterfaceModel;
+  uAmbienteReformaModel, uAmbienteReformaInterfaceModel, uProdutoInterfaceModel,
+  uProdutoModel, uProdutoDto, uListagemClientesController;
 
 type
   TReformaControler = class(TInterfacedObject, IControlerInterface)
@@ -21,11 +22,14 @@ type
     oListaAmbientes: TObjectDictionary<string, TAmbienteDto>;
     oListaAmbientesReformas: TObjectDictionary<string, TAmbienteDto>;
     oListaUsuarios: TObjectDictionary<string, TUsuarioDto>;
+    oListaProdutos: TObjectDictionary<string, TProdutoDto>;
+
     frmReforma: TfrmReforma;
-    oDetalhesClienteControler: TDetalhesClienteControler;
     oClienteDto: TClienteDto;
     oCLienteRegra: TClienteRegra;
     AmbientesReforma: Array of Integer;
+    oProdutoModel: IModelProdutoInterface;
+    oControlerListagemClientes: TListagemClientesControler;
 
     procedure Excluir(Sender: TObject);
     procedure Salvar(Sender: TObject);
@@ -37,12 +41,14 @@ type
     procedure Pesquisar(Sender: TObject);
     procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure PesquisarClientePorCpf(Sender: TObject);
-    procedure PesquisarClientePorCnpj(Sender: TObject);
     procedure popularCheckListBox;
     procedure PopularComboBoxAtendenteUsuario;
-    procedure PopularComboBoxAmbientes(AIdReforma: Integer);
-    procedure PopularComboBoxProdutos;
+    procedure PrencherDadosDoProduto(AIdAmbiente: Integer);
+    procedure ListarProdutosAmbiente;
+    procedure OnSelectCbProduto(Sender: TObject);
+    procedure CalcularTotalDoProduto;
+    procedure AbrirListagemClientes(Sender: TObject);
+    procedure AtualizaCliente(const ACNPJ: String);
   public
     procedure abrirForm;
 
@@ -62,7 +68,6 @@ begin
   if (not(Assigned(frmReforma))) then
     frmReforma := TfrmReforma.Create(nil);
 
-  frmReforma.tsProdutos.TabVisible := False;
   frmReforma.tsDados.Enabled := False;
   frmReforma.BtnSalvar.Enabled := False;
   frmReforma.BtnCancelar.Enabled := False;
@@ -75,15 +80,35 @@ begin
   frmReforma.btnPesquisa.OnClick := Pesquisar;
   frmReforma.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmReforma.OnKeyDown := OnKeyDownForm;
-  frmReforma.btnPesquisarCpf.OnClick := PesquisarClientePorCpf;
-  frmReforma.btnPesquisarCnpj.OnClick := PesquisarClientePorCnpj;
+  frmReforma.cbProduto.OnSelect := OnSelectCbProduto;
+  frmReforma.btnPesquisarCliente.OnClick := AbrirListagemClientes;
   ListarReformas;
   frmReforma.Show;
+end;
+
+procedure TReformaControler.AbrirListagemClientes(Sender: TObject);
+var
+  sRetorno: String;
+begin
+  oControlerListagemClientes.abrirForm(frmReforma, AtualizaCliente);
 end;
 
 procedure TReformaControler.Alterar(Sender: TObject);
 begin
 
+end;
+
+procedure TReformaControler.AtualizaCliente(const ACNPJ: String);
+begin
+  if not(ACNPJ = EmptyStr) then
+    frmReforma.edtCpfCnpj.Text := ACNPJ;
+end;
+
+procedure TReformaControler.CalcularTotalDoProduto;
+begin
+  frmReforma.edtTotalProduto.Text :=
+    FloatToStr(StrToInt(frmReforma.edtQuantidade.Text) *
+    StrToFloat(frmReforma.edtPreco.Text));
 end;
 
 procedure TReformaControler.Cancelar(Sender: TObject);
@@ -112,8 +137,8 @@ begin
     ([doOwnsValues]);
   oListaUsuarios := TObjectDictionary<string, TUsuarioDto>.Create
     ([doOwnsValues]);
-  oDetalhesClienteControler := TDetalhesClienteControler.Create;
   oCLienteRegra := TClienteRegra.Create;
+  oControlerListagemClientes := TListagemClientesControler.Create;
 end;
 
 destructor TReformaControler.Destroy;
@@ -121,6 +146,9 @@ begin
 
   if Assigned(oClienteDto) then
     FreeAndNil(oClienteDto);
+
+  if Assigned(oControlerListagemClientes) then
+    FreeAndNil(oControlerListagemClientes);
 
   if Assigned(oReformaRegra) then
     FreeAndNil(oReformaRegra);
@@ -135,6 +163,12 @@ begin
   begin
     oListaUsuarios.Clear;
     FreeAndNil(oListaUsuarios);
+  end;
+
+  if Assigned(oListaProdutos) then
+  begin
+    oListaProdutos.Clear;
+    FreeAndNil(oListaProdutos);
   end;
 
   if Assigned(oListaAmbientes) then
@@ -160,9 +194,6 @@ begin
 
   if Assigned(oCLienteRegra) then
     FreeAndNil(oCLienteRegra);
-
-  if Assigned(oDetalhesClienteControler) then
-    FreeAndNil(oDetalhesClienteControler);
   inherited;
 end;
 
@@ -210,8 +241,14 @@ begin
   frmReforma.btnExcluir.Enabled := False;
   frmReforma.BtnSalvar.Enabled := True;
   frmReforma.BtnCancelar.Enabled := True;
+  frmReforma.pageControl2.ActivePage := frmReforma.tsPedido;
   popularCheckListBox;
   PopularComboBoxAtendenteUsuario;
+end;
+
+procedure TReformaControler.ListarProdutosAmbiente;
+begin
+
 end;
 
 procedure TReformaControler.ListarReformas;
@@ -235,55 +272,16 @@ begin
 
 end;
 
+procedure TReformaControler.OnSelectCbProduto(Sender: TObject);
+begin
+  frmReforma.edtPreco.Text := oListaProdutos.Items
+    [frmReforma.cbProduto.Items[frmReforma.cbProduto.ItemIndex]].Preco;
+  CalcularTotalDoProduto;
+end;
+
 procedure TReformaControler.Pesquisar(Sender: TObject);
 begin
 
-end;
-
-procedure TReformaControler.PesquisarClientePorCnpj(Sender: TObject);
-begin
-  oCLienteRegra.Limpar(oClienteDto);
-  if frmReforma.edtCnpj.Text <> EmptyStr then
-  begin
-    oClienteDto.Cnpj := frmReforma.edtCnpj.Text;
-    oDetalhesClienteControler.abrirForm(oClienteDto);
-    frmReforma.edtCpf.Text := oClienteDto.Cpf;
-    frmReforma.edtCnpj.Text := oClienteDto.Cnpj;
-  end
-  else
-  begin
-    if MessageDlg('Você deseja cadastrar um novo cliente?', mtinformation,
-      [mbyes, mbno], 0) = mryes then
-    begin
-      oDetalhesClienteControler.ValoresCpfCnpj(oClienteDto);
-      frmReforma.edtCpf.Text := oClienteDto.Cpf;
-      frmReforma.edtCnpj.Text := oClienteDto.Cnpj;
-      oDetalhesClienteControler.abrirFormCad(oClienteDto);
-    end;
-  end;
-end;
-
-procedure TReformaControler.PesquisarClientePorCpf(Sender: TObject);
-begin
-  oCLienteRegra.Limpar(oClienteDto);
-  if frmReforma.edtCpf.Text <> EmptyStr then
-  begin
-    oClienteDto.Cpf := frmReforma.edtCpf.Text;
-    oDetalhesClienteControler.abrirForm(oClienteDto);
-    frmReforma.edtCpf.Text := oClienteDto.Cpf;
-    frmReforma.edtCnpj.Text := oClienteDto.Cnpj;
-  end
-  else
-  begin
-    if MessageDlg('Você deseja cadastrar um novo cliente?', mtinformation,
-      [mbyes, mbno], 0) = mryes then
-    begin
-      oDetalhesClienteControler.ValoresCpfCnpj(oClienteDto);
-      frmReforma.edtCpf.Text := oClienteDto.Cpf;
-      frmReforma.edtCnpj.Text := oClienteDto.Cnpj;
-      oDetalhesClienteControler.abrirFormCad(oClienteDto);
-    end;
-  end;
 end;
 
 procedure TReformaControler.popularCheckListBox;
@@ -299,29 +297,6 @@ begin
     for sIndice in oListaAmbientes.Keys do
       frmReforma.cltAmbientes.AddItem(sIndice, oListaAmbientes);
   end;
-end;
-
-procedure TReformaControler.PopularComboBoxAmbientes(AIdReforma: Integer);
-var
-  oAmbienteReformaModel: IModelAmbienteReformaInterface;
-  oIndice: TAmbienteDto;
-begin
-  oAmbienteReformaModel := TAmbienteReformaModel.Create;
-  frmReforma.cbAmbiente.Clear;
-  oListaAmbientesReformas := TObjectDictionary<string, TAmbienteDto>.Create
-    ([doOwnsValues]);
-
-  if oAmbienteReformaModel.BuscarRegistrosReforma(oListaAmbientesReformas,
-    oReformaDto.idReforma) then
-  begin
-    for oIndice in oListaAmbientesReformas.Values do
-    begin
-      frmReforma.cbAmbiente.AddItem(oIndice.Descricao,
-        TObject(oIndice.idAmbiente));
-      frmReforma.cbAmbiente.ItemIndex := 0;
-    end;
-  end;
-
 end;
 
 procedure TReformaControler.PopularComboBoxAtendenteUsuario;
@@ -345,101 +320,46 @@ begin
   end;
 end;
 
-procedure TReformaControler.PopularComboBoxProdutos;
+procedure TReformaControler.PrencherDadosDoProduto(AIdAmbiente: Integer);
 var
-  oAmbienteReformaModel: IModelAmbienteReformaInterface;
-  oIndice: TAmbienteDto;
+  oIndice: TProdutoDto;
 begin
-  oAmbienteReformaModel := TAmbienteReformaModel.Create;
-  frmReforma.cbAmbiente.Clear;
-  oListaAmbientesReformas := TObjectDictionary<string, TAmbienteDto>.Create
-    ([doOwnsValues]);
+  if not(Assigned(oProdutoModel)) then
+    oProdutoModel := TProdutoModel.Create;
 
-  if oAmbienteReformaModel.BuscarRegistrosReforma(oListaAmbientesReformas,
-    oReformaDto.idReforma) then
+  if not(Assigned(oListaProdutos)) then
+    oListaProdutos := TObjectDictionary<string, TProdutoDto>.Create
+      ([doOwnsValues]);
+
+  oListaProdutos.Clear;
+  frmReforma.cbProduto.Clear;
+  if (not(oProdutoModel.BuscarProdutosPorAmbiente(AIdAmbiente, oListaProdutos)))
+  then
+    ShowMessage('Nenhum produto cadastrado nesse ambiente.')
+  else
   begin
-    for oIndice in oListaAmbientesReformas.Values do
+    for oIndice in oListaProdutos.Values do
     begin
-      frmReforma.cbAmbiente.AddItem(oIndice.Descricao,
-        TObject(oIndice.idAmbiente));
-      frmReforma.cbAmbiente.ItemIndex := 0;
+      frmReforma.cbProduto.AddItem(oIndice.Descricao,
+        TObject(oIndice.idProduto));
     end;
+    frmReforma.edtQuantidade.Text := IntToStr(1);
+    CalcularTotalDoProduto;
   end;
-
 end;
 
 procedure TReformaControler.Salvar(Sender: TObject);
 var
-  sTeste: String;
-  i: Integer;
-  iCount: Integer;
-  iCountArray: Integer;
+  iClick: Integer;
 begin
-  iCount := frmReforma.cltAmbientes.Items.count - 1;
-  iCountArray := 0;
-  SetLength(AmbientesReforma, 0);
-
-  for i := 0 to iCount do
+  iClick := +1;
+  if iClick = 1 then
   begin
-    if frmReforma.cltAmbientes.Checked[i] = True then
-    begin
-      sTeste := sTeste + frmReforma.cltAmbientes.Items[i];
-      SetLength(AmbientesReforma, iCountArray + 2);
-      AmbientesReforma[iCountArray] := oListaAmbientes.Items
-        [frmReforma.cltAmbientes.Items[i]].idAmbiente;
-      iCountArray := iCountArray + 1;
-    end;
-  end;
-  if sTeste = EmptyStr then
-    ShowMessage('Selecione um ambiente.')
+
+  end
   else
   begin
-    oReformaDto.dataDoPedido := frmReforma.dtpPedido.Date;
-    oReformaDto.dataDeEntrega := frmReforma.dtpEntrega.Date;
-    if frmReforma.cbAtedente.ItemIndex > -1 then
-    begin
-      if frmReforma.cbUsuario.ItemIndex > -1 then
-      begin
-        if (Trim(frmReforma.edtCpf.Text) = EmptyStr) and
-          (Trim(frmReforma.edtCnpj.Text) = EmptyStr) then
-          ShowMessage('Prencha todos os campos.')
-        else
-        begin
-          oReformaDto.oCliente.Cpf := frmReforma.edtCpf.Text;
-          oReformaDto.oCliente.Cnpj := frmReforma.edtCnpj.Text;
-          oReformaDto.oEscritor.idUsuario :=
-            Integer(frmReforma.cbUsuario.Items.Objects
-            [frmReforma.cbUsuario.ItemIndex]);
-          oReformaDto.oAtendente.idUsuario :=
-            Integer(frmReforma.cbAtedente.Items.Objects
-            [frmReforma.cbAtedente.ItemIndex]);
-          oReformaDto.observacao := frmReforma.moObservacao.Lines.Text;
-          try
-            if oReformaRegra.Salvar(oReformaModel, oReformaDto, AmbientesReforma)
-            then
-            begin
-              ListarReformas;
-              frmReforma.tsPedido.TabVisible := False;
-              frmReforma.tsProdutos.TabVisible := True;
-              frmReforma.pageControl2.ActivePage := frmReforma.tsProdutos;
-              PopularComboBoxAmbientes(oReformaDto.idReforma);
 
-            end;
-          except
-            on E: Exception do
-            begin
-              oReformaRegra.Limpar(oReformaDto);
-              ShowMessage(E.Message);
-            end;
-
-          end;
-        end;
-      end
-      else
-        ShowMessage('Selecione um usuario.');
-    end
-    else
-      ShowMessage('Selecionae um atendente.');
   end;
 end;
 

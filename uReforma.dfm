@@ -1,33 +1,32 @@
 inherited frmReforma: TfrmReforma
   Caption = 'Listagem de Reformas'
   ClientHeight = 472
-  ClientWidth = 821
-  ExplicitWidth = 827
-  ExplicitHeight = 500
+  ClientWidth = 976
+  ExplicitLeft = -112
+  ExplicitWidth = 982
+  ExplicitHeight = 501
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
-    Width = 821
-    ExplicitWidth = 821
+    Width = 976
+    ExplicitWidth = 976
   end
   inherited Panel2: TPanel
-    Width = 821
+    Width = 976
     Height = 360
-    ExplicitWidth = 821
+    ExplicitWidth = 976
     ExplicitHeight = 360
     inherited PageControl1: TPageControl
-      Width = 811
+      Width = 966
       Height = 350
       ActivePage = tsDados
-      ExplicitWidth = 811
+      ExplicitWidth = 966
       ExplicitHeight = 350
       inherited tsTabela: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
-        ExplicitWidth = 803
+        ExplicitWidth = 958
         ExplicitHeight = 322
         inherited DBGrid1: TDBGrid
-          Width = 803
+          Width = 958
           Height = 322
           Columns = <
             item
@@ -74,13 +73,13 @@ inherited frmReforma: TfrmReforma
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitTop = 27
-        ExplicitWidth = 803
+        ExplicitTop = 24
+        ExplicitWidth = 958
         ExplicitHeight = 322
         object pageControl2: TPageControl
           Left = 0
           Top = 0
-          Width = 803
+          Width = 958
           Height = 322
           ActivePage = tsProdutos
           Align = alClient
@@ -110,7 +109,7 @@ inherited frmReforma: TfrmReforma
             end
             object Label5: TLabel
               Left = 341
-              Top = 115
+              Top = 65
               Width = 144
               Height = 13
               Caption = 'Usuario que est'#225' cadastrando'
@@ -121,13 +120,6 @@ inherited frmReforma: TfrmReforma
               Width = 64
               Height = 13
               Caption = 'Obeserva'#231#227'o'
-            end
-            object Label6: TLabel
-              Left = 563
-              Top = 13
-              Width = 106
-              Height = 13
-              Caption = 'Ambientes da reforma'
             end
             object dtpPedido: TDateTimePicker
               Left = 117
@@ -159,53 +151,30 @@ inherited frmReforma: TfrmReforma
               ParentFont = False
               TabOrder = 1
             end
-            object edtCpf: TLabeledEdit
+            object edtCpfCnpj: TLabeledEdit
               Left = 117
               Top = 82
               Width = 186
               Height = 27
-              EditLabel.Width = 68
+              EditLabel.Width = 97
               EditLabel.Height = 13
-              EditLabel.Caption = 'CPF do cliente'
+              EditLabel.Caption = 'CPF/CNPJ do cliente'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -16
               Font.Name = 'Tahoma'
               Font.Style = []
+              MaxLength = 14
               ParentFont = False
               TabOrder = 2
             end
-            object btnPesquisarCpf: TBitBtn
+            object btnPesquisarCliente: TBitBtn
               Left = 279
               Top = 82
               Width = 24
               Height = 27
               Caption = 'P'
               TabOrder = 3
-            end
-            object edtCnpj: TLabeledEdit
-              Left = 341
-              Top = 80
-              Width = 186
-              Height = 27
-              EditLabel.Width = 74
-              EditLabel.Height = 13
-              EditLabel.Caption = 'CNPJ do cliente'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -16
-              Font.Name = 'Tahoma'
-              Font.Style = []
-              ParentFont = False
-              TabOrder = 4
-            end
-            object btnPesquisarCnpj: TBitBtn
-              Left = 503
-              Top = 80
-              Width = 24
-              Height = 27
-              Caption = 'P'
-              TabOrder = 5
             end
             object cbAtedente: TComboBox
               Left = 117
@@ -218,11 +187,11 @@ inherited frmReforma: TfrmReforma
               Font.Name = 'Tahoma'
               Font.Style = []
               ParentFont = False
-              TabOrder = 6
+              TabOrder = 4
             end
             object cbUsuario: TComboBox
               Left = 341
-              Top = 134
+              Top = 84
               Width = 186
               Height = 27
               Font.Charset = DEFAULT_CHARSET
@@ -231,21 +200,31 @@ inherited frmReforma: TfrmReforma
               Font.Name = 'Tahoma'
               Font.Style = []
               ParentFont = False
-              TabOrder = 7
+              TabOrder = 5
             end
             object moObservacao: TMemo
               Left = 117
               Top = 191
-              Width = 186
+              Width = 410
               Height = 95
-              TabOrder = 8
+              TabOrder = 6
+            end
+          end
+          object tsProdutos: TTabSheet
+            Caption = 'Produtos'
+            ImageIndex = 1
+            object Label6: TLabel
+              Left = 3
+              Top = 8
+              Width = 106
+              Height = 13
+              Caption = 'Ambientes da reforma'
             end
             object cltAmbientes: TCheckListBox
-              Left = 563
-              Top = 29
+              Left = 3
+              Top = 24
               Width = 186
               Height = 257
-              BorderStyle = bsNone
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -16
@@ -253,22 +232,127 @@ inherited frmReforma: TfrmReforma
               Font.Style = []
               ItemHeight = 19
               ParentFont = False
-              TabOrder = 9
+              TabOrder = 0
             end
-          end
-          object tsProdutos: TTabSheet
-            Caption = 'Produtos'
-            ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 31
+            object Panel13: TPanel
+              Left = 195
+              Top = -3
+              Width = 401
+              Height = 294
+              BevelOuter = bvNone
+              TabOrder = 1
+              object Label11: TLabel
+                Left = 0
+                Top = 24
+                Width = 38
+                Height = 13
+                Caption = 'Produto'
+              end
+              object Label12: TLabel
+                Left = 3
+                Top = 131
+                Width = 58
+                Height = 13
+                Caption = 'Observa'#231#227'o'
+              end
+              object cbProduto: TComboBox
+                Left = 0
+                Top = 44
+                Width = 321
+                Height = 27
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+              end
+              object edtPreco: TLabeledEdit
+                Left = 115
+                Top = 93
+                Width = 100
+                Height = 27
+                EditLabel.Width = 48
+                EditLabel.Height = 13
+                EditLabel.Caption = 'Pre'#231'o UN.'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 1
+              end
+              object moObservacaoProduto: TMemo
+                Left = 0
+                Top = 149
+                Width = 321
+                Height = 104
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                Lines.Strings = (
+                  '')
+                MaxLength = 255
+                ParentFont = False
+                TabOrder = 2
+              end
+              object edtQuantidade: TLabeledEdit
+                Left = 0
+                Top = 93
+                Width = 100
+                Height = 27
+                EditLabel.Width = 56
+                EditLabel.Height = 13
+                EditLabel.Caption = 'Quantidade'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                NumbersOnly = True
+                ParentFont = False
+                TabOrder = 3
+              end
+              object edtTotalProduto: TLabeledEdit
+                Left = 221
+                Top = 93
+                Width = 100
+                Height = 27
+                EditLabel.Width = 24
+                EditLabel.Height = 13
+                EditLabel.Caption = 'Total'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                NumbersOnly = True
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 4
+              end
+              object btnAdicionar: TBitBtn
+                Left = 248
+                Top = 262
+                Width = 75
+                Height = 25
+                Caption = 'Adicionar'
+                TabOrder = 5
+              end
+            end
             object Panel5: TPanel
-              Left = 368
+              Left = 523
               Top = 0
               Width = 427
               Height = 294
               Align = alRight
               BevelOuter = bvNone
-              TabOrder = 0
+              TabOrder = 2
               object Panel6: TPanel
                 Left = 0
                 Top = 253
@@ -277,7 +361,6 @@ inherited frmReforma: TfrmReforma
                 Align = alBottom
                 BevelOuter = bvNone
                 TabOrder = 0
-                ExplicitTop = 285
                 object Panel7: TPanel
                   Left = 219
                   Top = 0
@@ -286,9 +369,6 @@ inherited frmReforma: TfrmReforma
                   Align = alRight
                   BevelOuter = bvNone
                   TabOrder = 0
-                  ExplicitLeft = 240
-                  ExplicitTop = 1
-                  ExplicitHeight = 39
                   object Label10: TLabel
                     Left = 11
                     Top = 10
@@ -342,15 +422,38 @@ inherited frmReforma: TfrmReforma
                 Align = alTop
                 BevelOuter = bvNone
                 TabOrder = 1
-                ExplicitLeft = 74
-                ExplicitTop = 81
-                ExplicitWidth = 185
                 object Label9: TLabel
                   Left = 0
                   Top = 16
                   Width = 63
                   Height = 19
                   Caption = 'Produtos'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -16
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Label8: TLabel
+                  Left = 172
+                  Top = 16
+                  Width = 142
+                  Height = 19
+                  Caption = 'Total do pedido: R$'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -16
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object valorPedido: TLabel
+                  Left = 320
+                  Top = 16
+                  Width = 9
+                  Height = 19
+                  Caption = '0'
                   Font.Charset = DEFAULT_CHARSET
                   Font.Color = clWindowText
                   Font.Height = -16
@@ -367,17 +470,12 @@ inherited frmReforma: TfrmReforma
                 Align = alClient
                 BevelOuter = bvNone
                 TabOrder = 2
-                ExplicitLeft = 266
-                ExplicitTop = 224
-                ExplicitWidth = 185
-                ExplicitHeight = 41
                 object dbgProdutos: TDBGrid
                   Left = 0
                   Top = 0
                   Width = 427
                   Height = 212
                   Align = alClient
-                  DataSource = dsTabelaProduto
                   TabOrder = 0
                   TitleFont.Charset = DEFAULT_CHARSET
                   TitleFont.Color = clWindowText
@@ -422,181 +520,6 @@ inherited frmReforma: TfrmReforma
                 end
               end
             end
-            object Panel10: TPanel
-              Left = 0
-              Top = 0
-              Width = 368
-              Height = 294
-              Align = alClient
-              BevelOuter = bvNone
-              TabOrder = 1
-              ExplicitLeft = -6
-              ExplicitTop = 3
-              ExplicitWidth = 344
-              object Panel11: TPanel
-                Left = 0
-                Top = 0
-                Width = 368
-                Height = 41
-                Align = alTop
-                BevelOuter = bvNone
-                TabOrder = 0
-                ExplicitLeft = 66
-                ExplicitTop = 151
-                ExplicitWidth = 185
-                object Label8: TLabel
-                  Left = 8
-                  Top = 9
-                  Width = 161
-                  Height = 19
-                  Caption = 'Ambiente selecionado:'
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  ParentFont = False
-                end
-                object cbAmbiente: TComboBox
-                  Left = 175
-                  Top = 9
-                  Width = 145
-                  Height = 26
-                  Style = csOwnerDrawFixed
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  ItemHeight = 20
-                  ParentFont = False
-                  TabOrder = 0
-                end
-              end
-              object Panel12: TPanel
-                Left = 0
-                Top = 259
-                Width = 368
-                Height = 35
-                Align = alBottom
-                BevelOuter = bvNone
-                TabOrder = 1
-                ExplicitWidth = 344
-                object btnAdicionarProduto: TBitBtn
-                  Left = 177
-                  Top = 6
-                  Width = 75
-                  Height = 25
-                  Caption = 'Adicionar'
-                  TabOrder = 0
-                end
-              end
-              object Panel13: TPanel
-                Left = 0
-                Top = 41
-                Width = 368
-                Height = 218
-                Align = alClient
-                BevelOuter = bvNone
-                TabOrder = 2
-                ExplicitLeft = 104
-                ExplicitTop = 7
-                object Label11: TLabel
-                  Left = 13
-                  Top = 21
-                  Width = 38
-                  Height = 13
-                  Caption = 'Produto'
-                end
-                object Label12: TLabel
-                  Left = 177
-                  Top = 73
-                  Width = 58
-                  Height = 13
-                  Caption = 'Observa'#231#227'o'
-                end
-                object cbProduto: TComboBox
-                  Left = 13
-                  Top = 40
-                  Width = 145
-                  Height = 27
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  ParentFont = False
-                  TabOrder = 0
-                end
-                object edtPreco: TLabeledEdit
-                  Left = 177
-                  Top = 40
-                  Width = 121
-                  Height = 27
-                  EditLabel.Width = 48
-                  EditLabel.Height = 13
-                  EditLabel.Caption = 'Pre'#231'o UN.'
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  ParentFont = False
-                  ReadOnly = True
-                  TabOrder = 1
-                end
-                object moObservacaoProduto: TMemo
-                  Left = 177
-                  Top = 92
-                  Width = 185
-                  Height = 89
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  Lines.Strings = (
-                    '')
-                  ParentFont = False
-                  TabOrder = 2
-                end
-                object edtQuantidade: TLabeledEdit
-                  Left = 13
-                  Top = 93
-                  Width = 145
-                  Height = 27
-                  EditLabel.Width = 56
-                  EditLabel.Height = 13
-                  EditLabel.Caption = 'Quantidade'
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  NumbersOnly = True
-                  ParentFont = False
-                  TabOrder = 3
-                end
-                object LabeledEdit1: TLabeledEdit
-                  Left = 13
-                  Top = 141
-                  Width = 145
-                  Height = 27
-                  EditLabel.Width = 24
-                  EditLabel.Height = 13
-                  EditLabel.Caption = 'Total'
-                  Font.Charset = DEFAULT_CHARSET
-                  Font.Color = clWindowText
-                  Font.Height = -16
-                  Font.Name = 'Tahoma'
-                  Font.Style = []
-                  NumbersOnly = True
-                  ParentFont = False
-                  ReadOnly = True
-                  TabOrder = 4
-                end
-              end
-            end
           end
         end
       end
@@ -604,12 +527,12 @@ inherited frmReforma: TfrmReforma
   end
   inherited Panel3: TPanel
     Top = 417
-    Width = 821
+    Width = 976
     ExplicitTop = 417
-    ExplicitWidth = 821
+    ExplicitWidth = 976
     inherited Panel4: TPanel
-      Left = 66
-      ExplicitLeft = 66
+      Left = 221
+      ExplicitLeft = 221
       inherited btnInserir: TBitBtn
         Left = 23
         Top = 1

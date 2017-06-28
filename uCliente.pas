@@ -10,10 +10,8 @@ uses
 type
   TfrmCliente = class(TfrmCadastroBase)
     Label5: TLabel;
-    cbPesquisa: TComboBox;
     edtNome: TLabeledEdit;
-    edtCnpj: TLabeledEdit;
-    edtCpf: TLabeledEdit;
+    edtCpfCnpj: TLabeledEdit;
     edtCelular: TLabeledEdit;
     edtTelefone: TLabeledEdit;
     cbEstado: TComboBox;
@@ -28,6 +26,7 @@ type
     edtCep: TLabeledEdit;
     moObservacao: TMemo;
     Label6: TLabel;
+    cbPesquisa: TComboBox;
   private
     { Private declarations }
   public

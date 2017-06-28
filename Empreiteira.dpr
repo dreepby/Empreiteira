@@ -53,14 +53,20 @@ uses
   uReformaRegra in 'uReformaRegra.pas',
   uReformaInterfaceModel in 'uReformaInterfaceModel.pas',
   uDetalhesReforma in 'uDetalhesReforma.pas' {frmDetalhesReforma},
-  uDetalhesCliente in 'uDetalhesCliente.pas' {frmDetalhesCliente},
-  uDetalhesClienteControler in 'uDetalhesClienteControler.pas',
-  uDetalhesClienteModel in 'uDetalhesClienteModel.pas',
-  uDetalhesClienteRegra in 'uDetalhesClienteRegra.pas',
-  uDetalhesClienteInterfaceModel in 'uDetalhesClienteInterfaceModel.pas',
   uAmbienteReformaModel in 'uAmbienteReformaModel.pas',
   uAmbienteReformaInterfaceModel in 'uAmbienteReformaInterfaceModel.pas',
-  uAmbienteReformaDto in 'uAmbienteReformaDto.pas';
+  uAmbienteReformaDto in 'uAmbienteReformaDto.pas',
+  uProduto in 'uProduto.pas' {frmProduto},
+  uProdutoModel in 'uProdutoModel.pas',
+  uProdutoDto in 'uProdutoDto.pas',
+  uProdutoRegra in 'uProdutoRegra.pas',
+  uProdutoControler in 'uProdutoControler.pas',
+  uProdutoInterfaceModel in 'uProdutoInterfaceModel.pas',
+  uProdutoAmbienteDto in 'uProdutoAmbienteDto.pas',
+  uProdutoAmbienteModel in 'uProdutoAmbienteModel.pas',
+  uProdutoAmbienteInterfaceModel in 'uProdutoAmbienteInterfaceModel.pas',
+  uListagemClientes in 'uListagemClientes.pas' {frmListagemClientes},
+  uListagemClientesController in 'uListagemClientesController.pas';
 
 {$R *.res}
 

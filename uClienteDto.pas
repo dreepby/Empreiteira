@@ -9,9 +9,7 @@ type
   TClienteDto = class
   private
     FObservacao: String;
-    FCnpj: String;
     FoBairro: TBairroDto;
-    FCpf: String;
     FCep: String;
     FNumero: Integer;
     FComplemento: String;
@@ -22,11 +20,10 @@ type
     FNome: String;
     FoEstado: TEstadoDto;
     FoMunicipio: TMunicipioDto;
+    FCpfCnpj: String;
     procedure SetCelular(const Value: String);
     procedure SetCep(const Value: String);
-    procedure SetCnpj(const Value: String);
     procedure SetComplemento(const Value: String);
-    procedure SetCpf(const Value: String);
     procedure SetidCliente(const Value: Integer);
     procedure SetNumero(const Value: Integer);
     procedure SetoBairro(const Value: TBairroDto);
@@ -36,11 +33,11 @@ type
     procedure SetNome(const Value: String);
     procedure SetoEstado(const Value: TEstadoDto);
     procedure SetoMunicipio(const Value: TMunicipioDto);
+    procedure SetCpfCnpj(const Value: String);
   public
     property idCliente: Integer read FidCliente write SetidCliente;
     property Nome: String read FNome write SetNome;
-    property Cpf: String read FCpf write SetCpf;
-    property Cnpj: String read FCnpj write SetCnpj;
+    property CpfCnpj: String read FCpfCnpj write SetCpfCnpj;
     property Telefone: String read FTelefone write SetTelefone;
     property Celular: String read FCelular write SetCelular;
     property Observacao: String read FObservacao write SetObservacao;
@@ -90,19 +87,14 @@ begin
   FCep := Value;
 end;
 
-procedure TClienteDto.SetCnpj(const Value: String);
-begin
-  FCnpj := Value;
-end;
-
 procedure TClienteDto.SetComplemento(const Value: String);
 begin
   FComplemento := Value;
 end;
 
-procedure TClienteDto.SetCpf(const Value: String);
+procedure TClienteDto.SetCpfCnpj(const Value: String);
 begin
-  FCpf := Value;
+  FCpfCnpj := Value;
 end;
 
 procedure TClienteDto.SetidCliente(const Value: Integer);

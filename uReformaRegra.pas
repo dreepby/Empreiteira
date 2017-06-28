@@ -59,7 +59,7 @@ function TReformaRegra.Salvar(const AModel: IModelReformaInterface;
 var
   iCodigoCPF, iCodigoCnpj: Integer;
   oClienteModel: IModelClienteInterface;
-begin
+begin                                                                 {
   if AReforma.dataDoPedido > AReforma.dataDeEntrega then
     raise Exception.Create
       ('A data do pedido não pode ser depois da data de entrega.')
@@ -125,7 +125,7 @@ begin
       end;
 
     end;
-  end;
+  end;        }
 end;
 
 function TReformaRegra.SalvarAmbientes(AAmbientes: array of Integer;

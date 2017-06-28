@@ -18,8 +18,6 @@ type
     function Localizar(ATexto, ACampo: String): Boolean;
     procedure DesativarFiltro;
     function BuscarRegistro(var ACliente: TClienteDto): Boolean;
-    function BuscarRegistroIdCpf(AValor: String): Integer;
-    function BuscarRegistroIdCnpj(AValor: String): Integer;
   end;
 
 implementation

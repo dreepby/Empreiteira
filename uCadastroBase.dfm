@@ -41,24 +41,16 @@ object frmCadastroBase: TfrmCadastroBase
     end
     object edtPesquisa: TEdit
       Left = 195
-      Top = 11
+      Top = 14
       Width = 329
-      Height = 31
+      Height = 27
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
       TabOrder = 0
-    end
-    object btnPesquisa: TButton
-      Left = 562
-      Top = 11
-      Width = 75
-      Height = 31
-      Caption = 'Pesquisar'
-      TabOrder = 1
     end
   end
   object Panel2: TPanel
@@ -78,6 +70,7 @@ object frmCadastroBase: TfrmCadastroBase
       ActivePage = tsTabela
       Align = alClient
       TabOrder = 0
+      OnChanging = PageControl1Changing
       object tsTabela: TTabSheet
         Caption = '&Tabela'
         object DBGrid1: TDBGrid

@@ -56,8 +56,7 @@ procedure TClienteRegra.Limpar(ACliente: TClienteDto);
 begin
   ACliente.idCliente := 0;
   ACliente.Nome := EmptyStr;
-  ACliente.Cpf := EmptyStr;
-  ACliente.Cnpj := EmptyStr;
+  ACliente.CpfCnpj := EmptyStr;
   ACliente.Telefone := EmptyStr;
   ACliente.Celular := EmptyStr;
   ACliente.Observacao := EmptyStr;

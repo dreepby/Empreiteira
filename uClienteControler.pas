@@ -41,6 +41,8 @@ type
     procedure OnSelectCbMunicipio(Sender: TObject);
   public
     procedure abrirForm;
+    procedure AbriFormModoAdicao;
+    procedure AbrirFormAlterar(AIdCliente: Integer);
 
     constructor Create;
     destructor Destroy; override;
@@ -53,11 +55,18 @@ implementation
 
 { TClienteControler }
 
+procedure TClienteControler.AbriFormModoAdicao;
+begin
+  abrirForm;
+  Inserir(Self);
+end;
+
 procedure TClienteControler.abrirForm;
 begin
   if (not(Assigned(frmCliente))) then
     frmCliente := TfrmCliente.Create(nil);
 
+  frmCliente.PageControl1.TabIndex := 0;
   frmCliente.moObservacao.Lines.Text := EmptyStr;
   frmCliente.tsDados.Enabled := False;
   frmCliente.BtnFechar.OnClick := fecharCliente;
@@ -78,13 +87,18 @@ begin
   frmCliente.Show;
 end;
 
-procedure TClienteControler.Alterar(Sender: TObject);
+procedure TClienteControler.AbrirFormAlterar(AIdCliente: Integer);
 begin
-  PopularComboBoxEstado;
-  oClienteDto.idCliente := frmCliente.DBGrid1.Fields[0].AsInteger;
+  ShowMessage('Aberto: '+IntToStr(AIdCliente));
+end;
 
-  if oClienteRegra.BuscarRegistro(oClienteModel, oClienteDto) then
-  begin
+procedure TClienteControler.Alterar(Sender: TObject);
+begin {
+    PopularComboBoxEstado;
+    oClienteDto.idCliente := frmCliente.DBGrid1.Fields[0].AsInteger;
+
+    if oClienteRegra.BuscarRegistro(oClienteModel, oClienteDto) then
+    begin
     frmCliente.edtNome.Text := oClienteDto.Nome;
     frmCliente.edtCnpj.Text := oClienteDto.Cnpj;
     frmCliente.edtCpf.Text := oClienteDto.Cpf;
@@ -96,18 +110,18 @@ begin
     frmCliente.edtCep.Text := oClienteDto.Cep;
     frmCliente.moObservacao.Lines.Text := oClienteDto.Observacao;
     frmCliente.cbEstado.ItemIndex := frmCliente.cbEstado.Items.IndexOf
-      (oClienteDto.oEstado.Nome);
+    (oClienteDto.oEstado.Nome);
     PopularComboBoxMunicipio(oListaEstados.Items[frmCliente.cbEstado.Items
-      [frmCliente.cbEstado.ItemIndex]].IdUF);
+    [frmCliente.cbEstado.ItemIndex]].IdUF);
     frmCliente.cbMunicipio.ItemIndex := frmCliente.cbMunicipio.Items.IndexOf
-      (oClienteDto.oMunicipio.Nome);
+    (oClienteDto.oMunicipio.Nome);
     PopularComboBoxBairro(oListaMunicipios.Items[frmCliente.cbMunicipio.Items
-      [frmCliente.cbMunicipio.ItemIndex]].idMunicipio);
+    [frmCliente.cbMunicipio.ItemIndex]].idMunicipio);
     frmCliente.cbBairro.ItemIndex := frmCliente.cbBairro.Items.IndexOf
-      (oClienteDto.oBairro.Nome);
-  end
-  else
-  begin
+    (oClienteDto.oBairro.Nome);
+    end
+    else
+    begin
     oClienteRegra.Limpar(oClienteDto);
     ListarClientes;
     AtivarBotoesListagem;
@@ -116,13 +130,13 @@ begin
     frmCliente.tsDados.Enabled := False;
     frmCliente.Caption := 'Listagem de Clientes';
     ShowMessage('Nenhum registro encontrado');
-  end;
+    end;
 
-  frmCliente.tsDados.Enabled := True;
-  frmCliente.Caption := 'Alteração de Cliente';
-  frmCliente.PageControl1.ActivePage := frmCliente.tsDados;
-  frmCliente.tsTabela.Enabled := False;
-  AtivarBotoesInserir;
+    frmCliente.tsDados.Enabled := True;
+    frmCliente.Caption := 'Alteração de Cliente';
+    frmCliente.PageControl1.ActivePage := frmCliente.tsDados;
+    frmCliente.tsTabela.Enabled := False;
+    AtivarBotoesInserir; }
 end;
 
 procedure TClienteControler.AtivarBotoesInserir;
@@ -243,7 +257,7 @@ begin
   frmCliente.PageControl1.ActivePage := frmCliente.tsDados;
   frmCliente.tsTabela.Enabled := False;
   AtivarBotoesInserir;
-  frmCliente.edtNome.SetFocus;
+  frmCliente.edtCpfCnpj.SetFocus;
   frmCliente.cbMunicipio.Clear;
   frmCliente.cbMunicipio.Enabled := False;
   frmCliente.cbBairro.Clear;
@@ -253,8 +267,7 @@ end;
 procedure TClienteControler.LimparCamposForm;
 begin
   frmCliente.edtNome.Text := EmptyStr;
-  frmCliente.edtCpf.Text := EmptyStr;
-  frmCliente.edtCnpj.Text := EmptyStr;
+  frmCliente.edtCpfCnpj.Text := EmptyStr;
   frmCliente.edtTelefone.Text := EmptyStr;
   frmCliente.edtCelular.Text := EmptyStr;
   frmCliente.moObservacao.Lines.Text := EmptyStr;
@@ -377,80 +390,80 @@ procedure TClienteControler.Salvar(Sender: TObject);
 var
   bVerificaCpfCnpj: Boolean;
   bVerificaTelefoneCelular: Boolean;
-begin
-  oClienteDto.Cpf := Trim(frmCliente.edtCpf.Text);
-  oClienteDto.Nome := Trim(frmCliente.edtNome.Text);
-  oClienteDto.Observacao := Trim(frmCliente.moObservacao.Lines.Text);
-  oClienteDto.Cnpj := Trim(frmCliente.edtCnpj.Text);
-  oClienteDto.Celular := Trim(frmCliente.edtCelular.Text);
-  oClienteDto.Telefone := Trim(frmCliente.edtTelefone.Text);
-  oClienteDto.Rua := Trim(frmCliente.edtRua.Text);
-  oClienteDto.Cep := Trim(frmCliente.edtCep.Text);
+begin {
+    oClienteDto.Cpf := Trim(frmCliente.edtCpf.Text);
+    oClienteDto.Nome := Trim(frmCliente.edtNome.Text);
+    oClienteDto.Observacao := Trim(frmCliente.moObservacao.Lines.Text);
+    oClienteDto.Cnpj := Trim(frmCliente.edtCnpj.Text);
+    oClienteDto.Celular := Trim(frmCliente.edtCelular.Text);
+    oClienteDto.Telefone := Trim(frmCliente.edtTelefone.Text);
+    oClienteDto.Rua := Trim(frmCliente.edtRua.Text);
+    oClienteDto.Cep := Trim(frmCliente.edtCep.Text);
 
-  if (oClienteDto.Cpf <> EmptyStr) or (oClienteDto.Cnpj <> EmptyStr) then
+    if (oClienteDto.Cpf <> EmptyStr) or (oClienteDto.Cnpj <> EmptyStr) then
     bVerificaCpfCnpj := True
-  else
+    else
     bVerificaCpfCnpj := False;
 
-  if (oClienteDto.Telefone <> EmptyStr) or (oClienteDto.Celular <> EmptyStr)
-  then
+    if (oClienteDto.Telefone <> EmptyStr) or (oClienteDto.Celular <> EmptyStr)
+    then
     bVerificaTelefoneCelular := True
-  else
+    else
     bVerificaTelefoneCelular := False;
 
-  if (oClienteDto.Nome <> EmptyStr) and (oClienteDto.Rua <> EmptyStr) and
+    if (oClienteDto.Nome <> EmptyStr) and (oClienteDto.Rua <> EmptyStr) and
     (frmCliente.edtNumero.Text <> EmptyStr) and (oClienteDto.Cep <> EmptyStr)
-  then
-  begin
+    then
+    begin
     if frmCliente.cbEstado.ItemIndex > -1 then
     begin
-      if frmCliente.cbMunicipio.ItemIndex > -1 then
-      begin
-        if frmCliente.cbBairro.ItemIndex > -1 then
-        begin
-          if bVerificaCpfCnpj then
-          begin
-            if bVerificaTelefoneCelular then
-            begin
-              oClienteDto.Numero := StrToInt(frmCliente.edtNumero.Text);
-              oClienteDto.oBairro.idBairro := oListaBairros.Items
-                [frmCliente.cbBairro.Items[frmCliente.cbBairro.ItemIndex]
-                ].idBairro;
-              oClienteDto.Complemento := Trim(frmCliente.edtComplemento.Text);
-              try
-                if (oClienteRegra.Salvar(oClienteModel, oClienteDto)) then
-                begin
-                  ShowMessage('Salvo com sucesso');
-                  frmCliente.PageControl1.ActivePage := frmCliente.tsTabela;
-                  frmCliente.tsTabela.Enabled := True;
-                  AtivarBotoesListagem;
-                  frmCliente.Caption := 'Listagem de Clientes';
-                  LimparCamposForm;
-                  ListarClientes;
-                end;
-              except
-                on E: Exception do
-                  ShowMessage(E.Message);
-              end;
-              oClienteRegra.Limpar(oClienteDto);
-            end
-            else
-              ShowMessage('Deve ser cadastrado o Telefone ou Celular');
-          end
-          else
-            ShowMessage('Deve ser cadastrado o CPF ou CNPJ.');
-        end
-        else
-          ShowMessage('Selecione um bairro.');
-      end
-      else
-        ShowMessage('Selecione um municipio.');
+    if frmCliente.cbMunicipio.ItemIndex > -1 then
+    begin
+    if frmCliente.cbBairro.ItemIndex > -1 then
+    begin
+    if bVerificaCpfCnpj then
+    begin
+    if bVerificaTelefoneCelular then
+    begin
+    oClienteDto.Numero := StrToInt(frmCliente.edtNumero.Text);
+    oClienteDto.oBairro.idBairro := oListaBairros.Items
+    [frmCliente.cbBairro.Items[frmCliente.cbBairro.ItemIndex]
+    ].idBairro;
+    oClienteDto.Complemento := Trim(frmCliente.edtComplemento.Text);
+    try
+    if (oClienteRegra.Salvar(oClienteModel, oClienteDto)) then
+    begin
+    ShowMessage('Salvo com sucesso');
+    frmCliente.PageControl1.ActivePage := frmCliente.tsTabela;
+    frmCliente.tsTabela.Enabled := True;
+    AtivarBotoesListagem;
+    frmCliente.Caption := 'Listagem de Clientes';
+    LimparCamposForm;
+    ListarClientes;
+    end;
+    except
+    on E: Exception do
+    ShowMessage(E.Message);
+    end;
+    oClienteRegra.Limpar(oClienteDto);
     end
     else
-      ShowMessage('Selecione um estado.');
-  end
-  else
-    ShowMessage('Prencha todos os campos.');
+    ShowMessage('Deve ser cadastrado o Telefone ou Celular');
+    end
+    else
+    ShowMessage('Deve ser cadastrado o CPF ou CNPJ.');
+    end
+    else
+    ShowMessage('Selecione um bairro.');
+    end
+    else
+    ShowMessage('Selecione um municipio.');
+    end
+    else
+    ShowMessage('Selecione um estado.');
+    end
+    else
+    ShowMessage('Prencha todos os campos.'); }
 end;
 
 initialization

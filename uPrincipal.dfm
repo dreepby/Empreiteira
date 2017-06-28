@@ -82,6 +82,7 @@ object frmPrincipal: TfrmPrincipal
     end
     object actProduto: TAction
       Caption = 'Produtos'
+      OnExecute = actProdutoExecute
     end
     object actReforma: TAction
       Caption = 'Reformas'
