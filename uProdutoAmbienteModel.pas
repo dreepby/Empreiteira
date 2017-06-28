@@ -5,26 +5,56 @@ interface
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, System.Generics.Collections,
-  uProdutoAmbienteDto, uClassSingletonConexao, uProdutoAmbienteInterfaceModel;
+  uProdutoAmbienteDto, uClassSingletonConexao, uProdutoAmbienteInterfaceModel, uArrayAmbientes;
 
 type
   TProdutoAmbienteModel = class(TInterfacedObject,
     IModelProdutoAmbienteInterface)
   public
     function Inserir(var AProdutoAmbiente: TProdutoAmbienteDto): Boolean;
-    function VerificarExcluir(AId: integer): Boolean;
-    function Deletar(const AProdutoAmbiente: integer): Boolean;
-    function BuscarID: integer;
+    function VerificarExcluir(AId: Integer): Boolean;
+    function Deletar(const AProdutoAmbiente: Integer): Boolean;
+    function BuscarID: Integer;
     function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto;
-      out AId: integer): Boolean;
-
+      out AId: Integer): Boolean;
+    procedure BuscarAmbientes(const ID: Integer; var oAmbientes: TAmbientesReformaArray);
   end;
 
 implementation
 
 { TProdutoAmbienteModel }
 
-function TProdutoAmbienteModel.BuscarID: integer;
+procedure TProdutoAmbienteModel.BuscarAmbientes(const ID: Integer; var oAmbientes: TAmbientesReformaArray);
+var
+  iCount: Integer;
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open
+      ('select pa.Ambientes_idAmbientes as ID from produto_ambiente pa where ' +
+      ' pa.Produto_idProduto = ' + IntToStr(ID));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      SetLength(oAmbientes, oQuery.RecordCount);
+      iCount := 0;
+      oQuery.First;
+      while (not(oQuery.Eof)) do
+      begin
+        oAmbientes[iCount] := oQuery.FieldByName('ID').AsInteger;
+        oQuery.Next;
+        if not(oQuery.Eof) then
+          iCount := +1;
+      end;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
+function TProdutoAmbienteModel.BuscarID: Integer;
 var
   oQuery: TFDQuery;
 begin
@@ -41,7 +71,7 @@ begin
   end;
 end;
 
-function TProdutoAmbienteModel.Deletar(const AProdutoAmbiente: integer)
+function TProdutoAmbienteModel.Deletar(const AProdutoAmbiente: Integer)
   : Boolean;
 begin
   Result := TSingletonConexao.GetInstancia.ExecSQL
@@ -62,13 +92,13 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-function TProdutoAmbienteModel.VerificarExcluir(AId: integer): Boolean;
+function TProdutoAmbienteModel.VerificarExcluir(AId: Integer): Boolean;
 begin
 
 end;
 
 function TProdutoAmbienteModel.VerificarProdutoAmbiente(AProdutoAmbiente
-  : TProdutoAmbienteDto; out AId: integer): Boolean;
+  : TProdutoAmbienteDto; out AId: Integer): Boolean;
 begin
 
 end;

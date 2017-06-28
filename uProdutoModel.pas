@@ -212,8 +212,22 @@ end;
 
 function TProdutoModel.Localizar(ATexto: String): Boolean;
 begin
-
+  oQueryListarProdutos.Open
+    ('select idproduto, descricao, CONCAT("R$ ",Preco) as Preco from Produto where descricao LIKE "%'
+    + ATexto + '%" or descricao LIKE "%' + ATexto + '"');
+  if (not(oQueryListarProdutos.IsEmpty)) then
+  begin
+    Result := True;
+  end
+  else
+  begin
+    Result := False;
+    oQueryListarProdutos.Open
+      ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
+  end;
 end;
+
+
 
 function TProdutoModel.VerificarExcluir(AId: Integer): Boolean;
 var

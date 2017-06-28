@@ -14,6 +14,8 @@ type
       AId: Integer): Boolean;
     function Filtrar(const AModel: IModelProdutoInterface;
       ATexto: String): Boolean;
+    function Localizar(const AModel: IModelProdutoInterface;
+      ATexto: String): Boolean;
     function Deletar(const AModel: IModelProdutoInterface;
       AId: Integer): Boolean;
     function Salvar(const AModel: IModelProdutoInterface; AProduto: TProdutoDto;
@@ -61,6 +63,19 @@ begin
   AProduto.idProduto := 0;
   AProduto.Descricao := EmptyStr;
   AProduto.Preco := EmptyStr;
+end;
+
+function TProdutoRegra.Localizar(const AModel: IModelProdutoInterface;
+  ATexto: String): Boolean;
+begin
+  if Trim(ATexto) = EmptyStr then
+    raise Exception.Create('Campo de pesquisa vazio.')
+  else
+  begin
+    Result := AModel.Localizar(ATexto);
+  end;
+  if not(Result) then
+    raise Exception.Create('Nenhum registro encontrado.');
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;
