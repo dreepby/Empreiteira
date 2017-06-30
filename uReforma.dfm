@@ -2,7 +2,6 @@ inherited frmReforma: TfrmReforma
   Caption = 'Listagem de Reformas'
   ClientHeight = 472
   ClientWidth = 976
-  ExplicitLeft = -112
   ExplicitWidth = 982
   ExplicitHeight = 501
   PixelsPerInch = 96
@@ -73,7 +72,6 @@ inherited frmReforma: TfrmReforma
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitTop = 24
         ExplicitWidth = 958
         ExplicitHeight = 322
         object pageControl2: TPageControl
@@ -208,6 +206,7 @@ inherited frmReforma: TfrmReforma
               Width = 410
               Height = 95
               TabOrder = 6
+              WantReturns = False
             end
           end
           object tsProdutos: TTabSheet
@@ -269,9 +268,9 @@ inherited frmReforma: TfrmReforma
                 TabOrder = 0
               end
               object edtPreco: TLabeledEdit
-                Left = 115
+                Left = 112
                 Top = 93
-                Width = 100
+                Width = 97
                 Height = 27
                 EditLabel.Width = 48
                 EditLabel.Height = 13
@@ -300,6 +299,7 @@ inherited frmReforma: TfrmReforma
                 MaxLength = 255
                 ParentFont = False
                 TabOrder = 2
+                WantReturns = False
               end
               object edtQuantidade: TLabeledEdit
                 Left = 0
@@ -314,6 +314,7 @@ inherited frmReforma: TfrmReforma
                 Font.Height = -16
                 Font.Name = 'Tahoma'
                 Font.Style = []
+                MaxLength = 10
                 NumbersOnly = True
                 ParentFont = False
                 TabOrder = 3
@@ -337,12 +338,20 @@ inherited frmReforma: TfrmReforma
                 TabOrder = 4
               end
               object btnAdicionar: TBitBtn
-                Left = 248
+                Left = 167
                 Top = 262
                 Width = 75
                 Height = 25
                 Caption = 'Adicionar'
                 TabOrder = 5
+              end
+              object btnCancelarProduto: TBitBtn
+                Left = 248
+                Top = 262
+                Width = 74
+                Height = 24
+                Caption = 'Cancelar'
+                TabOrder = 6
               end
             end
             object Panel5: TPanel
@@ -476,6 +485,8 @@ inherited frmReforma: TfrmReforma
                   Width = 427
                   Height = 212
                   Align = alClient
+                  DataSource = dsTabelaProduto
+                  Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
                   TabOrder = 0
                   TitleFont.Charset = DEFAULT_CHARSET
                   TitleFont.Color = clWindowText
@@ -485,36 +496,34 @@ inherited frmReforma: TfrmReforma
                   Columns = <
                     item
                       Expanded = False
-                      FieldName = 'idProdutoReforma'
-                      Title.Caption = 'C'#243'digo'
-                      Width = 40
+                      FieldName = 'Produto'
+                      Width = 87
                       Visible = True
                     end
                     item
                       Expanded = False
                       FieldName = 'Quantidade'
+                      Title.Caption = 'Quant.'
+                      Width = 38
                       Visible = True
                     end
                     item
                       Expanded = False
-                      FieldName = 'Produto'
-                      Visible = True
-                    end
-                    item
-                      Expanded = False
-                      FieldName = 'PrecoUni'
+                      FieldName = 'precouni'
                       Title.Caption = 'Pre'#231'o Un.'
                       Visible = True
                     end
                     item
                       Expanded = False
-                      FieldName = 'Total'
+                      FieldName = 'total'
+                      Title.Caption = 'Total'
                       Visible = True
                     end
                     item
                       Expanded = False
-                      FieldName = 'Observacao'
-                      Width = 93
+                      FieldName = 'observacao'
+                      Title.Caption = 'Observa'#231#227'o'
+                      Width = 128
                       Visible = True
                     end>
                 end
@@ -858,7 +867,41 @@ inherited frmReforma: TfrmReforma
     Top = 13
   end
   object dsTabelaProduto: TDataSource
+    DataSet = FDMemTable1
     Left = 753
     Top = 5
+  end
+  object FDMemTable1: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 880
+    Top = 8
+    object FDMemTable1Quantidade: TIntegerField
+      FieldName = 'Quantidade'
+    end
+    object FDMemTable1total: TFloatField
+      FieldName = 'total'
+    end
+    object FDMemTable1observacao: TStringField
+      FieldName = 'observacao'
+      Size = 255
+    end
+    object FDMemTable1precouni: TFloatField
+      FieldName = 'precouni'
+    end
+    object FDMemTable1idAmbiente: TIntegerField
+      FieldName = 'idAmbiente'
+    end
+    object FDMemTable1Produto: TStringField
+      FieldName = 'Produto'
+    end
+    object FDMemTable1idProduto: TIntegerField
+      FieldName = 'idProduto'
+    end
   end
 end

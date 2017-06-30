@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, Data.DB, uEstadoDto, uEstadoModel, uEstado, uEstadoRegra,
-  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler, uEstadoInterfaceModel;
+  Dialogs, System.UITypes, System.Classes, Winapi.Windows, uInterfaceControler,
+  uEstadoInterfaceModel;
 
 type
   TEstadoControler = class(TInterfacedObject, IControlerInterface)
@@ -53,7 +54,6 @@ begin
   frmEstados.BtnCancelar.OnClick := Cancelar;
   frmEstados.btnExcluir.OnClick := Excluir;
   ListarEstados;
-  frmEstados.btnPesquisa.OnClick := Pesquisar;
   frmEstados.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmEstados.OnKeyDown := OnKeyDownForm;
   frmEstados.Show;
@@ -187,9 +187,6 @@ begin
     if Length(Trim(frmEstados.edtPesquisa.Text)) = 1 then
       ListarEstados;
   end;
-
-  if Key = #13 then
-    frmEstados.btnPesquisa.Click;
 end;
 
 procedure TEstadoControler.Pesquisar(Sender: TObject);

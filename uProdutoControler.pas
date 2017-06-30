@@ -60,7 +60,6 @@ begin
   frmProduto.BtnCancelar.OnClick := Cancelar;
   frmProduto.btnExcluir.OnClick := Excluir;
   ListarProdutos;
-  frmProduto.btnPesquisa.OnClick := Pesquisar;
   frmProduto.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmProduto.OnKeyDown := OnKeyDownForm;
   frmProduto.Show;

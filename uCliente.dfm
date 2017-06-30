@@ -3,7 +3,7 @@ inherited frmCliente: TfrmCliente
   ClientHeight = 553
   ClientWidth = 940
   ExplicitWidth = 946
-  ExplicitHeight = 582
+  ExplicitHeight = 581
   PixelsPerInch = 96
   TextHeight = 13
   object Label5: TLabel [0]
@@ -15,7 +15,7 @@ inherited frmCliente: TfrmCliente
   end
   inherited Panel1: TPanel
     Width = 940
-    ExplicitWidth = 986
+    ExplicitWidth = 940
     inherited Label1: TLabel
       Width = 96
       Caption = 'Buscar por '
@@ -52,15 +52,18 @@ inherited frmCliente: TfrmCliente
   inherited Panel2: TPanel
     Width = 940
     Height = 441
-    ExplicitWidth = 986
+    ExplicitWidth = 940
     ExplicitHeight = 441
     inherited PageControl1: TPageControl
       Width = 930
       Height = 431
-      ExplicitWidth = 976
+      ActivePage = tsDados
+      ExplicitWidth = 930
       ExplicitHeight = 431
       inherited tsTabela: TTabSheet
-        ExplicitWidth = 968
+        ExplicitLeft = 4
+        ExplicitTop = 24
+        ExplicitWidth = 922
         ExplicitHeight = 403
         inherited DBGrid1: TDBGrid
           Width = 922
@@ -139,8 +142,8 @@ inherited frmCliente: TfrmCliente
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 0
-        ExplicitTop = 27
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 922
         ExplicitHeight = 403
         object Label2: TLabel
@@ -365,10 +368,10 @@ inherited frmCliente: TfrmCliente
     Top = 498
     Width = 940
     ExplicitTop = 498
-    ExplicitWidth = 986
+    ExplicitWidth = 940
     inherited Panel4: TPanel
       Left = 185
-      ExplicitLeft = 231
+      ExplicitLeft = 185
     end
   end
   inherited dsTabela: TDataSource

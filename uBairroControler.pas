@@ -60,7 +60,6 @@ begin
   frmBairro.BtnCancelar.OnClick := Cancelar;
   frmBairro.btnExcluir.OnClick := Excluir;
   ListarBairros;
-  frmBairro.btnPesquisa.OnClick := Pesquisar;
   frmBairro.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmBairro.OnKeyDown := OnKeyDownForm;
   frmBairro.cbEstado.OnSelect := OnSelectCbEstado;
@@ -227,9 +226,6 @@ begin
       ListarBairros;
 
   end;
-
-  if Key = #13 then
-    frmBairro.btnPesquisa.Click;
 end;
 
 procedure TBairroControler.OnSelectCbEstado(Sender: TObject);

@@ -12,6 +12,8 @@ uses
 type
   TConfirmaCliente = procedure(const ACNPJ: String) of object;
 
+  TFormParaFrenteReforma = procedure of object;
+
   TListagemClientesControler = class
   private
     oModelCliente: IModelClienteInterface;
@@ -20,6 +22,7 @@ type
     oClienteRegra: TClienteRegra;
     oClienteControler: TClienteControler;
     oConfirmaCliente: TConfirmaCliente;
+    oFormReformaParaFrente: TFormParaFrenteReforma;
     sCampo: String;
 
     procedure Inserir(Sender: TObject);
@@ -33,8 +36,8 @@ type
     procedure OnChangeEdtpesquisa(Sender: TObject);
     procedure OnSelectCbPesquisa(Sender: TObject);
   public
-    procedure abrirForm(AOwner: TComponent;
-      oAtualizarCliente: TConfirmaCliente);
+    procedure abrirForm(AOwner: TComponent; oAtualizarCliente: TConfirmaCliente;
+      oFormParaFrente: TFormParaFrenteReforma);
 
     constructor Create;
     destructor Destroy; override;
@@ -48,12 +51,13 @@ implementation
 { TEstadoControler }
 
 procedure TListagemClientesControler.abrirForm(AOwner: TComponent;
-  oAtualizarCliente: TConfirmaCliente);
+  oAtualizarCliente: TConfirmaCliente; oFormParaFrente: TFormParaFrenteReforma);
 begin
   if (not(Assigned(frmListagemClientes))) then
     frmListagemClientes := TfrmListagemClientes.Create(AOwner);
 
   oConfirmaCliente := oAtualizarCliente;
+  oFormReformaParaFrente := oFormParaFrente;
   frmListagemClientes.cbPesquisa.ItemIndex := 0;
   OnSelectCbPesquisa(Self);
   frmListagemClientes.cbPesquisa.OnSelect := OnSelectCbPesquisa;
@@ -65,6 +69,7 @@ begin
   ListarClientes;
   frmListagemClientes.OnKeyDown := OnKeyDownForm;
   frmListagemClientes.DBGrid1.OnDblClick := OnDblClickDbGrid;
+  frmListagemClientes.OnActivate := FormActivate;
   frmListagemClientes.Show;
 end;
 
@@ -111,6 +116,7 @@ begin
   frmListagemClientes.Close;
   oClienteRegra.Limpar(oClienteDto);
   FreeAndNil(frmListagemClientes);
+  oFormReformaParaFrente;
 end;
 
 procedure TListagemClientesControler.FormActivate(Sender: TObject);
@@ -121,7 +127,7 @@ end;
 
 procedure TListagemClientesControler.Inserir(Sender: TObject);
 begin
-  oClienteControler.AbriFormModoAdicao;
+  oClienteControler.AbrirFormModoAdicao;
 end;
 
 procedure TListagemClientesControler.ListarClientes;
@@ -131,12 +137,7 @@ end;
 
 procedure TListagemClientesControler.OnChangeEdtpesquisa(Sender: TObject);
 begin
-  if (oModelCliente.Localizar(frmListagemClientes.edtPesquisa.Text, sCampo)
-    = False) then
-  begin
-
-  end;
-
+  oModelCliente.Localizar(frmListagemClientes.edtPesquisa.Text, sCampo);
 end;
 
 procedure TListagemClientesControler.OnDblClickDbGrid(Sender: TObject);
@@ -165,6 +166,9 @@ begin
   else
     sCampo := frmListagemClientes.cbPesquisa.Items
       [frmListagemClientes.cbPesquisa.ItemIndex];
+
+  if Trim(frmListagemClientes.edtPesquisa.Text) <> EmptyStr then
+    OnChangeEdtpesquisa(Sender);
 end;
 
 procedure TListagemClientesControler.Selecionar(Sender: TObject);

@@ -5,7 +5,7 @@ interface
 uses
   uReformaDto, System.SysUtils, uReformaModel, uReformaInterfaceModel,
   uClienteInterfaceModel, uClienteModel, uAmbienteReformaDto,
-  uAmbienteReformaInterfaceModel, uAmbienteReformaModel;
+  uAmbienteReformaInterfaceModel, uAmbienteReformaModel, FireDAC.Comp.Client;
 
 type
   TReformaRegra = class
@@ -21,6 +21,10 @@ type
       AAmbientes: Array of Integer): Boolean;
     function SalvarAmbientes(AAmbientes: Array of Integer;
       AReforma: TReformaDto): Boolean;
+    function VerificarMemTableProduto(var AMemTable: TFDMemTable;
+      const AIdProduto: Integer; const AIdAmbiente: Integer): Boolean;
+    procedure ExcluirProduto(var AMemTable: TFDMemTable;
+      const AIdAmbiente, AIdProduto: Integer);
   end;
 
 implementation
@@ -31,6 +35,17 @@ function TReformaRegra.Deletar(const AModel: IModelReformaInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
+end;
+
+procedure TReformaRegra.ExcluirProduto(var AMemTable: TFDMemTable;
+  const AIdAmbiente, AIdProduto: Integer);
+begin
+  AMemTable.Filter := 'idProduto = ' + IntToStr(AIdProduto) +
+    ' AND idAmbiente = ' + IntToStr(AIdAmbiente);
+  AMemTable.Filtered := True;
+  AMemTable.Delete;
+  AMemTable.Filter := 'idAmbiente = ' + IntToStr(AIdAmbiente);
+  AMemTable.Filtered := True;
 end;
 
 procedure TReformaRegra.Limpar(var AReforma: TReformaDto);
@@ -59,73 +74,73 @@ function TReformaRegra.Salvar(const AModel: IModelReformaInterface;
 var
   iCodigoCPF, iCodigoCnpj: Integer;
   oClienteModel: IModelClienteInterface;
-begin                                                                 {
-  if AReforma.dataDoPedido > AReforma.dataDeEntrega then
+begin {
+    if AReforma.dataDoPedido > AReforma.dataDeEntrega then
     raise Exception.Create
-      ('A data do pedido não pode ser depois da data de entrega.')
-  else
-  begin
+    ('A data do pedido não pode ser depois da data de entrega.')
+    else
+    begin
     oClienteModel := TClienteModel.Create;
     iCodigoCPF := oClienteModel.BuscarRegistroIdCpf(AReforma.oCliente.Cpf);
     iCodigoCnpj := oClienteModel.BuscarRegistroIdCnpj(AReforma.oCliente.Cnpj);
     if (iCodigoCPF > 0) and (iCodigoCnpj > 0) then
     begin
-      if iCodigoCPF = iCodigoCnpj then
-      begin
-        AReforma.oCliente.idCliente := iCodigoCPF;
-        if AReforma.idReforma > 0 then
-        begin
-          if AModel.Alterar(AReforma) then
-            Result := True
-          else
-            raise Exception.Create('Ocorreu algum erro.');
-        end
-        else
-        begin
-          AReforma.idReforma := AModel.BuscarID;
-          if AModel.Inserir(AReforma) then
-          begin
-            if SalvarAmbientes(AAmbientes, AReforma) then
-              Result := True
-            else
-              raise Exception.Create('Ocorreu algum erro!')
-          end
-          else
-            raise Exception.Create('Ocorreu algum erro.');
-        end;
-      end
-      else
-        raise Exception.Create('CPF e CNPJ não correspondem ao mesmo cliente.');
+    if iCodigoCPF = iCodigoCnpj then
+    begin
+    AReforma.oCliente.idCliente := iCodigoCPF;
+    if AReforma.idReforma > 0 then
+    begin
+    if AModel.Alterar(AReforma) then
+    Result := True
+    else
+    raise Exception.Create('Ocorreu algum erro.');
     end
     else
     begin
-      if iCodigoCPF > 0 then
-        AReforma.oCliente.idCliente := iCodigoCPF
-      else
-        AReforma.oCliente.idCliente := iCodigoCnpj;
-      if AReforma.idReforma > 0 then
-      begin
-        if AModel.Alterar(AReforma) then
-          Result := True
-        else
-          raise Exception.Create('Ocorreu algum erro.');
-      end
-      else
-      begin
-        AReforma.idReforma := AModel.BuscarID;
-        if AModel.Inserir(AReforma) then
-        begin
-          if SalvarAmbientes(AAmbientes, AReforma) then
-            Result := True
-          else
-            raise Exception.Create('Ocorreu algum erro!')
-        end
-        else
-          raise Exception.Create('Ocorreu algum erro.');
-      end;
+    AReforma.idReforma := AModel.BuscarID;
+    if AModel.Inserir(AReforma) then
+    begin
+    if SalvarAmbientes(AAmbientes, AReforma) then
+    Result := True
+    else
+    raise Exception.Create('Ocorreu algum erro!')
+    end
+    else
+    raise Exception.Create('Ocorreu algum erro.');
+    end;
+    end
+    else
+    raise Exception.Create('CPF e CNPJ não correspondem ao mesmo cliente.');
+    end
+    else
+    begin
+    if iCodigoCPF > 0 then
+    AReforma.oCliente.idCliente := iCodigoCPF
+    else
+    AReforma.oCliente.idCliente := iCodigoCnpj;
+    if AReforma.idReforma > 0 then
+    begin
+    if AModel.Alterar(AReforma) then
+    Result := True
+    else
+    raise Exception.Create('Ocorreu algum erro.');
+    end
+    else
+    begin
+    AReforma.idReforma := AModel.BuscarID;
+    if AModel.Inserir(AReforma) then
+    begin
+    if SalvarAmbientes(AAmbientes, AReforma) then
+    Result := True
+    else
+    raise Exception.Create('Ocorreu algum erro!')
+    end
+    else
+    raise Exception.Create('Ocorreu algum erro.');
+    end;
 
     end;
-  end;        }
+    end; }
 end;
 
 function TReformaRegra.SalvarAmbientes(AAmbientes: array of Integer;
@@ -159,6 +174,24 @@ function TReformaRegra.VerificarExcluir(const AModel: IModelReformaInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.VerificarExcluir(AId);
+end;
+
+function TReformaRegra.VerificarMemTableProduto(var AMemTable: TFDMemTable;
+  const AIdProduto, AIdAmbiente: Integer): Boolean;
+begin
+  try
+    Result := False;
+    AMemTable.Filter := 'idProduto = ' + IntToStr(AIdProduto) +
+      ' AND idAmbiente = ' + IntToStr(AIdAmbiente);
+    AMemTable.Filtered := True;
+    if AMemTable.IsEmpty then
+      Result := True
+    else
+      raise Exception.Create('Produto já cadastrado.');
+  finally
+    AMemTable.Filter := 'idAmbiente = ' + IntToStr(AIdAmbiente);
+  end;
+
 end;
 
 end.

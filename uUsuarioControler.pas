@@ -59,7 +59,6 @@ begin
   frmUsuario.BtnCancelar.OnClick := Cancelar;
   frmUsuario.btnExcluir.OnClick := Excluir;
   ListarUsuarios;
-  frmUsuario.btnPesquisa.OnClick := Pesquisar;
   frmUsuario.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmUsuario.OnKeyDown := OnKeyDownForm;
   frmUsuario.Show;
@@ -202,9 +201,6 @@ begin
     else if Length(Trim(frmUsuario.edtPesquisa.Text)) = 0 then
       oRegraUsuario.DesativarFiltro(oModelUsuario);
   end;
-
-  if Key = #13 then
-    frmUsuario.btnPesquisa.Click;
 end;
 
 procedure TUsuarioControler.Pesquisar(Sender: TObject);

@@ -57,7 +57,6 @@ begin
   frmAmbiente.BtnCancelar.OnClick := Cancelar;
   frmAmbiente.btnExcluir.OnClick := Excluir;
   ListarAmbientes;
-  frmAmbiente.btnPesquisa.OnClick := Pesquisar;
   frmAmbiente.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmAmbiente.OnKeyDown := OnKeyDownForm;
   frmAmbiente.Show;
@@ -198,9 +197,6 @@ begin
       ListarAmbientes;
 
   end;
-
-  if Key = #13 then
-    frmAmbiente.btnPesquisa.Click;
 end;
 
 procedure TAmbienteControler.Pesquisar(Sender: TObject);

@@ -5,7 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uCadastroBase, Data.DB, Vcl.Buttons,
-  Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.CheckLst;
+  Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.CheckLst,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
   TfrmReforma = class(TfrmCadastroBase)
@@ -50,6 +53,15 @@ type
     btnAdicionar: TBitBtn;
     Label8: TLabel;
     valorPedido: TLabel;
+    FDMemTable1: TFDMemTable;
+    FDMemTable1Quantidade: TIntegerField;
+    FDMemTable1total: TFloatField;
+    FDMemTable1observacao: TStringField;
+    FDMemTable1precouni: TFloatField;
+    FDMemTable1idAmbiente: TIntegerField;
+    FDMemTable1Produto: TStringField;
+    FDMemTable1idProduto: TIntegerField;
+    btnCancelarProduto: TBitBtn;
   private
     { Private declarations }
   public

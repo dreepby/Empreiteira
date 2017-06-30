@@ -75,21 +75,7 @@ end;
 function TClienteRegra.Localizar(const AModel: IModelClienteInterface;
   ATexto, ACampo: String): Boolean;
 begin
-  if Trim(ACampo) = EmptyStr then
-    raise Exception.Create
-      ('Por favor selecione o campo que você deseja pesquisar.')
-  else
-  begin
-    if ACampo = 'Nome do cliente' then
-      ACampo := 'Nome'
-    else if ACampo = 'Rua' then
-      ACampo := 'Endereco'
-    else if ACampo = 'Estado' then
-      ACampo := 'Municipio';
-    Result := AModel.Localizar(ATexto, ACampo);
-  end;
-  if not(Result) then
-    raise Exception.Create('Nenhum registro encontrado.');
+  Result := AModel.Localizar(ATexto, ACampo);
 end;
 
 function TClienteRegra.PopularListaBairros(const AModel: IModelBairroInterface;
@@ -129,7 +115,7 @@ begin
         raise Exception.Create('Ocorreu algum erro!')
     end
     else
-      raise Exception.Create('Cliente já cadastrado.')
+      raise Exception.Create('CPF/CNPJ já cadastrado.')
   end
   else
   begin

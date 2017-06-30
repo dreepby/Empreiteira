@@ -37,7 +37,7 @@ var
   sSql: String;
 begin
   sSql := 'UPDATE cliente SET Nome = ' + QuotedStr(ACliente.Nome) +
-    ', CPF/CNPJ = ' + QuotedStr(ACliente.CpfCnpj) + ', Telefone = ' +
+    ', CPFCNPJ = ' + QuotedStr(ACliente.CpfCnpj) + ', Telefone = ' +
     QuotedStr(ACliente.Telefone) + ', Celular = ' + QuotedStr(ACliente.Celular)
     + ', Observacao = ' + QuotedStr(ACliente.Observacao) + ', Rua = ' +
     QuotedStr(ACliente.Rua) + ', Numero = ' + IntToStr(ACliente.Numero) +
@@ -132,7 +132,7 @@ function TClienteModel.Inserir(var ACliente: TClienteDto): Boolean;
 var
   sSql: String;
 begin
-  sSql := 'INSERT INTO cliente (idCliente, Nome, CPF/CNPJ, Telefone, Celular,' +
+  sSql := 'INSERT INTO cliente (idCliente, Nome, CPFCNPJ, Telefone, Celular,' +
     'Observacao, Rua, Numero, Complemento, CEP, cliente_idBairro) VALUES(' +
     IntToStr(ACliente.idCliente) + ', ' + QuotedStr(ACliente.Nome) + ', ' +
     QuotedStr(ACliente.CpfCnpj) + ', ' + QuotedStr(ACliente.Telefone) + ', ' +
@@ -213,17 +213,12 @@ begin
   Result := False;
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    { if ACliente.Cpf <> EmptyStr then
-      begin
-      oQuery.Open('select idCliente from cliente where CPF = ' +
-      QuotedStr(ACliente.Cpf));
-      end
-      else if ACliente.Cnpj <> EmptyStr then
-      begin
-      oQuery.Open('select idCliente from cliente where CNPJ = ' +
-      QuotedStr(ACliente.Cnpj));
-      end;
-    }
+    if ACliente.CpfCnpj <> EmptyStr then
+    begin
+      oQuery.Open('select idCliente from cliente where CPFCNPJ = ' +
+        QuotedStr(ACliente.CpfCnpj));
+    end;
+
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('idCliente').AsInteger;
