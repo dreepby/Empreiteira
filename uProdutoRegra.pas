@@ -4,7 +4,8 @@ interface
 
 uses
   uProdutoDto, System.SysUtils, uProdutoInterfaceModel,
-  uProdutoAmbienteInterfaceModel, uProdutoAmbienteModel, uProdutoAmbienteDto;
+  uProdutoAmbienteInterfaceModel, uProdutoAmbienteModel, uProdutoAmbienteDto,
+  uArrayAmbientes;
 
 type
   TProdutoRegra = class
@@ -18,8 +19,9 @@ type
       ATexto: String): Boolean;
     function Deletar(const AModel: IModelProdutoInterface;
       AId: Integer): Boolean;
-    function Salvar(const AModel: IModelProdutoInterface; AProduto: TProdutoDto;
-      AAmbientes: array of Integer): Boolean;
+    function Salvar(const AModel: IModelProdutoInterface;
+      const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
+      AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
     function BuscarProduto(const AModel: IModelProdutoInterface;
       AProduto: TProdutoDto): Boolean;
     function SalvarAmbientes(AAmbientes: array of Integer;
@@ -79,9 +81,12 @@ begin
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;
+  const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
   AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
 var
-  VerificarID: Integer;
+  VerificarID, iCount, i, iContadorFor2: Integer;
+  ArrayAmbientesBanco: TAmbientesReformaArray;
+  bVerifica: Boolean;
 begin
   if AProduto.idProduto = 0 then
   begin
@@ -93,12 +98,17 @@ begin
         begin
           if SalvarAmbientes(AAmbientes, AProduto) then
             Result := True
+
           else
-            raise Exception.Create('Ocorreu algum erro!')
+          begin
+            AModel.Deletar(AProduto.idProduto);
+            raise Exception.Create('Selecione algum ambiente!')
+          end;
+
         end;
       end
       else
-        raise Exception.Create('Ocorreu algum erro!')
+        raise Exception.Create('Ocorreu algum erro! 1')
     end
     else
       raise Exception.Create('Produto já cadastrado.')
@@ -110,13 +120,31 @@ begin
       if VerificarID = AProduto.idProduto then
         If AModel.Alterar(AProduto) then
         begin
+          AModelProdutoAmbiente.BuscarAmbientes(AProduto.idProduto,
+            ArrayAmbientesBanco);
+          iCount := Length(ArrayAmbientesBanco) - 1;
+          for i := 0 to iCount do
+          begin
+            for iContadorFor2 := 0 to (Length(AAmbientes) - 1) do
+            begin
+              if ArrayAmbientesBanco[i] = AAmbientes[iContadorFor2] then
+                bVerifica := True;
+              if iContadorFor2 = (Length(AAmbientes) - 1) then
+              begin
+                if not(bVerifica) then
+                  AModelProdutoAmbiente.Deletar(ArrayAmbientesBanco[i]);
+              end;
+
+            end;
+          end;
+
           if SalvarAmbientes(AAmbientes, AProduto) then
             Result := True
           else
-            raise Exception.Create('Ocorreu algum erro!')
+            raise Exception.Create('Selecione ao menos um ambiente')
         end
         else
-          raise Exception.Create('Ocorreu algum erro!')
+          raise Exception.Create('Ocorreu algum erro!3')
       else
       begin
         raise Exception.Create('Produto já cadastrado.');
@@ -127,7 +155,7 @@ begin
       If AModel.Alterar(AProduto) then
         Result := True
       else
-        raise Exception.Create('Ocorreu algum erro!')
+        raise Exception.Create('Ocorreu algum erro!4')
     end;
   end;
 
@@ -141,7 +169,7 @@ var
   oProdutoAmbienteDto: TProdutoAmbienteDto;
 begin
   oProdutoAmbienteDto := TProdutoAmbienteDto.Create;
-  count := Length(AAmbientes) - 2;
+  count := Length(AAmbientes) - 1;
   oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
   oProdutoAmbienteDto.oProduto.idProduto := AProduto.idProduto;
   for i := 0 to count do

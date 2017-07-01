@@ -261,26 +261,22 @@ var
   i, iV: integer;
   iCount: integer;
   iCountArray: integer;
-  AmbientesReforma: Array of integer;
+  AmbientesReforma: TAmbientesReformaArray;
 begin
   iCount := frmProduto.clbAmbientes.Items.count - 1;
   iCountArray := 0;
   SetLength(AmbientesReforma, 0);
-
   for i := 0 to iCount do
   begin
     if frmProduto.clbAmbientes.Checked[i] = True then
     begin
       sTeste := sTeste + frmProduto.clbAmbientes.Items[i];
-      SetLength(AmbientesReforma, iCountArray + 2);
+      SetLength(AmbientesReforma, iCountArray + 1);
       AmbientesReforma[iCountArray] := oListaAmbientes.Items
         [frmProduto.clbAmbientes.Items[i]].idAmbiente;
       iCountArray := iCountArray + 1;
     end;
   end;
-  if sTeste = EmptyStr then
-    ShowMessage('Selecione um ambiente.')
-  else
   begin
     oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
     oProdutoDto.Preco := StringReplace((frmProduto.edtPreco.Text), ',', '.',
@@ -288,13 +284,13 @@ begin
     if (frmProduto.edtDescricao.Text <> EmptyStr) then
 
       try
-        if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) and
-          (TryStrToInt(frmProduto.edtPreco.Text, iV)) then
+        if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) then
+        // Arruma isso ae parça
 
         begin
           try
-            if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto,
-              AmbientesReforma)) then
+            if (oProdutoRegra.Salvar(oProdutoModel, oProdutoAmbienteModel,
+              oProdutoDto, AmbientesReforma)) then
             begin
               oProdutoRegra.Limpar(oProdutoDto);
               frmProduto.edtDescricao.Text := EmptyStr;

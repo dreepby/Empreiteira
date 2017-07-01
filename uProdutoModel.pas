@@ -155,26 +155,19 @@ begin
         iCodigos[iCount] := oQuery.FieldByName('idProduto_Ambiente').AsInteger;
         oQuery.Next;
         if not(oQuery.Eof) then
-          iCount := +1;
+        iCount := +1;
       end;
     end;
   finally
     if Assigned(oQuery) then
       FreeAndNil(oQuery);
   end;
-  for i := 0 to iCount do
-  begin
-    bValida := TSingletonConexao.GetInstancia.ExecSQL
-      ('delete from produto_ambiente where idProduto_ambiente = ' +
-      IntToStr(iCodigos[i])) > 0;
 
-    if bValida = False then
-      exit;
-  end;
   if bValida then
   begin
+    sSql := ('delete from produto where idProduto = ' + IntToStr(AIDProduto));
     Result := TSingletonConexao.GetInstancia.ExecSQL
-      ('delete from produto where idProduto = ' + IntToStr(AIDProduto)) > 0;
+      (sSql) > 0;
   end;
 end;
 
@@ -226,8 +219,6 @@ begin
       ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
   end;
 end;
-
-
 
 function TProdutoModel.VerificarExcluir(AId: Integer): Boolean;
 var

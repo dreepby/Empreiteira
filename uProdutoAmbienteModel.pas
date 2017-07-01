@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, System.Generics.Collections,
-  uProdutoAmbienteDto, uClassSingletonConexao, uProdutoAmbienteInterfaceModel, uArrayAmbientes;
+  uProdutoAmbienteDto, uClassSingletonConexao, uProdutoAmbienteInterfaceModel,
+  uArrayAmbientes;
 
 type
   TProdutoAmbienteModel = class(TInterfacedObject,
@@ -17,14 +18,16 @@ type
     function BuscarID: Integer;
     function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto;
       out AId: Integer): Boolean;
-    procedure BuscarAmbientes(const ID: Integer; var oAmbientes: TAmbientesReformaArray);
+    procedure BuscarAmbientes(const ID: Integer;
+      var oAmbientes: TAmbientesReformaArray);
   end;
 
 implementation
 
 { TProdutoAmbienteModel }
 
-procedure TProdutoAmbienteModel.BuscarAmbientes(const ID: Integer; var oAmbientes: TAmbientesReformaArray);
+procedure TProdutoAmbienteModel.BuscarAmbientes(const ID: Integer;
+  var oAmbientes: TAmbientesReformaArray);
 var
   iCount: Integer;
   oQuery: TFDQuery;
@@ -83,7 +86,9 @@ function TProdutoAmbienteModel.Inserir(var AProdutoAmbiente
   : TProdutoAmbienteDto): Boolean;
 var
   sSql: String;
+
 begin
+
   sSql := 'insert into Produto_Ambiente (idProduto_Ambiente, Produto_IdProduto, Ambientes_IdAmbientes) values ('
     + IntToStr(AProdutoAmbiente.IdProdutoAmbiente) + ', ' +
     IntToStr(AProdutoAmbiente.oProduto.idProduto) + ', ' +
@@ -91,6 +96,8 @@ begin
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
+
+
 
 function TProdutoAmbienteModel.VerificarExcluir(AId: Integer): Boolean;
 begin
