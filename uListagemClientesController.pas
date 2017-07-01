@@ -1,5 +1,5 @@
 unit uListagemClientesController;
-
+
 interface
 
 uses
@@ -35,6 +35,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure OnChangeEdtpesquisa(Sender: TObject);
     procedure OnSelectCbPesquisa(Sender: TObject);
+    procedure OnKeyPressGrid(Sender: TObject; var Key: Char);
   public
     procedure abrirForm(AOwner: TComponent; oAtualizarCliente: TConfirmaCliente;
       oFormParaFrente: TFormParaFrenteReforma);
@@ -66,10 +67,12 @@ begin
   frmListagemClientes.BtnAlterar.OnClick := Alterar;
   frmListagemClientes.BtnFechar.OnClick := fecharForm;
   frmListagemClientes.btnSelecionar.OnClick := Selecionar;
+  frmListagemClientes.DBGrid1.OnKeyPress := OnKeyPressGrid;
   ListarClientes;
   frmListagemClientes.OnKeyDown := OnKeyDownForm;
   frmListagemClientes.DBGrid1.OnDblClick := OnDblClickDbGrid;
   frmListagemClientes.OnActivate := FormActivate;
+  frmListagemClientes.DBGrid1.SetFocus;
   frmListagemClientes.Show;
 end;
 
@@ -155,6 +158,13 @@ begin
     ListarClientes;
 end;
 
+procedure TListagemClientesControler.OnKeyPressGrid(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+    Selecionar(TObject(0));
+end;
+
 procedure TListagemClientesControler.OnSelectCbPesquisa(Sender: TObject);
 begin
   if frmListagemClientes.cbPesquisa.Items
@@ -183,7 +193,7 @@ begin
   else
   begin
     oConfirmaCliente(oClienteDto.CpfCnpj);
-    fecharForm(Self);
+    fecharForm(TObject(0));
   end;
 end;
 
@@ -195,3 +205,4 @@ if Assigned(oListagemControler) then
   FreeAndNil(oListagemControler);
 
 end.
+

@@ -5,7 +5,8 @@ interface
 uses
   uReformaDto, System.SysUtils, uReformaModel, uReformaInterfaceModel,
   uClienteInterfaceModel, uClienteModel, uAmbienteReformaDto,
-  uAmbienteReformaInterfaceModel, uAmbienteReformaModel, FireDAC.Comp.Client;
+  uAmbienteReformaInterfaceModel, uAmbienteReformaModel, FireDAC.Comp.Client,
+  uReforma;
 
 type
   TReformaRegra = class
@@ -25,6 +26,8 @@ type
       const AIdProduto: Integer; const AIdAmbiente: Integer): Boolean;
     procedure ExcluirProduto(var AMemTable: TFDMemTable;
       const AIdAmbiente, AIdProduto: Integer);
+    function VerificarCamposPedido(const AForm: TfrmReforma;
+      const AReforma: TReformaDto): Boolean;
   end;
 
 implementation
@@ -168,6 +171,30 @@ begin
   end;
   if Assigned(oAmbienteReformaDto) then
     FreeAndNil(oAmbienteReformaDto);
+end;
+
+function TReformaRegra.VerificarCamposPedido(const AForm: TfrmReforma;
+  const AReforma: TReformaDto): Boolean;
+begin
+  Result := False;
+  if AReforma.dataDoPedido > AReforma.dataDeEntrega then
+    raise Exception.Create
+      ('A data do pedido não pode ser depois da data de entrega.')
+  else
+  begin
+    if AForm.cbAtendente.ItemIndex > -1 then
+    begin
+      if not(AForm.cbUsuario.ItemIndex > -1) then
+      begin
+        AForm.cbUsuario.SetFocus;
+        raise Exception.Create('Selecione um usuario.');
+      end
+      else
+        Result := True;
+    end
+    else
+      raise Exception.Create('Selecione um atendente.');
+  end;
 end;
 
 function TReformaRegra.VerificarExcluir(const AModel: IModelReformaInterface;

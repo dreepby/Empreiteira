@@ -22,7 +22,7 @@ type
     Label3: TLabel;
     edtCpfCnpj: TLabeledEdit;
     btnPesquisarCliente: TBitBtn;
-    cbAtedente: TComboBox;
+    cbAtendente: TComboBox;
     Label4: TLabel;
     cbUsuario: TComboBox;
     Label5: TLabel;
@@ -32,25 +32,11 @@ type
     cltAmbientes: TCheckListBox;
     Label6: TLabel;
     Panel13: TPanel;
-    Label11: TLabel;
-    Label12: TLabel;
-    cbProduto: TComboBox;
-    edtPreco: TLabeledEdit;
-    moObservacaoProduto: TMemo;
-    edtQuantidade: TLabeledEdit;
-    edtTotalProduto: TLabeledEdit;
     Panel5: TPanel;
-    Panel6: TPanel;
-    Panel7: TPanel;
-    Label10: TLabel;
-    edtTotal: TEdit;
-    btnAlterarProdutos: TBitBtn;
-    btnExcluirProdutos: TBitBtn;
     Panel8: TPanel;
     Label9: TLabel;
     Panel9: TPanel;
     dbgProdutos: TDBGrid;
-    btnAdicionar: TBitBtn;
     Label8: TLabel;
     valorPedido: TLabel;
     FDMemTable1: TFDMemTable;
@@ -61,7 +47,21 @@ type
     FDMemTable1idAmbiente: TIntegerField;
     FDMemTable1Produto: TStringField;
     FDMemTable1idProduto: TIntegerField;
+    Label11: TLabel;
+    cbProduto: TComboBox;
+    edtQuantidade: TLabeledEdit;
+    moObservacaoProduto: TMemo;
+    Label12: TLabel;
+    btnAdicionar: TBitBtn;
     btnCancelarProduto: TBitBtn;
+    edtPreco: TLabeledEdit;
+    edtTotalProduto: TLabeledEdit;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Label10: TLabel;
+    btnAlterarProdutos: TBitBtn;
+    btnExcluirProdutos: TBitBtn;
+    edtTotal: TEdit;
   private
     { Private declarations }
   public
