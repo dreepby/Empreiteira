@@ -162,7 +162,11 @@ procedure TListagemClientesControler.OnKeyPressGrid(Sender: TObject;
   var Key: Char);
 begin
   if Key = #13 then
+  begin
     Selecionar(TObject(0));
+    char(Key):= #0;
+  end;
+
 end;
 
 procedure TListagemClientesControler.OnSelectCbPesquisa(Sender: TObject);

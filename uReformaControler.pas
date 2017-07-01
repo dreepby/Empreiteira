@@ -24,6 +24,7 @@ type
     oListaAmbientesReformas: TObjectDictionary<string, TAmbienteDto>;
     oListaUsuarios: TObjectDictionary<string, TUsuarioDto>;
     oListaProdutos: TObjectDictionary<string, TProdutoDto>;
+    oListaTodosProdutos: TObjectDictionary<string, TProdutoDto>;
     iClickSalvar: Integer;
     oClienteModel: IModelClienteInterface;
     iCodigoAmbiente: Integer;
@@ -266,6 +267,9 @@ procedure TReformaControler.AtualizarInformacoesPedido;
 var
   iCodigoUsuario, iCodigoAtendente, i, iCount, i2, iCount2, iCodigoAmbienteBD,
     iCodigoProduto: Integer;
+  oProduto: TProdutoDto;
+  bVerifica: Boolean;
+  sTeste: String;
 begin
   iCodigoUsuario := 0;
   iCodigoAtendente := 0;
@@ -334,20 +338,49 @@ begin
           frmReforma.cbProduto.Items.IndexOfObject(TObject(iCodigoProduto));
         OnSelectCbProduto(TObject(0));
         CalcularTotalDoProduto;
-
-      end;
-      frmReforma.FDMemTable1.DisableControls;
-      frmReforma.FDMemTable1.Filter := 'idProduto = ' +
-        IntToStr(Integer(frmReforma.cbProduto.Items.Objects[i]));
-      frmReforma.FDMemTable1.Filtered := True;
-      if not(frmReforma.FDMemTable1.IsEmpty) then
-      begin
-        frmReforma.FDMemTable1.First;
-        //Verificar se o produto existe no banco aindaa
-        frmReforma.FDMemTable1.EnableControls;
       end;
     end;
   end;
+  oListaTodosProdutos.Clear;
+  oProdutoModel.ADDListaHash(oListaTodosProdutos);
+  frmReforma.FDMemTable1.DisableControls;
+
+  frmReforma.FDMemTable1.Filtered := False;
+  if (frmReforma.FDMemTable1.RecordCount > 0) then
+  begin
+    frmReforma.FDMemTable1.First;
+    while not(frmReforma.FDMemTable1.Eof) do
+    begin
+      bVerifica := False;
+      for oProduto in oListaTodosProdutos.Values do
+      begin
+        if oProduto.idProduto = frmReforma.FDMemTable1idProduto.AsInteger then
+        begin
+          bVerifica := True;
+          frmReforma.FDMemTable1.Edit;
+          frmReforma.FDMemTable1precouni.AsFloat := StrToFloat(oProduto.Preco);
+          frmReforma.FDMemTable1produto.AsString := oProduto.Descricao;
+          frmReforma.FDMemTable1total.AsFloat :=
+            frmReforma.FDMemTable1Quantidade.AsInteger *
+            StrToFloat(oProduto.Preco);
+          frmReforma.FDMemTable1.Post;
+          Break;
+        end;
+      end;
+      if not(bVerifica) then
+        frmReforma.FDMemTable1.Delete;
+      frmReforma.FDMemTable1.Next;
+    end;
+  end;
+
+  frmReforma.FDMemTable1.EnableControls;
+  frmReforma.FDMemTable1.Filter := EmptyStr;
+  frmReforma.FDMemTable1.Filtered := True;  
+  frmReforma.FDMemTable1.Filter := 'idAmbiente = ' + IntToStr(iCodigoAmbiente);
+  frmReforma.FDMemTable1.Filtered := True;
+
+  CalcularTotalAmbiente;
+  CalcularTotalPedido;
 end;
 
 procedure TReformaControler.CalcularTotalAmbiente;
@@ -382,6 +415,7 @@ begin
   cTotal := 0;
   frmReforma.FDMemTable1.DisableControls;
   iCount := Length(AmbientesSelecionados) - 1;
+  
   for i := 0 to iCount do
   begin
     frmReforma.FDMemTable1.Filter := 'idAmbiente = ' +
@@ -397,8 +431,11 @@ begin
       end;
       frmReforma.valorPedido.Caption := CurrToStr(cTotal);
     end;
-  end;
+  end;                   
   frmReforma.FDMemTable1.EnableControls;
+   frmReforma.FDMemTable1.Filter := 'idAmbiente = ' +
+      IntToStr(iCodigoAmbiente);
+    frmReforma.FDMemTable1.Filtered := True;
 end;
 
 procedure TReformaControler.Cancelar(Sender: TObject);
@@ -457,6 +494,8 @@ begin
   oCLienteRegra := TClienteRegra.Create;
   oControlerListagemClientes := TListagemClientesControler.Create;
   oClienteModel := TClienteModel.Create;
+  oListaTodosProdutos := TObjectDictionary<string, TProdutoDto>.Create
+    ([doOwnsValues]);
 end;
 
 destructor TReformaControler.Destroy;
@@ -490,6 +529,12 @@ begin
   begin
     oListaProdutos.Clear;
     FreeAndNil(oListaProdutos);
+  end;
+
+  if Assigned(oListaTodosProdutos) then
+  begin
+    oListaTodosProdutos.Clear;
+    FreeAndNil(oListaTodosProdutos);
   end;
 
   if Assigned(oListaAmbientes) then
@@ -653,6 +698,7 @@ procedure TReformaControler.OnClickCltAmbiente(Sender: TObject);
 var
   i, iCount, iCountArray: Integer;
 begin
+  // frmReforma.FDMemTable1.EnableControls;
   iCodigoAmbiente := 0;
   frmReforma.cbProduto.Enabled := True;
   frmReforma.cltAmbientes.Checked[frmReforma.cltAmbientes.ItemIndex] :=
@@ -682,7 +728,6 @@ begin
     frmReforma.FDMemTable1.Filter := 'idAmbiente = ' +
       IntToStr(iCodigoAmbiente);
     frmReforma.FDMemTable1.Filtered := True;
-
     if frmReforma.FDMemTable1.IsEmpty then
     begin
       frmReforma.btnAlterarProdutos.Enabled := False;
@@ -710,6 +755,8 @@ begin
   end;
   CalcularTotalAmbiente;
   CalcularTotalPedido;
+  frmReforma.FDMemTable1.Filter := 'idAmbiente = ' + IntToStr(iCodigoAmbiente);
+  frmReforma.FDMemTable1.Filtered := True;
 end;
 
 procedure TReformaControler.OnKeyDownForm(Sender: TObject; var Key: Word;

@@ -13,13 +13,11 @@ inherited frmReforma: TfrmReforma
   inherited Panel2: TPanel
     Width = 976
     Height = 360
-    ExplicitTop = 52
     ExplicitWidth = 976
     ExplicitHeight = 360
     inherited PageControl1: TPageControl
       Width = 966
       Height = 350
-      ActivePage = tsDados
       ExplicitWidth = 966
       ExplicitHeight = 350
       inherited tsTabela: TTabSheet
