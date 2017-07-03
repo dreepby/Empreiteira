@@ -1,5 +1,5 @@
 unit uReformaModel;
-
+
 interface
 
 uses
@@ -15,12 +15,10 @@ type
     function BuscarID: Integer;
     function Alterar(var AReforma: TReformaDto): Boolean;
     function Inserir(var AReforma: TReformaDto): Boolean;
-    procedure ListarReformas(var DsTabela: TDataSource);
+    function ListarReformas(var DsTabela: TDataSource): Boolean;
     function Deletar(const AID: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function VerificarExcluir(AID: Integer): Boolean;
-    function ADDListaHash(var oReforma: TObjectDictionary<string, TReformaDto>;
-      const AID: Integer): Boolean;
+    function BuscarRegistro(var AReforma: TReformaDto): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -29,12 +27,6 @@ type
 implementation
 
 { TReformaModel }
-
-function TReformaModel.ADDListaHash(var oReforma
-  : TObjectDictionary<string, TReformaDto>; const AID: Integer): Boolean;
-begin
-
-end;
 
 function TReformaModel.Alterar(var AReforma: TReformaDto): Boolean;
 begin
@@ -58,6 +50,32 @@ begin
   end;
 end;
 
+function TReformaModel.BuscarRegistro(var AReforma: TReformaDto): Boolean;
+var
+  oQuery: TFDQuery;
+begin
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select r.observacao, r.datadopedido, r.datadeentrega, c.cpfcnpj, Escritor_idusuario, atendente_idusuario, total from Reforma r inner join cliente c on r.pedinte_idcliente = c.idcliente');
+    if (not(oQuery.IsEmpty)) then
+    begin
+      Result := True;
+      AReforma.observacao := oQuery.FieldByName('observacao').AsString;
+      AReforma.dataDoPedido := oQuery.FieldByName('datadopedido').AsDateTime;
+      AReforma.dataDeEntrega := oQuery.FieldByName('datadeentrega').AsDateTime;
+      AReforma.oCliente.CpfCnpj := oQuery.FieldByName('cpfcnpj').AsString;
+      AReforma.oEscritor.idUsuario := oQuery.FieldByName('Escritor_idusuario').AsInteger;
+      AReforma.oAtendente.idUsuario := oQuery.FieldByName('atendente_idusuario').AsInteger;
+      AReforma.Total := oQuery.FieldByName('Total').AsString;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
 constructor TReformaModel.Create;
 begin
   oQueryListarReformas := TFDQuery.Create(nil);
@@ -65,7 +83,8 @@ end;
 
 function TReformaModel.Deletar(const AID: Integer): Boolean;
 begin
-
+  Result := TSingletonConexao.GetInstancia.ExecSQL
+    ('delete from reforma where idreforma = ' + IntToStr(AID)) > 0;
 end;
 
 destructor TReformaModel.Destroy;
@@ -83,28 +102,25 @@ var
   sSql: String;
 begin
   sSql := 'insert into reforma (idReforma, observacao, datadopedido, datadeentrega,'
-    + ' pedinte_idCliente, escritor_idusuario, atendente_idUsuario) values (' +
-    IntToStr(AReforma.idReforma) + ', ' + QuotedStr(AReforma.observacao) + ', '
-    + QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDoPedido)) + ', ' +
-    QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDeEntrega)) + ', ' +
+    + ' pedinte_idCliente, escritor_idusuario, atendente_idUsuario, total) values ('
+    + IntToStr(AReforma.idReforma) + ', ' + QuotedStr(AReforma.observacao) +
+    ', ' + QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDoPedido)) + ', '
+    + QuotedStr(FormatDateTime('yyyy/mm/dd', AReforma.dataDeEntrega)) + ', ' +
     IntToStr(AReforma.oCliente.idCliente) + ', ' +
     IntToStr(AReforma.oEscritor.idUsuario) + ', ' +
-    IntToStr(AReforma.oAtendente.idUsuario) + ')';
+    IntToStr(AReforma.oAtendente.idUsuario) + ', ' +
+    QuotedStr(AReforma.Total) + ')';
 
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-procedure TReformaModel.ListarReformas(var DsTabela: TDataSource);
+function TReformaModel.ListarReformas(var DsTabela: TDataSource): Boolean;
 begin
   oQueryListarReformas.Connection := TSingletonConexao.GetInstancia;
   oQueryListarReformas.Open
     ('SELECT r.idReforma , r.DataDoPedido , r.DataDeEntrega, c.nome as cliente, CONCAT("R$ ", r.Total) as total, r.observacao  from reforma r INNER JOIN cliente c ON pedinte_idcliente = c.idCliente ');
   DsTabela.DataSet := oQueryListarReformas;
-end;
-
-function TReformaModel.Pesquisar(ANome: String): Boolean;
-begin
-
+  Result := oQueryListarReformas.IsEmpty;
 end;
 
 function TReformaModel.VerificarExcluir(AID: Integer): Boolean;
@@ -128,3 +144,4 @@ begin
 end;
 
 end.
+

@@ -10,7 +10,7 @@ type
     function BuscarID: Integer;
     function Alterar(var ABairro: TBairroDto): Boolean;
     function Inserir(var ABairro: TBairroDto): Boolean;
-    procedure ListarBairros(var DsBairro: TDataSource);
+    function ListarBairros(var DsBairro: TDataSource): Boolean;
     function Deletar(const AIDBairro: Integer): Boolean;
     function VerificarBairro(ABairro: TBairroDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;

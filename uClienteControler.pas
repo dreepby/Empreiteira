@@ -28,7 +28,6 @@ type
     procedure Cancelar(Sender: TObject);
     procedure Alterar(Sender: TObject);
     procedure fecharCliente(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ListarClientes;
     procedure LimparCamposForm;
@@ -42,6 +41,7 @@ type
     procedure OnChangeEdtPesquisa(Sender: TObject);
     procedure OnSelectCbPesquisa(Sender: TObject);
     procedure OnExitEdtCpfCnpj(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   public
     procedure abrirForm;
     procedure AbrirFormModoAdicao;
@@ -67,31 +67,35 @@ end;
 procedure TClienteControler.abrirForm;
 begin
   if (not(Assigned(frmCliente))) then
+  begin
     frmCliente := TfrmCliente.Create(nil);
 
-  OnSelectCbPesquisa(Self);
-  frmCliente.edtCpfCnpj.OnExit := OnExitEdtCpfCnpj;
-  frmCliente.PageControl1.TabIndex := 0;
-  frmCliente.cbPesquisa.OnSelect := OnSelectCbPesquisa;
-  frmCliente.edtPesquisa.OnChange := OnChangeEdtPesquisa;
-  frmCliente.PageControl1.TabIndex := 0;
-  frmCliente.moObservacao.Lines.Text := EmptyStr;
-  frmCliente.tsDados.Enabled := False;
-  frmCliente.BtnFechar.OnClick := fecharCliente;
-  frmCliente.BtnSalvar.OnClick := Salvar;
-  frmCliente.btnInserir.OnClick := Inserir;
-  frmCliente.BtnAlterar.OnClick := Alterar;
-  frmCliente.BtnCancelar.OnClick := Cancelar;
-  frmCliente.btnExcluir.OnClick := Excluir;
-  frmCliente.cbEstado.OnSelect := OnSelectCbEstado;
-  frmCliente.cbMunicipio.OnSelect := OnSelectCbMunicipio;
-  ListarClientes;
-  frmCliente.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmCliente.OnKeyDown := OnKeyDownForm;
-  AtivarBotoesListagem;
-  frmCliente.cbMunicipio.Enabled := False;
-  frmCliente.cbBairro.Enabled := False;
-  frmCliente.Show;
+    OnSelectCbPesquisa(Self);
+    frmCliente.OnActivate := FormActivate;
+    frmCliente.edtCpfCnpj.OnExit := OnExitEdtCpfCnpj;
+    frmCliente.PageControl1.TabIndex := 0;
+    frmCliente.cbPesquisa.OnSelect := OnSelectCbPesquisa;
+    frmCliente.edtPesquisa.OnChange := OnChangeEdtPesquisa;
+    frmCliente.PageControl1.TabIndex := 0;
+    frmCliente.moObservacao.Lines.Text := EmptyStr;
+    frmCliente.tsDados.Enabled := False;
+    frmCliente.BtnFechar.OnClick := fecharCliente;
+    frmCliente.BtnSalvar.OnClick := Salvar;
+    frmCliente.btnInserir.OnClick := Inserir;
+    frmCliente.BtnAlterar.OnClick := Alterar;
+    frmCliente.BtnCancelar.OnClick := Cancelar;
+    frmCliente.btnExcluir.OnClick := Excluir;
+    frmCliente.cbEstado.OnSelect := OnSelectCbEstado;
+    frmCliente.cbMunicipio.OnSelect := OnSelectCbMunicipio;
+    ListarClientes;
+    frmCliente.OnKeyDown := OnKeyDownForm;
+    AtivarBotoesListagem;
+    frmCliente.cbMunicipio.Enabled := False;
+    frmCliente.cbBairro.Enabled := False;
+    frmCliente.Show;
+  end
+  else
+    frmCliente.Show;
 end;
 
 procedure TClienteControler.AbrirFormAlterar(AIdCliente: Integer);
@@ -175,6 +179,7 @@ begin
     frmCliente.PageControl1.ActivePage := frmCliente.tsDados;
     frmCliente.tsTabela.Enabled := False;
     AtivarBotoesInserir;
+    frmCliente.edtPesquisa.Enabled := False;
   end
   else
   begin
@@ -215,6 +220,7 @@ end;
 
 procedure TClienteControler.Cancelar(Sender: TObject);
 begin
+  frmCliente.edtPesquisa.Enabled := True;
   frmCliente.tsTabela.Enabled := True;
   frmCliente.PageControl1.ActivePage := frmCliente.tsTabela;
   frmCliente.tsDados.Enabled := False;
@@ -222,6 +228,7 @@ begin
   frmCliente.Caption := 'Listagem de Clientes';
   AtivarBotoesListagem;
   oClienteRegra.Limpar(oClienteDto);
+  ListarClientes;
 end;
 
 constructor TClienteControler.Create;
@@ -305,9 +312,24 @@ begin
   FreeAndNil(frmCliente);
 end;
 
+procedure TClienteControler.FormActivate(Sender: TObject);
+begin
+  if frmCliente.edtPesquisa.Enabled then
+    ListarClientes
+  else
+  begin
+    frmCliente.cbMunicipio.Clear;
+    frmCliente.cbMunicipio.Enabled := False;
+    frmCliente.cbBairro.Clear;
+    frmCliente.cbBairro.Enabled := False;
+    PopularComboBoxEstado;
+  end;
+end;
+
 procedure TClienteControler.Inserir(Sender: TObject);
 begin
   PopularComboBoxEstado;
+  frmCliente.edtPesquisa.Enabled := False;
   frmCliente.tsDados.Enabled := True;
   frmCliente.Caption := 'Cadastro de Cliente';
   frmCliente.PageControl1.ActivePage := frmCliente.tsDados;
@@ -340,12 +362,32 @@ end;
 
 procedure TClienteControler.ListarClientes;
 begin
-  oClienteModel.ListarClientes(frmCliente.dsTabela);
+  if oClienteModel.ListarClientes(frmCliente.dsTabela) then
+  begin
+    frmCliente.BtnAlterar.Enabled := False;
+    frmCliente.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmCliente.BtnAlterar.Enabled := True;
+    frmCliente.btnExcluir.Enabled := True;
+  end;
 end;
 
 procedure TClienteControler.OnChangeEdtPesquisa(Sender: TObject);
 begin
-  oClienteRegra.Localizar(oClienteModel, frmCliente.edtPesquisa.Text, sCampo);
+
+  if oClienteModel.Localizar(frmCliente.edtPesquisa.Text, sCampo) then
+  begin
+    frmCliente.BtnAlterar.Enabled := False;
+    frmCliente.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmCliente.BtnAlterar.Enabled := True;
+    frmCliente.btnExcluir.Enabled := True;
+  end;
+
 end;
 
 procedure TClienteControler.OnExitEdtCpfCnpj(Sender: TObject);
@@ -363,23 +405,24 @@ end;
 procedure TClienteControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_F2 then
-    frmCliente.edtPesquisa.SetFocus;
-
-  if Key = VK_F5 then
-    ListarClientes;
-end;
-
-procedure TClienteControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-
-  if Key = #8 then
+  if frmCliente.edtPesquisa.Enabled then
   begin
-    if Length(Trim(frmCliente.edtPesquisa.Text)) = 1 then
-      oClienteRegra.DesativarFiltro(oClienteModel)
-    else if Length(Trim(frmCliente.edtPesquisa.Text)) = 0 then
-      oClienteRegra.DesativarFiltro(oClienteModel)
+    if Key = VK_F2 then
+      frmCliente.edtPesquisa.SetFocus;
+
+    if Key = VK_F5 then
+      ListarClientes;
+  end
+  else
+  begin
+    if Key = VK_F5 then
+    begin
+      frmCliente.cbMunicipio.Clear;
+      frmCliente.cbMunicipio.Enabled := False;
+      frmCliente.cbBairro.Clear;
+      frmCliente.cbBairro.Enabled := False;
+      PopularComboBoxEstado;
+    end;
   end;
 end;
 
@@ -500,12 +543,8 @@ begin
                 if (oClienteRegra.Salvar(oClienteModel, oClienteDto)) then
                 begin
                   ShowMessage('Salvo com sucesso');
-                  frmCliente.PageControl1.ActivePage := frmCliente.tsTabela;
-                  frmCliente.tsTabela.Enabled := True;
-                  AtivarBotoesListagem;
-                  frmCliente.Caption := 'Listagem de Clientes';
                   LimparCamposForm;
-                  ListarClientes;
+                  frmCliente.edtCpfCnpj.SetFocus;
                 end;
               except
                 on E: Exception do

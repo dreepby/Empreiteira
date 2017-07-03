@@ -10,13 +10,11 @@ type
     function BuscarID: Integer;
     function Alterar(var ACliente: TClienteDto): Boolean;
     function Inserir(var ACliente: TClienteDto): Boolean;
-    procedure ListarClientes(var DsTabela: TDataSource);
+    function ListarClientes(var DsTabela: TDataSource): Boolean;
     function Deletar(const ACliente: Integer): Boolean;
-    function Pesquisar(ACampo: String; AValor: String): Boolean;
     function VerificarCliente(ACliente: TClienteDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
-    function Localizar(ATexto, ACampo: String): Boolean;
-    procedure DesativarFiltro;
+    function Localizar(ATexto: String; ACampo: String): Boolean;
     function BuscarRegistro(var ACliente: TClienteDto): Boolean;
   end;
 

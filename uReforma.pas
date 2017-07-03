@@ -16,18 +16,6 @@ type
     pageControl2: TPageControl;
     tsPedido: TTabSheet;
     tsProdutos: TTabSheet;
-    dtpPedido: TDateTimePicker;
-    Label2: TLabel;
-    dtpEntrega: TDateTimePicker;
-    Label3: TLabel;
-    edtCpfCnpj: TLabeledEdit;
-    btnPesquisarCliente: TBitBtn;
-    cbAtendente: TComboBox;
-    Label4: TLabel;
-    cbUsuario: TComboBox;
-    Label5: TLabel;
-    moObservacao: TMemo;
-    Label7: TLabel;
     dsTabelaProduto: TDataSource;
     cltAmbientes: TCheckListBox;
     Label6: TLabel;
@@ -62,6 +50,18 @@ type
     btnAlterarProdutos: TBitBtn;
     btnExcluirProdutos: TBitBtn;
     edtTotal: TEdit;
+    edtCpfCnpj: TLabeledEdit;
+    btnPesquisarCliente: TBitBtn;
+    dtpPedido: TDateTimePicker;
+    Label2: TLabel;
+    dtpEntrega: TDateTimePicker;
+    Label3: TLabel;
+    cbAtendente: TComboBox;
+    Label4: TLabel;
+    cbUsuario: TComboBox;
+    Label5: TLabel;
+    moObservacao: TMemo;
+    Label7: TLabel;
   private
     { Private declarations }
   public

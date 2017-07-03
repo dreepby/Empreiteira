@@ -15,14 +15,14 @@ type
     function BuscarID: Integer;
     function Alterar(var AUsuario: TUsuarioDto): Boolean;
     function Inserir(var AUsuario: TUsuarioDto): Boolean;
-    procedure ListarUsuarios(var DsUsuario: TDataSource);
+    function ListarUsuarios(var DsUsuario: TDataSource): Boolean;
     function Deletar(const AidUsuario: Integer): Boolean;
     function Localizar(ATexto, ACampo: String): Boolean;
     function VerificarUsuario(AUsuario: TUsuarioDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function ADDListaHash(var oUsuario: TObjectDictionary<string,
       TUsuarioDto>): Boolean;
-    procedure DesativarFiltro;
+    
     constructor Create;
     destructor Destroy; override;
   end;
@@ -112,11 +112,6 @@ begin
     ('delete from usuario where idusuario = ' + IntToStr(AidUsuario)) > 0;
 end;
 
-procedure TUsuarioModel.DesativarFiltro;
-begin
-  oQueryListarUsuarios.Filtered := False;
-end;
-
 destructor TUsuarioModel.Destroy;
 begin
   oQueryListarUsuarios.Close;
@@ -138,28 +133,21 @@ begin
 
 end;
 
-procedure TUsuarioModel.ListarUsuarios(var DsUsuario: TDataSource);
+function TUsuarioModel.ListarUsuarios(var DsUsuario: TDataSource): Boolean;
 begin
   oQueryListarUsuarios.Filtered := False;
   oQueryListarUsuarios.Connection := TSingletonConexao.GetInstancia;
   oQueryListarUsuarios.Open('select * from usuario');
   DsUsuario.DataSet := oQueryListarUsuarios;
-
+  Result := oQueryListarUsuarios.IsEmpty;
 end;
 
 function TUsuarioModel.Localizar(ATexto, ACampo: String): Boolean;
 begin
-  Result := True;
-  oQueryListarUsuarios.Filtered := False;
-  if ATexto.Trim <> EmptyStr then
-  begin
-    oQueryListarUsuarios.Filter := 'UPPER(' + ACampo + ') LIKE ''%' +
-      UpperCase(ATexto.Trim) + '%''';
-    oQueryListarUsuarios.Filtered := True;
-    Result := oQueryListarUsuarios.RecordCount > 0;
-    if (not(Result)) then
-      oQueryListarUsuarios.Filtered := False;
-  end;
+  oQueryListarUsuarios.Filter := 'UPPER(' + ACampo + ') LIKE ''%' +
+    UpperCase(ATexto.Trim) + '%''';
+  oQueryListarUsuarios.Filtered := True;
+  Result := oQueryListarUsuarios.IsEmpty;
 end;
 
 function TUsuarioModel.VerificarExcluir(AId: Integer): Boolean;

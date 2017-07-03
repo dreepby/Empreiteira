@@ -10,9 +10,10 @@ type
 
   public
     procedure Limpar(var AEstado: TEstadoDto);
-    function Salvar(var AModel: IModelEstadoInterface; AEstado: TEstadoDto): String;
-    function Pesquisar(var AModel: IModelEstadoInterface; ANome: String): Boolean;
-    function VerificarExcluir(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
+    function Salvar(var AModel: IModelEstadoInterface;
+      AEstado: TEstadoDto): String;
+    function VerificarExcluir(var AModel: IModelEstadoInterface;
+      AId: Integer): Boolean;
     function Deletar(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
   end;
 
@@ -20,7 +21,8 @@ implementation
 
 { TEstadoRegra }
 
-function TEstadoRegra.Deletar(var AModel: IModelEstadoInterface; AId: Integer): Boolean;
+function TEstadoRegra.Deletar(var AModel: IModelEstadoInterface;
+  AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
 end;
@@ -32,54 +34,51 @@ begin
   AEstado.UF := EmptyStr;
 end;
 
-function TEstadoRegra.Pesquisar(var AModel: IModelEstadoInterface;
-  ANome: String): Boolean;
-begin
-  Result := AModel.Pesquisar(ANome);
-end;
-
 function TEstadoRegra.Salvar(var AModel: IModelEstadoInterface;
   AEstado: TEstadoDto): String;
 var
   VerificarID: Integer;
 begin
-
-  if AEstado.IdUF = 0 then
+  if Length(Trim(AEstado.UF)) = 2 then
   begin
-    if (AModel.VerificarUF(AEstado, VerificarID) = False) then
+    if AEstado.IdUF = 0 then
     begin
-      AEstado.IdUF := AModel.BuscarID;
-      if (AModel.Inserir(AEstado)) then
-        Result := 'Sucesso!'
+      if (AModel.VerificarUF(AEstado, VerificarID) = False) then
+      begin
+        AEstado.IdUF := AModel.BuscarID;
+        if (AModel.Inserir(AEstado)) then
+          Result := 'Sucesso!'
+        else
+          Result := 'Ocorreu algum erro!'
+      end
       else
-        Result := 'Ocorreu algum erro!'
+        Result := 'Estado já cadastrado.'
     end
     else
-      Result := 'Estado já cadastrado.'
-  end
-  else
-  begin
-    if AModel.VerificarUF(AEstado, VerificarID) then
     begin
-      if VerificarID = AEstado.IdUF then
+      if AModel.VerificarUF(AEstado, VerificarID) then
+      begin
+        if VerificarID = AEstado.IdUF then
+          If AModel.Alterar(AEstado) then
+            Result := 'Sucesso!'
+          else
+            Result := 'Ocorreu algum erro!'
+        else
+        begin
+          Result := 'Estado já cadastrado.';
+        end;
+      end
+      else
+      begin
         If AModel.Alterar(AEstado) then
           Result := 'Sucesso!'
         else
           Result := 'Ocorreu algum erro!'
-      else
-      begin
-        Result := 'Estado já cadastrado.';
       end;
-    end
-    else
-    begin
-      If AModel.Alterar(AEstado) then
-        Result := 'Sucesso!'
-      else
-        Result := 'Ocorreu algum erro!'
     end;
-
-  end;
+  end
+  else
+    Result := 'Campo UF deve conter 2 letras.';
 end;
 
 function TEstadoRegra.VerificarExcluir(var AModel: IModelEstadoInterface;

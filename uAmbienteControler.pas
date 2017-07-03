@@ -1,5 +1,5 @@
 unit uAmbienteControler;
-
+
 interface
 
 uses
@@ -25,9 +25,9 @@ type
     procedure ListarAmbientes;
     procedure Alterar(Sender: TObject);
     procedure fecharAmbiente(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure OnChangeEdtPesquisa(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -45,27 +45,32 @@ implementation
 procedure TAmbienteControler.abrirForm;
 begin
   if (not(Assigned(frmAmbiente))) then
+  begin
     frmAmbiente := TfrmAmbiente.Create(nil);
 
-  frmAmbiente.tsDados.Enabled := False;
-  frmAmbiente.BtnSalvar.Enabled := False;
-  frmAmbiente.BtnCancelar.Enabled := False;
-  frmAmbiente.BtnFechar.OnClick := fecharAmbiente;
-  frmAmbiente.BtnSalvar.OnClick := Salvar;
-  frmAmbiente.btnInserir.OnClick := Inserir;
-  frmAmbiente.BtnAlterar.OnClick := Alterar;
-  frmAmbiente.BtnCancelar.OnClick := Cancelar;
-  frmAmbiente.btnExcluir.OnClick := Excluir;
-  ListarAmbientes;
-  frmAmbiente.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmAmbiente.OnKeyDown := OnKeyDownForm;
-  frmAmbiente.Show;
+    frmAmbiente.OnActivate := FormActivate;
+    frmAmbiente.tsDados.Enabled := False;
+    frmAmbiente.BtnSalvar.Enabled := False;
+    frmAmbiente.BtnCancelar.Enabled := False;
+    frmAmbiente.BtnFechar.OnClick := fecharAmbiente;
+    frmAmbiente.BtnSalvar.OnClick := Salvar;
+    frmAmbiente.btnInserir.OnClick := Inserir;
+    frmAmbiente.BtnAlterar.OnClick := Alterar;
+    frmAmbiente.BtnCancelar.OnClick := Cancelar;
+    frmAmbiente.btnExcluir.OnClick := Excluir;
+    ListarAmbientes;
+    frmAmbiente.edtPesquisa.OnChange := OnChangeEdtPesquisa;
+    frmAmbiente.OnKeyDown := OnKeyDownForm;
+    frmAmbiente.Show;
+  end
+  else
+    frmAmbiente.Show;
 end;
 
 procedure TAmbienteControler.Alterar(Sender: TObject);
 begin
   oAmbienteDto.idAmbiente := frmAmbiente.DBGrid1.Fields[0].AsInteger;
-
+  frmAmbiente.edtPesquisa.Enabled := False;
   frmAmbiente.tsDados.Enabled := True;
   frmAmbiente.Caption := 'Alteração de Ambiente';
   frmAmbiente.edtDescricao.Text := frmAmbiente.DBGrid1.Fields[1].AsString;
@@ -80,6 +85,7 @@ end;
 
 procedure TAmbienteControler.Cancelar(Sender: TObject);
 begin
+  frmAmbiente.edtPesquisa.Enabled := True;
   frmAmbiente.tsTabela.Enabled := True;
   frmAmbiente.PageControl1.ActivePage := frmAmbiente.tsTabela;
   frmAmbiente.tsDados.Enabled := False;
@@ -91,6 +97,7 @@ begin
   frmAmbiente.edtDescricao.Text := EmptyStr;
   frmAmbiente.Caption := 'Listagem de Ambientes';
   oAmbienteRegra.Limpar(oAmbienteDto);
+  ListarAmbientes;
 end;
 
 constructor TAmbienteControler.Create;
@@ -157,9 +164,16 @@ begin
   FreeAndNil(frmAmbiente);
 end;
 
+procedure TAmbienteControler.FormActivate(Sender: TObject);
+begin
+  if frmAmbiente.edtPesquisa.Enabled then
+    ListarAmbientes;
+end;
+
 procedure TAmbienteControler.Inserir(Sender: TObject);
 begin
   frmAmbiente.tsDados.Enabled := True;
+  frmAmbiente.edtPesquisa.Enabled := False;
   frmAmbiente.Caption := 'Cadastro de Ambiente';
   frmAmbiente.PageControl1.ActivePage := frmAmbiente.tsDados;
   frmAmbiente.tsTabela.Enabled := False;
@@ -174,38 +188,42 @@ end;
 procedure TAmbienteControler.ListarAmbientes;
 begin
   oAmbienteModel.ListarAmbientes(frmAmbiente.dsTabela);
+  if (oAmbienteModel.IsEmpty) then
+  begin
+    frmAmbiente.btnExcluir.Enabled := False;
+    frmAmbiente.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmAmbiente.btnExcluir.Enabled := True;
+    frmAmbiente.BtnAlterar.Enabled := True;
+  end;
+end;
+
+procedure TAmbienteControler.OnChangeEdtPesquisa(Sender: TObject);
+begin
+  if oAmbienteModel.Localizar(frmAmbiente.edtPesquisa.Text) then
+  begin
+    frmAmbiente.btnExcluir.Enabled := False;
+    frmAmbiente.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmAmbiente.btnExcluir.Enabled := True;
+    frmAmbiente.BtnAlterar.Enabled := True;
+  end;
 end;
 
 procedure TAmbienteControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_F2 then
-    frmAmbiente.edtPesquisa.SetFocus;
-
-  if Key = VK_F5 then
-    ListarAmbientes;
-end;
-
-procedure TAmbienteControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #8 then
+  if frmAmbiente.edtPesquisa.Enabled then
   begin
-    if Length(Trim(frmAmbiente.edtPesquisa.Text)) = 1 then
-      ListarAmbientes
-    else if Length(Trim(frmAmbiente.edtPesquisa.Text)) = 0 then
+    if Key = VK_F2 then
+      frmAmbiente.edtPesquisa.SetFocus;
+
+    if Key = VK_F5 then
       ListarAmbientes;
-
-  end;
-end;
-
-procedure TAmbienteControler.Pesquisar(Sender: TObject);
-begin
-  try
-    oAmbienteRegra.Filtrar(oAmbienteModel, frmAmbiente.edtPesquisa.Text);
-  except
-    on E: Exception do
-      ShowMessage(E.Message);
   end;
 end;
 
@@ -220,20 +238,10 @@ begin
         ShowMessage('Salvo com sucesso');
         oAmbienteRegra.Limpar(oAmbienteDto);
         frmAmbiente.edtDescricao.Text := EmptyStr;
-        frmAmbiente.PageControl1.ActivePage := frmAmbiente.tsTabela;
-        frmAmbiente.tsTabela.Enabled := True;
-        frmAmbiente.btnInserir.Enabled := True;
-        frmAmbiente.BtnAlterar.Enabled := True;
-        frmAmbiente.btnExcluir.Enabled := True;
-        frmAmbiente.BtnSalvar.Enabled := False;
-        frmAmbiente.BtnCancelar.Enabled := False;
-        frmAmbiente.Caption := 'Listagem de Ambientes';
-        ListarAmbientes;
       end;
     except
       on E: Exception do
         ShowMessage(E.Message);
-
     end
   end
   else
@@ -249,3 +257,4 @@ if Assigned(oAmbienteControler) then
   FreeAndNil(oAmbienteControler);
 
 end.
+

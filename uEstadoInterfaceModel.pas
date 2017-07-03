@@ -1,5 +1,5 @@
 unit uEstadoInterfaceModel;
-
+
 interface
 
 uses
@@ -18,10 +18,13 @@ type
     function Ler(var AEstado: TEstadoDto): Boolean;
     procedure ListarEstados(var DsEstado: TDataSource);
     function VerificarUF(AUF: TEstadoDto; out AId: integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function Buscar(ANome: String): integer;
+    function Localizar(ATexto: String): Boolean;
+    function IsEmpty: Boolean;
+
   end;
 
 implementation
 
 end.
+

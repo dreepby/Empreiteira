@@ -60,7 +60,7 @@ begin
         // Atribui os valores
         oProdutoDTO.idProduto := oQuery.FieldByName('idProduto').AsInteger;
         oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
-        oProdutoDTO.Preco := oQuery.FieldByName('Preco').AsString;
+        oProdutoDTO.Preco := CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency*100)/100);
 
         // Adiciona o objeto na lista hash
         oProduto.Add(oProdutoDTO.Descricao, oProdutoDTO);

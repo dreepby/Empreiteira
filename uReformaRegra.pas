@@ -1,12 +1,13 @@
 unit uReformaRegra;
-
+
 interface
 
 uses
-  uReformaDto, System.SysUtils, uReformaModel, uReformaInterfaceModel,
+  uReformaDto, System.SysUtils, Data.Db, uReformaModel, uReformaInterfaceModel,
   uClienteInterfaceModel, uClienteModel, uAmbienteReformaDto,
   uAmbienteReformaInterfaceModel, uAmbienteReformaModel, FireDAC.Comp.Client,
-  uReforma;
+  uReforma, System.Generics.Collections, uProdutoReformaDto,
+  uProdutoReformaModel, uProdutoReformaInterfaceModel, uArrayDinamicoInteger;
 
 type
   TReformaRegra = class
@@ -16,28 +17,64 @@ type
       AId: Integer): Boolean;
     function Deletar(const AModel: IModelReformaInterface;
       AId: Integer): Boolean;
-    function Pesquisar(const AModel: IModelReformaInterface;
-      ANome: String): Boolean;
     function Salvar(const AModel: IModelReformaInterface; AReforma: TReformaDto;
-      AAmbientes: Array of Integer): Boolean;
-    function SalvarAmbientes(AAmbientes: Array of Integer;
-      AReforma: TReformaDto): Boolean;
+      oListaAmbientesProdutosReformas: TObjectDictionary < Integer,
+      TObjectDictionary < Integer, TProdutoReformaDto >> ): Boolean;
     function VerificarMemTableProduto(var AMemTable: TFDMemTable;
       const AIdProduto: Integer; const AIdAmbiente: Integer): Boolean;
     procedure ExcluirProduto(var AMemTable: TFDMemTable;
       const AIdAmbiente, AIdProduto: Integer);
     function VerificarCamposPedido(const AForm: TfrmReforma;
       const AReforma: TReformaDto): Boolean;
+    function BuscarDadosRegra(var AModel: IModelReformaInterface;
+      var oReformaDto: TReformaDto; var AListaAmbientesProdutosReformas
+      : TObjectDictionary<Integer, TObjectDictionary<Integer,
+      TProdutoReformaDto>>): Boolean;
+
   end;
 
 implementation
 
 { TReformaRegra }
 
+function TReformaRegra.BuscarDadosRegra(var AModel: IModelReformaInterface;
+  var oReformaDto: TReformaDto;
+  var AListaAmbientesProdutosReformas: TObjectDictionary<Integer, TObjectDictionary<Integer, TProdutoReformaDto>>): Boolean;
+var
+  oArrayAmbientesReformas: TArrayDinamico;
+  oAmbienteReformaModel: IModelAmbienteReformaInterface;
+begin
+  if AModel.BuscarRegistro(oReformaDto) then
+  begin
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
 function TReformaRegra.Deletar(const AModel: IModelReformaInterface;
   AId: Integer): Boolean;
+var
+  oAmbienteReformaModel: IModelAmbienteReformaInterface;
+  oProdutoReformaModel: IModelProdutoReformaInterface;
+  oArray: TArrayDinamico;
+  i: Integer;
 begin
-  Result := AModel.Deletar(AId);
+  oAmbienteReformaModel := TAmbienteReformaModel.Create;
+  oProdutoReformaModel := TProdutoReformaModel.Create;
+  if oAmbienteReformaModel.BuscarArrayAmbientesReforma(AId, oArray) then
+  begin
+    for i := 0 to Length(oArray) - 1 do
+    begin
+      oProdutoReformaModel.Deletar(oArray[i]);
+      if not(oAmbienteReformaModel.Deletar(oArray[i])) then
+        raise Exception.Create('Ocorreu Algum erro.');
+    end
+  end;
+  if AModel.Deletar(AId) then
+    Result := True
+  else
+    raise Exception.Create('Ocorreu Algum erro.');
 end;
 
 procedure TReformaRegra.ExcluirProduto(var AMemTable: TFDMemTable;
@@ -63,110 +100,77 @@ begin
   AReforma.oEscritor.Nome := EmptyStr;
   AReforma.oAtendente.idUsuario := 0;
   AReforma.oAtendente.Nome := EmptyStr;
-  AReforma.total := 0;
-end;
-
-function TReformaRegra.Pesquisar(const AModel: IModelReformaInterface;
-  ANome: String): Boolean;
-begin
-
+  AReforma.total := EmptyStr;
 end;
 
 function TReformaRegra.Salvar(const AModel: IModelReformaInterface;
-  AReforma: TReformaDto; AAmbientes: Array of Integer): Boolean;
+  AReforma: TReformaDto; oListaAmbientesProdutosReformas: TObjectDictionary <
+  Integer, TObjectDictionary < Integer, TProdutoReformaDto >> ): Boolean;
 var
-  iCodigoCPF, iCodigoCnpj: Integer;
-  oClienteModel: IModelClienteInterface;
-begin {
-    if AReforma.dataDoPedido > AReforma.dataDeEntrega then
-    raise Exception.Create
-    ('A data do pedido não pode ser depois da data de entrega.')
-    else
-    begin
-    oClienteModel := TClienteModel.Create;
-    iCodigoCPF := oClienteModel.BuscarRegistroIdCpf(AReforma.oCliente.Cpf);
-    iCodigoCnpj := oClienteModel.BuscarRegistroIdCnpj(AReforma.oCliente.Cnpj);
-    if (iCodigoCPF > 0) and (iCodigoCnpj > 0) then
-    begin
-    if iCodigoCPF = iCodigoCnpj then
-    begin
-    AReforma.oCliente.idCliente := iCodigoCPF;
-    if AReforma.idReforma > 0 then
-    begin
-    if AModel.Alterar(AReforma) then
-    Result := True
-    else
-    raise Exception.Create('Ocorreu algum erro.');
-    end
-    else
-    begin
-    AReforma.idReforma := AModel.BuscarID;
-    if AModel.Inserir(AReforma) then
-    begin
-    if SalvarAmbientes(AAmbientes, AReforma) then
-    Result := True
-    else
-    raise Exception.Create('Ocorreu algum erro!')
-    end
-    else
-    raise Exception.Create('Ocorreu algum erro.');
-    end;
-    end
-    else
-    raise Exception.Create('CPF e CNPJ não correspondem ao mesmo cliente.');
-    end
-    else
-    begin
-    if iCodigoCPF > 0 then
-    AReforma.oCliente.idCliente := iCodigoCPF
-    else
-    AReforma.oCliente.idCliente := iCodigoCnpj;
-    if AReforma.idReforma > 0 then
-    begin
-    if AModel.Alterar(AReforma) then
-    Result := True
-    else
-    raise Exception.Create('Ocorreu algum erro.');
-    end
-    else
-    begin
-    AReforma.idReforma := AModel.BuscarID;
-    if AModel.Inserir(AReforma) then
-    begin
-    if SalvarAmbientes(AAmbientes, AReforma) then
-    Result := True
-    else
-    raise Exception.Create('Ocorreu algum erro!')
-    end
-    else
-    raise Exception.Create('Ocorreu algum erro.');
-    end;
-
-    end;
-    end; }
-end;
-
-function TReformaRegra.SalvarAmbientes(AAmbientes: array of Integer;
-  AReforma: TReformaDto): Boolean;
-var
-  i, count: Integer;
   oAmbienteReformaModel: IModelAmbienteReformaInterface;
+  oIndice: TObjectDictionary<Integer, TProdutoReformaDto>;
+  oIndice2, oProdutoReformaDto: TProdutoReformaDto;
   oAmbienteReformaDto: TAmbienteReformaDto;
+  iArray: TArray<Integer>;
+  bVerifica: Boolean;
+  oProdutoReformaModel: IModelProdutoReformaInterface;
 begin
+  oProdutoReformaModel := TProdutoReformaModel.Create;
   oAmbienteReformaDto := TAmbienteReformaDto.Create;
-  count := Length(AAmbientes) - 2;
   oAmbienteReformaModel := TAmbienteReformaModel.Create;
-  oAmbienteReformaDto.oReforma.idReforma := AReforma.idReforma;
-  for i := 0 to count do
+  Result := False;
+  if AReforma.dataDoPedido > AReforma.dataDeEntrega then
+    raise Exception.Create
+      ('A data do pedido não pode ser depois da data de entrega.')
+  else
   begin
-    oAmbienteReformaDto.IdAmbienteReforma := oAmbienteReformaModel.BuscarID;
-    oAmbienteReformaDto.oAmbiente.idAmbiente := AAmbientes[i];
-    if oAmbienteReformaModel.Inserir(oAmbienteReformaDto) then
-      Result := True
-    else
+    if AReforma.idReforma = 0 then
     begin
-      Result := False;
-      exit;
+      AReforma.idReforma := AModel.BuscarID;
+      if AModel.Inserir(AReforma) then
+      begin
+        oAmbienteReformaDto.oReforma.idReforma := AReforma.idReforma;
+        for oIndice in oListaAmbientesProdutosReformas.Values do
+        begin
+          bVerifica := False;
+          iArray := oIndice.Keys.ToArray;
+          oAmbienteReformaDto.oAmbiente.idAmbiente := oIndice.Items[iArray[0]]
+            .oAmbienteReforma.oAmbiente.idAmbiente;
+          for oIndice2 in oIndice.Values do
+          begin
+            oAmbienteReformaDto.IdAmbienteReforma :=
+              oAmbienteReformaModel.BuscarID;
+
+            if oAmbienteReformaModel.Inserir(oAmbienteReformaDto) then
+            begin
+              oIndice.Items[iArray[0]].oAmbienteReforma.IdAmbienteReforma :=
+                oAmbienteReformaDto.IdAmbienteReforma;
+              bVerifica := True;
+              Break;
+            end
+            else
+              raise Exception.Create('Ocorreu Algum erro!');
+          end;
+          if bVerifica then
+          begin
+            for oIndice2 in oIndice.Values do
+            begin
+              oProdutoReformaDto := oIndice2;
+              oProdutoReformaDto.id := oProdutoReformaModel.BuscarID;
+              oProdutoReformaDto.oAmbienteReforma.IdAmbienteReforma :=
+                oAmbienteReformaDto.IdAmbienteReforma;
+              if oProdutoReformaModel.Inserir(oProdutoReformaDto) then
+              begin
+                Result := True;
+              end
+              else
+                raise Exception.Create('Ocorreu Algum erro!');
+            end;
+          end;
+        end;
+      end
+      else
+        raise Exception.Create('Houve algum erro.');
     end;
   end;
   if Assigned(oAmbienteReformaDto) then
@@ -176,7 +180,6 @@ end;
 function TReformaRegra.VerificarCamposPedido(const AForm: TfrmReforma;
   const AReforma: TReformaDto): Boolean;
 begin
-  Result := False;
   if AReforma.dataDoPedido > AReforma.dataDeEntrega then
     raise Exception.Create
       ('A data do pedido não pode ser depois da data de entrega.')
@@ -193,7 +196,10 @@ begin
         Result := True;
     end
     else
+    begin
       raise Exception.Create('Selecione um atendente.');
+    end;
+
   end;
 end;
 
@@ -222,3 +228,4 @@ begin
 end;
 
 end.
+

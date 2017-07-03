@@ -11,8 +11,6 @@ type
     procedure Limpar(AAmbiente: TAmbienteDto);
     function VerificarExcluir(var AModel: IModelAmbienteInterface;
       AId: Integer): Boolean;
-    function Filtrar(const AModel: IModelAmbienteInterface;
-      ATexto: String): Boolean;
     function Deletar(const AModel: IModelAmbienteInterface;
       AId: Integer): Boolean;
     function Salvar(const AModel: IModelAmbienteInterface;
@@ -28,19 +26,6 @@ function TAmbienteRegra.Deletar(const AModel: IModelAmbienteInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
-end;
-
-function TAmbienteRegra.Filtrar(const AModel: IModelAmbienteInterface;
-  ATexto: String): Boolean;
-begin
-  if Trim(ATexto) = EmptyStr then
-    raise Exception.Create('Campo de pesquisa vazio.')
-  else
-  begin
-    Result := AModel.Localizar(ATexto);
-  end;
-  if not(Result) then
-    raise Exception.Create('Nenhum registro encontrado.');
 end;
 
 procedure TAmbienteRegra.Limpar(AAmbiente: TAmbienteDto);

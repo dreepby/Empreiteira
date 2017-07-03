@@ -10,6 +10,7 @@ uses
 type
   TfrmAmbiente = class(TfrmCadastroBase)
     edtDescricao: TLabeledEdit;
+    procedure edtDescricaoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -19,5 +20,12 @@ type
 implementation
 
 {$R *.dfm}
+
+procedure TfrmAmbiente.edtDescricaoKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = #13 then
+    BtnSalvar.Click;
+end;
 
 end.

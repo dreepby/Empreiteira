@@ -25,10 +25,9 @@ type
     procedure Alterar(Sender: TObject);
     procedure Cancelar(Sender: TObject);
     procedure Excluir(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
-
+    procedure onChangeEdtPesquisa(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   public
     procedure AbrirForm;
 
@@ -47,21 +46,26 @@ implementation
 procedure TUsuarioControler.AbrirForm;
 begin
   if (not(Assigned(frmUsuario))) then
+  begin
     frmUsuario := TfrmUsuario.Create(nil);
 
-  frmUsuario.tsDados.Enabled := False;
-  frmUsuario.BtnSalvar.Enabled := False;
-  frmUsuario.BtnCancelar.Enabled := False;
-  frmUsuario.BtnFechar.OnClick := fecharUsuario;
-  frmUsuario.BtnSalvar.OnClick := Salvar;
-  frmUsuario.btnInserir.OnClick := Inserir;
-  frmUsuario.BtnAlterar.OnClick := Alterar;
-  frmUsuario.BtnCancelar.OnClick := Cancelar;
-  frmUsuario.btnExcluir.OnClick := Excluir;
-  ListarUsuarios;
-  frmUsuario.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmUsuario.OnKeyDown := OnKeyDownForm;
-  frmUsuario.Show;
+    frmUsuario.OnActivate := FormActivate;
+    frmUsuario.tsDados.Enabled := False;
+    frmUsuario.BtnSalvar.Enabled := False;
+    frmUsuario.BtnCancelar.Enabled := False;
+    frmUsuario.BtnFechar.OnClick := fecharUsuario;
+    frmUsuario.BtnSalvar.OnClick := Salvar;
+    frmUsuario.btnInserir.OnClick := Inserir;
+    frmUsuario.BtnAlterar.OnClick := Alterar;
+    frmUsuario.BtnCancelar.OnClick := Cancelar;
+    frmUsuario.btnExcluir.OnClick := Excluir;
+    ListarUsuarios;
+    frmUsuario.edtPesquisa.OnChange := onChangeEdtPesquisa;
+    frmUsuario.OnKeyDown := OnKeyDownForm;
+    frmUsuario.Show;
+  end
+  else
+    frmUsuario.Show;
 end;
 
 procedure TUsuarioControler.Alterar(Sender: TObject);
@@ -72,7 +76,7 @@ begin
   frmUsuario.Caption := 'Alteração de Usuario';
   frmUsuario.edtNome.Text := frmUsuario.DBGrid1.Fields[1].AsString;
   frmUsuario.edtCPF.Text := frmUsuario.DBGrid1.Fields[2].AsString;
-
+  frmUsuario.edtCPF.SetFocus;
   frmUsuario.PageControl1.ActivePage := frmUsuario.tsDados;
   frmUsuario.tsTabela.Enabled := False;
   frmUsuario.tsDados.Enabled := True;
@@ -81,11 +85,12 @@ begin
   frmUsuario.btnExcluir.Enabled := False;
   frmUsuario.BtnSalvar.Enabled := True;
   frmUsuario.BtnCancelar.Enabled := True;
+  frmUsuario.edtPesquisa.Enabled := False;
 end;
 
 procedure TUsuarioControler.Cancelar(Sender: TObject);
 begin
-
+  frmUsuario.edtPesquisa.Enabled := True;
   frmUsuario.tsTabela.Enabled := True;
   frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
   frmUsuario.tsDados.Enabled := False;
@@ -97,6 +102,7 @@ begin
   frmUsuario.edtNome.Text := EmptyStr;
   frmUsuario.edtCPF.Text := EmptyStr;
   frmUsuario.Caption := 'Listagem de Usuários';
+  ListarUsuarios;
 end;
 
 constructor TUsuarioControler.Create;
@@ -159,6 +165,12 @@ begin
   FreeAndNil(frmUsuario);
 end;
 
+procedure TUsuarioControler.FormActivate(Sender: TObject);
+begin
+  if frmUsuario.edtPesquisa.Enabled then
+    ListarUsuarios;
+end;
+
 procedure TUsuarioControler.Inserir(Sender: TObject);
 begin
   frmUsuario.tsDados.Enabled := True;
@@ -170,47 +182,49 @@ begin
   frmUsuario.btnExcluir.Enabled := False;
   frmUsuario.BtnSalvar.Enabled := True;
   frmUsuario.BtnCancelar.Enabled := True;
-  frmUsuario.edtNome.SetFocus;
-
+  frmUsuario.edtCPF.SetFocus;
+  frmUsuario.edtPesquisa.Enabled := False;
 end;
 
 procedure TUsuarioControler.ListarUsuarios;
 begin
-  oRegraUsuario.ListarUsuarios(oModelUsuario, frmUsuario.dsTabela);
+  if oModelUsuario.ListarUsuarios(frmUsuario.dsTabela) then
+  begin
+    frmUsuario.BtnAlterar.Enabled := False;
+    frmUsuario.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmUsuario.BtnAlterar.Enabled := True;
+    frmUsuario.btnExcluir.Enabled := True;
+  end;
+end;
+
+procedure TUsuarioControler.onChangeEdtPesquisa(Sender: TObject);
+begin
+  if oModelUsuario.Localizar(frmUsuario.edtPesquisa.Text,
+    frmUsuario.cbPesquisa.Items[frmUsuario.cbPesquisa.ItemIndex]) then
+  begin
+    frmUsuario.BtnAlterar.Enabled := False;
+    frmUsuario.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmUsuario.BtnAlterar.Enabled := True;
+    frmUsuario.btnExcluir.Enabled := True;
+  end;
 end;
 
 procedure TUsuarioControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-
-  if Key = VK_F2 then
-    frmUsuario.edtPesquisa.SetFocus;
-
-  if Key = VK_F5 then
-    ListarUsuarios;
-
-end;
-
-procedure TUsuarioControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #8 then
+  if frmUsuario.edtPesquisa.Enabled then
   begin
-    if Length(Trim(frmUsuario.edtPesquisa.Text)) = 1 then
-      oRegraUsuario.DesativarFiltro(oModelUsuario)
-    else if Length(Trim(frmUsuario.edtPesquisa.Text)) = 0 then
-      oRegraUsuario.DesativarFiltro(oModelUsuario);
-  end;
-end;
+    if Key = VK_F2 then
+      frmUsuario.edtPesquisa.SetFocus;
 
-procedure TUsuarioControler.Pesquisar(Sender: TObject);
-begin
-  try
-    oRegraUsuario.Localizar(oModelUsuario, frmUsuario.edtPesquisa.Text,
-      frmUsuario.cbPesquisa.Items[frmUsuario.cbPesquisa.ItemIndex]);
-  except
-    on E: Exception do
-      ShowMessage(E.Message);
+    if Key = VK_F5 then
+      ListarUsuarios;
   end;
 end;
 
@@ -226,24 +240,15 @@ begin
       try
         if (oRegraUsuario.Salvar(oModelUsuario, oUsuarioDto)) then
         begin
-          ShowMessage('Salvo com sucesso');
           oRegraUsuario.Limpar(oUsuarioDto);
           frmUsuario.edtNome.Text := EmptyStr;
           frmUsuario.edtCPF.Text := EmptyStr;
-          frmUsuario.PageControl1.ActivePage := frmUsuario.tsTabela;
-          frmUsuario.tsTabela.Enabled := True;
-          frmUsuario.btnInserir.Enabled := True;
-          frmUsuario.BtnAlterar.Enabled := True;
-          frmUsuario.btnExcluir.Enabled := True;
-          frmUsuario.BtnSalvar.Enabled := False;
-          frmUsuario.BtnCancelar.Enabled := False;
-          frmUsuario.Caption := 'Listagem de Usuários';
-          ListarUsuarios;
+          frmUsuario.edtCPF.SetFocus;
+          ShowMessage('Salvo com sucesso');
         end;
       except
         on E: Exception do
           ShowMessage(E.Message);
-
       end
     end
     else

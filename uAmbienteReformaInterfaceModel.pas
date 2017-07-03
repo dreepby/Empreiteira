@@ -3,7 +3,7 @@ unit uAmbienteReformaInterfaceModel;
 interface
 
 uses
-  Data.DB, System.Generics.Collections, uAmbienteReformaDto, uAmbienteDto;
+  Data.DB, System.Generics.Collections, uAmbienteReformaDto, uAmbienteDto, uArrayDinamicoInteger;
 
 type
   IModelAmbienteReformaInterface = interface
@@ -15,6 +15,8 @@ type
     function VerificarExcluir(AId: Integer): Boolean;
     function BuscarRegistrosReforma(var oLista
       : TObjectDictionary<string, TAmbienteDto>; AidReforma: Integer): Boolean;
+    function BuscarArrayAmbientesReforma(const ACodigoReforma: Integer;var oArray: TArrayDinamico): Boolean;
+
   end;
 
 implementation

@@ -24,10 +24,10 @@ type
     procedure Alterar(Sender: TObject);
     procedure Cancelar(Sender: TObject);
     procedure Excluir(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure PopularComboBox;
+    procedure OnChangeEdtPesquisa(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   public
     procedure AbrirForm;
 
@@ -46,44 +46,53 @@ implementation
 procedure TMunicipioControler.AbrirForm;
 begin
   if (not(Assigned(frmMunicipio))) then
+  begin
     frmMunicipio := TfrmMunicipio.Create(nil);
 
-  frmMunicipio.tsDados.Enabled := False;
-  frmMunicipio.BtnSalvar.Enabled := False;
-  frmMunicipio.BtnCancelar.Enabled := False;
-  frmMunicipio.BtnFechar.OnClick := fecharMunicipio;
-  frmMunicipio.BtnSalvar.OnClick := Salvar;
-  frmMunicipio.btnInserir.OnClick := Inserir;
-  frmMunicipio.BtnAlterar.OnClick := Alterar;
-  frmMunicipio.BtnCancelar.OnClick := Cancelar;
-  frmMunicipio.btnExcluir.OnClick := Excluir;
-  ListarMunicipios;
-  frmMunicipio.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmMunicipio.OnKeyDown := OnKeyDownForm;
-  frmMunicipio.Show;
-
+    frmMunicipio.OnActivate := FormActivate;
+    frmMunicipio.tsDados.Enabled := False;
+    frmMunicipio.BtnSalvar.Enabled := False;
+    frmMunicipio.BtnCancelar.Enabled := False;
+    frmMunicipio.BtnFechar.OnClick := fecharMunicipio;
+    frmMunicipio.BtnSalvar.OnClick := Salvar;
+    frmMunicipio.btnInserir.OnClick := Inserir;
+    frmMunicipio.BtnAlterar.OnClick := Alterar;
+    frmMunicipio.BtnCancelar.OnClick := Cancelar;
+    frmMunicipio.btnExcluir.OnClick := Excluir;
+    ListarMunicipios;
+    frmMunicipio.edtPesquisa.OnChange := OnChangeEdtPesquisa;
+    frmMunicipio.OnKeyDown := OnKeyDownForm;
+    frmMunicipio.Show;
+  end
+  else
+    frmMunicipio.Show;
 end;
 
 procedure TMunicipioControler.Alterar(Sender: TObject);
 begin
   oMunicipioDto.idMunicipio := frmMunicipio.DBGrid1.Fields[0].AsInteger;
-  // oMunicipioDto.oEstado.Nome := frmMunicipio.DBGrid1.Fields[2].AsString;
-  frmMunicipio.tsDados.Enabled := True;
-  frmMunicipio.Caption := 'Alteração de Municipio';
-  frmMunicipio.edtNome.Text := frmMunicipio.DBGrid1.Fields[1].AsString;
-
-  PopularComboBox;
-  // frmMunicipio.cbEstado.Items.Objects[frmMunicipio.cbEstado.ItemIndex]);
-  frmMunicipio.cbEstado.ItemIndex := frmMunicipio.cbEstado.Items.IndexOfObject
-    (TObject(2));
-  // buscar no banco procurar pelo id do estado
-  frmMunicipio.PageControl1.ActivePage := frmMunicipio.tsDados;
-  frmMunicipio.tsTabela.Enabled := False;
-  frmMunicipio.btnInserir.Enabled := False;
-  frmMunicipio.BtnAlterar.Enabled := False;
-  frmMunicipio.btnExcluir.Enabled := False;
-  frmMunicipio.BtnSalvar.Enabled := True;
-  frmMunicipio.BtnCancelar.Enabled := True;
+  if oModelMunicipio.BuscarRegistro(oMunicipioDto) then
+  begin
+    frmMunicipio.tsDados.Enabled := True;
+    frmMunicipio.Caption := 'Alteração de Municipio';
+    frmMunicipio.edtPesquisa.Enabled := False;
+    PopularComboBox;
+    frmMunicipio.cbEstado.ItemIndex := frmMunicipio.cbEstado.Items.IndexOfObject
+      (TObject(oMunicipioDto.oEstado.IdUF));
+    frmMunicipio.edtNome.Text := oMunicipioDto.Nome;
+    frmMunicipio.PageControl1.ActivePage := frmMunicipio.tsDados;
+    frmMunicipio.tsTabela.Enabled := False;
+    frmMunicipio.btnInserir.Enabled := False;
+    frmMunicipio.BtnAlterar.Enabled := False;
+    frmMunicipio.btnExcluir.Enabled := False;
+    frmMunicipio.BtnSalvar.Enabled := True;
+    frmMunicipio.BtnCancelar.Enabled := True;
+  end
+  else
+  begin
+    ListarMunicipios;
+    ShowMessage('Registro não encontrado');
+  end;
 end;
 
 procedure TMunicipioControler.Cancelar(Sender: TObject);
@@ -100,6 +109,8 @@ begin
   frmMunicipio.cbEstado.ItemIndex := -1;
   frmMunicipio.Caption := 'Listagem de Municipios';
   oRegraMunicipio.Limpar(oMunicipioDto);
+  frmMunicipio.edtPesquisa.Enabled := True;
+  ListarMunicipios;
 end;
 
 constructor TMunicipioControler.Create;
@@ -166,9 +177,16 @@ begin
   FreeAndNil(frmMunicipio);
 end;
 
+procedure TMunicipioControler.FormActivate(Sender: TObject);
+begin
+  if frmMunicipio.edtPesquisa.Enabled then
+    ListarMunicipios;
+end;
+
 procedure TMunicipioControler.Inserir(Sender: TObject);
 begin
   frmMunicipio.tsDados.Enabled := True;
+  frmMunicipio.edtPesquisa.Enabled := False;
   frmMunicipio.Caption := 'Cadastro de Municpio';
   frmMunicipio.PageControl1.ActivePage := frmMunicipio.tsDados;
   frmMunicipio.tsTabela.Enabled := False;
@@ -183,40 +201,43 @@ end;
 
 procedure TMunicipioControler.ListarMunicipios;
 begin
-  oModelMunicipio.ListarMunicipios(frmMunicipio.dsTabela);
+  if oModelMunicipio.ListarMunicipios(frmMunicipio.dsTabela) then
+  begin
+    frmMunicipio.btnExcluir.Enabled := False;
+    frmMunicipio.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmMunicipio.btnExcluir.Enabled := True;
+    frmMunicipio.BtnAlterar.Enabled := True;
+  end;
+end;
+
+procedure TMunicipioControler.OnChangeEdtPesquisa(Sender: TObject);
+begin
+  if oModelMunicipio.Localizar(frmMunicipio.edtPesquisa.Text) then
+  begin
+    frmMunicipio.btnExcluir.Enabled := False;
+    frmMunicipio.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmMunicipio.btnExcluir.Enabled := True;
+    frmMunicipio.BtnAlterar.Enabled := True;
+  end;
 end;
 
 procedure TMunicipioControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-
-  if Key = VK_F2 then
-    frmMunicipio.edtPesquisa.SetFocus;
-
-  if Key = VK_F5 then
-    ListarMunicipios;
-end;
-
-procedure TMunicipioControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #8 then
+  if frmMunicipio.edtPesquisa.Enabled then
   begin
-    if Length(Trim(frmMunicipio.edtPesquisa.Text)) = 1 then
+    if Key = VK_F2 then
+      frmMunicipio.edtPesquisa.SetFocus;
+
+    if Key = VK_F5 then
       ListarMunicipios;
   end;
-end;
-
-procedure TMunicipioControler.Pesquisar(Sender: TObject);
-begin
-  if (Trim(frmMunicipio.edtPesquisa.Text) <> EmptyStr) then
-  begin
-    if (oRegraMunicipio.Pesquisar(oModelMunicipio,
-      frmMunicipio.edtPesquisa.Text) = False) then
-      ShowMessage('Nenhum registro encontrado.');
-  end
-  else
-    ShowMessage('Campo pesquisa vazio.');
 end;
 
 procedure TMunicipioControler.PopularComboBox;
@@ -242,9 +263,6 @@ begin
     Integer(frmMunicipio.cbEstado.Items.Objects
     [frmMunicipio.cbEstado.ItemIndex]);
 
-  // oListaEstados.Item
-  // [frmMunicipio.cbEstado.Items[frmMunicipio.cbEstado.ItemIndex]].IdUF;
-
   if (oMunicipioDto.Nome <> '') and (frmMunicipio.cbEstado.ItemIndex <> -1) then
   begin
     ShowMessage(oRegraMunicipio.Salvar(oModelMunicipio, oMunicipioDto));
@@ -252,15 +270,6 @@ begin
     oRegraMunicipio.Limpar(oMunicipioDto);
     frmMunicipio.edtNome.Text := EmptyStr;
     frmMunicipio.cbEstado.ItemIndex := -1;
-    frmMunicipio.PageControl1.ActivePage := frmMunicipio.tsTabela;
-    frmMunicipio.tsTabela.Enabled := True;
-    frmMunicipio.btnInserir.Enabled := True;
-    frmMunicipio.BtnAlterar.Enabled := True;
-    frmMunicipio.btnExcluir.Enabled := True;
-    frmMunicipio.BtnSalvar.Enabled := False;
-    frmMunicipio.BtnCancelar.Enabled := False;
-    frmMunicipio.Caption := 'Listagem de Municipios';
-    ListarMunicipios;
   end
   else
     ShowMessage('Prencha todos os campos');

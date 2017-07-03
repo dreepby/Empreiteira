@@ -12,7 +12,6 @@ type
     function VerificarExcluir(var AModel: IModelMunicipioInterface;
       AId: Integer): Boolean;
     function Deletar(var AModel: IModelMunicipioInterface; AId: Integer): Boolean;
-    function Pesquisar(var AModel: IModelMunicipioInterface; ANome: String): Boolean;
     function Salvar(var AModel: IModelMunicipioInterface; AMunicipio: TMunicipioDto): String;
   end;
 
@@ -33,12 +32,6 @@ begin
   AMunicipio.oEstado.IdUF := 0;
   AMunicipio.oEstado.Nome := EmptyStr;
   AMunicipio.oEstado.UF := EmptyStr;
-end;
-
-function TMunicipioRegra.Pesquisar(var AModel: IModelMunicipioInterface;
-  ANome: String): Boolean;
-begin
-  Result := AModel.Pesquisar(ANome);
 end;
 
 function TMunicipioRegra.Salvar(var AModel: IModelMunicipioInterface;

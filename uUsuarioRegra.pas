@@ -20,7 +20,6 @@ type
       ATexto, ACampo: String): Boolean;
     function Salvar(const AModel: IModelUsuarioInterface;
       AUsuario: TUsuarioDto): Boolean;
-    procedure DesativarFiltro(const AModel: IModelUsuarioInterface);
   end;
 
 implementation
@@ -31,11 +30,6 @@ function TUsuarioRegra.Deletar(const AModel: IModelUsuarioInterface;
   AId: Integer): Boolean;
 begin
   Result := AModel.Deletar(AId);
-end;
-
-procedure TUsuarioRegra.DesativarFiltro(const AModel: IModelUsuarioInterface);
-begin
-  AModel.DesativarFiltro;
 end;
 
 procedure TUsuarioRegra.Limpar(AUsuario: TUsuarioDto);

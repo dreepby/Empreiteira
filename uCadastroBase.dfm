@@ -29,12 +29,12 @@ object frmCadastroBase: TfrmCadastroBase
     object Label1: TLabel
       Left = 32
       Top = 14
-      Width = 63
-      Height = 23
+      Width = 52
+      Height = 19
       Caption = 'Buscar:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False

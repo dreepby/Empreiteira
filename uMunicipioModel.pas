@@ -15,14 +15,15 @@ type
     function BuscarID: Integer;
     function Alterar(var AMunicipio: TMunicipioDto): Boolean;
     function Inserir(var AMunicipio: TMunicipioDto): Boolean;
-    procedure ListarMunicipios(var DsEstado: TDataSource);
+    function ListarMunicipios(var DsEstado: TDataSource): Boolean;
     function Deletar(const AIDMunicipio: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function VerificarMunicipio(AMunicipio: TMunicipioDto;
       out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
       TMunicipioDto>; const AId: Integer): Boolean;
+    function Localizar(ATexto: String): Boolean;
+    function BuscarRegistro(AMunicipio: TMunicipioDto): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -103,6 +104,28 @@ begin
   end;
 end;
 
+function TMunicipioModel.BuscarRegistro(AMunicipio: TMunicipioDto): Boolean;
+var
+  oQuery: TFDQuery;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open('select Nome, Municipio_idUf from Municipio where IdMunicipio =' +IntToStr(AMunicipio.idMunicipio));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      AMunicipio.Nome := oQuery.FieldByName('Nome').AsString;
+      AMunicipio.oEstado.IdUF := oQuery.FieldByName('Municipio_idUf').AsInteger;
+      Result := True;
+    end
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
 constructor TMunicipioModel.Create;
 begin
   oQueryListarMunicipios := TFDQuery.Create(nil);
@@ -134,29 +157,21 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-procedure TMunicipioModel.ListarMunicipios(var DsEstado: TDataSource);
+function TMunicipioModel.ListarMunicipios(var DsEstado: TDataSource): Boolean;
 begin
   oQueryListarMunicipios.Connection := TSingletonConexao.GetInstancia;
   oQueryListarMunicipios.Open
     ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
   DsEstado.DataSet := oQueryListarMunicipios;
+  Result := oQueryListarMunicipios.IsEmpty;
 end;
 
-function TMunicipioModel.Pesquisar(ANome: String): Boolean;
+function TMunicipioModel.Localizar(ATexto: String): Boolean;
 begin
-  oQueryListarMunicipios.Open
-    ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf WHERE m.Nome LIKE "%'
-    + ANome + '%"');
-  if (not(oQueryListarMunicipios.IsEmpty)) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-    oQueryListarMunicipios.Open
-      ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
-  end;
+  oQueryListarMunicipios.Filter := 'UPPER(Nome) LIKE ''%' +
+    UpperCase(ATexto.Trim) + '%''';
+  oQueryListarMunicipios.Filtered := True;
+  Result := oQueryListarMunicipios.IsEmpty;
 end;
 
 function TMunicipioModel.VerificarExcluir(AId: Integer): Boolean;

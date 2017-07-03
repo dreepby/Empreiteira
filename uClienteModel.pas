@@ -15,13 +15,11 @@ type
     function BuscarID: Integer;
     function Alterar(var ACliente: TClienteDto): Boolean;
     function Inserir(var ACliente: TClienteDto): Boolean;
-    procedure ListarClientes(var DsTabela: TDataSource);
+    function ListarClientes(var DsTabela: TDataSource): Boolean;
     function Deletar(const ACliente: Integer): Boolean;
-    function Pesquisar(ACampo: String; AValor: String): Boolean;
     function VerificarCliente(ACliente: TClienteDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String; ACampo: String): Boolean;
-    procedure DesativarFiltro;
     function BuscarRegistro(var ACliente: TClienteDto): Boolean;
 
     constructor Create;
@@ -114,11 +112,6 @@ begin
     ('delete from cliente where idCliente = ' + IntToStr(ACliente)) > 0;
 end;
 
-procedure TClienteModel.DesativarFiltro;
-begin
-  oQueryListaClientes.Filtered := False;
-end;
-
 destructor TClienteModel.Destroy;
 begin
   oQueryListaClientes.Close;
@@ -144,7 +137,7 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
-procedure TClienteModel.ListarClientes(var DsTabela: TDataSource);
+function TClienteModel.ListarClientes(var DsTabela: TDataSource): Boolean;
 begin
   oQueryListaClientes.Filtered := False;
   oQueryListaClientes.Connection := TSingletonConexao.GetInstancia;
@@ -156,52 +149,15 @@ begin
     + ' municipio m ON b.bairro_idMunicipio = m.idMunicipio INNER JOIN uf u' +
     ' ON m.Municipio_idUF = u.idUF');
   DsTabela.DataSet := oQueryListaClientes;
+  Result := oQueryListaClientes.IsEmpty;
 end;
 
 function TClienteModel.Localizar(ATexto, ACampo: String): Boolean;
 begin
-  Result := True;
-  oQueryListaClientes.Filtered := False;
-  if ATexto.Trim <> EmptyStr then
-  begin
     oQueryListaClientes.Filter := 'UPPER(' + ACampo + ') LIKE ''%' +
       UpperCase(ATexto.Trim) + '%''';
     oQueryListaClientes.Filtered := True;
-    Result := oQueryListaClientes.RecordCount > 0;
-    if (not(Result)) then
-      oQueryListaClientes.Filtered := False;
-  end;
-end;
-
-function TClienteModel.Pesquisar(ACampo: String; AValor: String): Boolean;
-var
-  oQuery: TFDQuery;
-begin
-  oQuery := TFDQuery.Create(nil);
-  Result := False;
-  try
-    oQuery.Open
-      ('SELECT c.idCliente, c.Nome, c.CPF, c.CNPJ, c.Telefone, c.Celular,' +
-      ' c.Observacao,c.Complemento, CONCAT("Rua: ",c.Rua, ", Nº: " ,c.Numero) as '
-      + ' endereco, c.CEP, b.Nome as bairro, CONCAT(m.Nome, " - ",u.UF) as municipio FROM '
-      + ' cliente c INNER JOIN bairro b ON c.cliente_idBairro = b.idBairro INNER JOIN '
-      + ' municipio m ON b.bairro_idMunicipio = m.idMunicipio INNER JOIN uf u' +
-      ' ON m.Municipio_idUF = u.idUF');
-    if (not(oQuery.IsEmpty)) then
-    begin
-      oQueryListaClientes.Open
-        ('SELECT c.idCliente, c.Nome, c.CPF, c.CNPJ, c.Telefone, c.Celular,' +
-        ' c.Observacao,c.Complemento, CONCAT("Rua: ",c.Rua, ", Nº: " ,c.Numero) as '
-        + ' endereco, c.CEP, b.Nome as bairro, CONCAT(m.Nome, " - ",u.UF) as municipio FROM '
-        + ' cliente c INNER JOIN bairro b ON c.cliente_idBairro = b.idBairro INNER JOIN '
-        + ' municipio m ON b.bairro_idMunicipio = m.idMunicipio INNER JOIN uf u'
-        + ' ON m.Municipio_idUF = u.idUF');
-      Result := True;
-    end;
-  finally
-    if Assigned(oQuery) then
-      FreeAndNil(oQuery);
-  end;
+    Result := oQueryListaClientes.IsEmpty;
 end;
 
 function TClienteModel.VerificarCliente(ACliente: TClienteDto;

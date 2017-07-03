@@ -17,6 +17,7 @@ type
     cbEstado: TComboBox;
     procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
     procedure cbMunicipioKeyPress(Sender: TObject; var Key: Char);
+    procedure cbEstadoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -26,6 +27,13 @@ type
 implementation
 
 {$R *.dfm}
+
+procedure TfrmBairro.cbEstadoKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = #13 then
+    cbMunicipio.SetFocus;
+end;
 
 procedure TfrmBairro.cbMunicipioKeyPress(Sender: TObject; var Key: Char);
 begin
@@ -38,7 +46,7 @@ procedure TfrmBairro.edtNomeKeyPress(Sender: TObject; var Key: Char);
 begin
   inherited;
   if Key = #13 then
-    cbMunicipio.SetFocus;
+    cbEstado.SetFocus;
 end;
 
 end.

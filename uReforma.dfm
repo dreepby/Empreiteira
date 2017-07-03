@@ -1,32 +1,32 @@
 inherited frmReforma: TfrmReforma
   Caption = 'Listagem de Reformas'
   ClientHeight = 472
-  ClientWidth = 976
-  ExplicitWidth = 982
+  ClientWidth = 977
+  ExplicitWidth = 983
   ExplicitHeight = 501
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
-    Width = 976
-    ExplicitWidth = 976
+    Width = 977
+    ExplicitWidth = 977
   end
   inherited Panel2: TPanel
-    Width = 976
+    Width = 977
     Height = 360
-    ExplicitWidth = 976
+    ExplicitWidth = 977
     ExplicitHeight = 360
     inherited PageControl1: TPageControl
-      Width = 966
+      Width = 967
       Height = 350
-      ExplicitWidth = 966
+      ExplicitWidth = 967
       ExplicitHeight = 350
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
-        ExplicitWidth = 958
+        ExplicitWidth = 959
         ExplicitHeight = 322
         inherited DBGrid1: TDBGrid
-          Width = 958
+          Width = 959
           Height = 322
           Columns = <
             item
@@ -75,12 +75,12 @@ inherited frmReforma: TfrmReforma
       inherited tsDados: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
-        ExplicitWidth = 958
+        ExplicitWidth = 959
         ExplicitHeight = 322
         object pageControl2: TPageControl
           Left = 0
           Top = 0
-          Width = 958
+          Width = 959
           Height = 322
           ActivePage = tsPedido
           Align = alClient
@@ -88,78 +88,48 @@ inherited frmReforma: TfrmReforma
           object tsPedido: TTabSheet
             Caption = 'Pedido'
             object Label2: TLabel
-              Left = 117
-              Top = 13
-              Width = 73
+              Left = 380
+              Top = 7
+              Width = 82
               Height = 13
-              Caption = 'Data do pedido'
+              Caption = 'Data do pedido *'
             end
             object Label3: TLabel
-              Left = 341
-              Top = 13
-              Width = 79
+              Left = 641
+              Top = 7
+              Width = 88
               Height = 13
-              Caption = 'Data de entrega'
+              Caption = 'Data de entrega *'
             end
             object Label4: TLabel
-              Left = 341
-              Top = 63
+              Left = 92
+              Top = 59
               Width = 51
               Height = 13
               Caption = 'Atendente'
             end
             object Label5: TLabel
-              Left = 117
-              Top = 115
+              Left = 92
+              Top = 111
               Width = 144
               Height = 13
               Caption = 'Usuario que est'#225' cadastrando'
             end
             object Label7: TLabel
-              Left = 117
-              Top = 175
+              Left = 92
+              Top = 159
               Width = 64
               Height = 13
               Caption = 'Obeserva'#231#227'o'
             end
-            object dtpPedido: TDateTimePicker
-              Left = 117
-              Top = 32
-              Width = 186
-              Height = 27
-              Date = 42903.660658750000000000
-              Time = 42903.660658750000000000
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -16
-              Font.Name = 'Tahoma'
-              Font.Style = []
-              ParentFont = False
-              TabOrder = 0
-            end
-            object dtpEntrega: TDateTimePicker
-              Left = 341
-              Top = 32
-              Width = 186
-              Height = 27
-              Date = 42903.660658750000000000
-              Time = 42903.660658750000000000
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -16
-              Font.Name = 'Tahoma'
-              Font.Style = []
-              ParentFont = False
-              TabOrder = 1
-            end
             object edtCpfCnpj: TLabeledEdit
-              Left = 117
-              Top = 82
-              Width = 186
+              Left = 92
+              Top = 26
+              Width = 202
               Height = 27
-              EditLabel.Width = 97
+              EditLabel.Width = 106
               EditLabel.Height = 13
-              EditLabel.Caption = 'CPF/CNPJ do cliente'
+              EditLabel.Caption = 'CPF/CNPJ do cliente *'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -16
@@ -167,20 +137,50 @@ inherited frmReforma: TfrmReforma
               Font.Style = []
               MaxLength = 14
               ParentFont = False
-              TabOrder = 2
+              TabOrder = 0
             end
             object btnPesquisarCliente: TBitBtn
-              Left = 279
-              Top = 82
+              Left = 294
+              Top = 26
               Width = 24
               Height = 27
               Caption = 'P'
+              TabOrder = 1
+            end
+            object dtpPedido: TDateTimePicker
+              Left = 380
+              Top = 26
+              Width = 199
+              Height = 27
+              Date = 42903.660658750000000000
+              Time = 42903.660658750000000000
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object dtpEntrega: TDateTimePicker
+              Left = 641
+              Top = 26
+              Width = 201
+              Height = 27
+              Date = 42903.660658750000000000
+              Time = 42903.660658750000000000
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
               TabOrder = 3
             end
             object cbAtendente: TComboBox
-              Left = 341
-              Top = 82
-              Width = 186
+              Left = 92
+              Top = 78
+              Width = 750
               Height = 27
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
@@ -191,9 +191,9 @@ inherited frmReforma: TfrmReforma
               TabOrder = 4
             end
             object cbUsuario: TComboBox
-              Left = 117
-              Top = 134
-              Width = 186
+              Left = 92
+              Top = 126
+              Width = 750
               Height = 27
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
@@ -204,10 +204,11 @@ inherited frmReforma: TfrmReforma
               TabOrder = 5
             end
             object moObservacao: TMemo
-              Left = 117
-              Top = 191
-              Width = 410
+              Left = 92
+              Top = 178
+              Width = 750
               Height = 95
+              MaxLength = 120
               TabOrder = 6
               WantReturns = False
             end
@@ -358,13 +359,15 @@ inherited frmReforma: TfrmReforma
               end
             end
             object Panel5: TPanel
-              Left = 523
+              Left = 524
               Top = 0
               Width = 427
               Height = 294
               Align = alRight
               BevelOuter = bvNone
               TabOrder = 2
+              ExplicitLeft = 311
+              ExplicitHeight = 211
               object Panel8: TPanel
                 Left = 0
                 Top = 0
@@ -421,6 +424,7 @@ inherited frmReforma: TfrmReforma
                 Align = alClient
                 BevelOuter = bvNone
                 TabOrder = 1
+                ExplicitHeight = 129
                 object dbgProdutos: TDBGrid
                   Left = 0
                   Top = 0
@@ -478,6 +482,7 @@ inherited frmReforma: TfrmReforma
                 Align = alBottom
                 BevelOuter = bvNone
                 TabOrder = 2
+                ExplicitTop = 170
                 object Panel7: TPanel
                   Left = 219
                   Top = 0
@@ -539,12 +544,12 @@ inherited frmReforma: TfrmReforma
   end
   inherited Panel3: TPanel
     Top = 417
-    Width = 976
+    Width = 977
     ExplicitTop = 417
-    ExplicitWidth = 976
+    ExplicitWidth = 977
     inherited Panel4: TPanel
-      Left = 221
-      ExplicitLeft = 221
+      Left = 222
+      ExplicitLeft = 222
       inherited btnInserir: TBitBtn
         Left = 23
         Top = 1

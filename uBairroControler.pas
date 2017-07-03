@@ -6,7 +6,8 @@ uses
   System.SysUtils, Data.DB, System.Generics.Collections, uBairroDto,
   uBairroModel, uBairro, uMunicipioDto, uMunicipioModel, uBairroRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows, uEstadoDto,
-  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel, uBairroInterfaceModel;
+  uEstadoModel, uInterfaceControler, uMunicipioInterfaceModel,
+  uBairroInterfaceModel;
 
 type
   TBairroControler = class(TInterfacedObject, IControlerInterface)
@@ -25,12 +26,12 @@ type
     procedure ListarBairros;
     procedure Alterar(Sender: TObject);
     procedure fecharBairro(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure PopularComboBoxEstado;
     procedure PopularComboBoxMunicipio(AID: Integer);
     procedure OnSelectCbEstado(Sender: TObject);
+    procedure OnChangeEdtPesquisa(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -48,22 +49,27 @@ implementation
 procedure TBairroControler.abrirForm;
 begin
   if (not(Assigned(frmBairro))) then
+  begin
     frmBairro := TfrmBairro.Create(nil);
 
-  frmBairro.tsDados.Enabled := False;
-  frmBairro.BtnSalvar.Enabled := False;
-  frmBairro.BtnCancelar.Enabled := False;
-  frmBairro.BtnFechar.OnClick := fecharBairro;
-  frmBairro.BtnSalvar.OnClick := Salvar;
-  frmBairro.btnInserir.OnClick := Inserir;
-  frmBairro.BtnAlterar.OnClick := Alterar;
-  frmBairro.BtnCancelar.OnClick := Cancelar;
-  frmBairro.btnExcluir.OnClick := Excluir;
-  ListarBairros;
-  frmBairro.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmBairro.OnKeyDown := OnKeyDownForm;
-  frmBairro.cbEstado.OnSelect := OnSelectCbEstado;
-  frmBairro.Show;
+    frmBairro.OnActivate := FormActivate;
+    frmBairro.tsDados.Enabled := False;
+    frmBairro.BtnSalvar.Enabled := False;
+    frmBairro.BtnCancelar.Enabled := False;
+    frmBairro.BtnFechar.OnClick := fecharBairro;
+    frmBairro.BtnSalvar.OnClick := Salvar;
+    frmBairro.btnInserir.OnClick := Inserir;
+    frmBairro.BtnAlterar.OnClick := Alterar;
+    frmBairro.BtnCancelar.OnClick := Cancelar;
+    frmBairro.btnExcluir.OnClick := Excluir;
+    ListarBairros;
+    frmBairro.edtPesquisa.OnChange := OnChangeEdtPesquisa;
+    frmBairro.OnKeyDown := OnKeyDownForm;
+    frmBairro.cbEstado.OnSelect := OnSelectCbEstado;
+    frmBairro.Show;
+  end
+  else
+    frmBairro.Show;
 end;
 
 procedure TBairroControler.Alterar(Sender: TObject);
@@ -79,7 +85,7 @@ begin
   frmBairro.edtNome.Text := frmBairro.DBGrid1.Fields[1].AsString;
   sEstado := frmBairro.DBGrid1.Fields[3].AsString;
   PopularComboBoxEstado;
-
+  frmBairro.edtPesquisa.Enabled := False;
   frmBairro.cbEstado.ItemIndex := frmBairro.cbEstado.Items.IndexOf(sEstado);
   PopularComboBoxMunicipio(oEstadoModel.Buscar(sEstado));
   frmBairro.cbMunicipio.ItemIndex := frmBairro.cbMunicipio.Items.IndexOf
@@ -111,6 +117,8 @@ begin
   frmBairro.Caption := 'Listagem de Bairros';
   frmBairro.cbMunicipio.Enabled := False;
   oBairroRegra.Limpar(oBairroDto);
+  frmBairro.edtPesquisa.Enabled := True;
+  ListarBairros;
 end;
 
 constructor TBairroControler.Create;
@@ -185,8 +193,15 @@ begin
   FreeAndNil(frmBairro);
 end;
 
+procedure TBairroControler.FormActivate(Sender: TObject);
+begin
+  if frmBairro.edtPesquisa.Enabled then
+    ListarBairros;
+end;
+
 procedure TBairroControler.Inserir(Sender: TObject);
 begin
+  frmBairro.edtPesquisa.Enabled := False;
   frmBairro.tsDados.Enabled := True;
   frmBairro.Caption := 'Cadastro de Bairro';
   frmBairro.PageControl1.ActivePage := frmBairro.tsDados;
@@ -202,7 +217,30 @@ end;
 
 procedure TBairroControler.ListarBairros;
 begin
-  oBairroModel.ListarBairros(frmBairro.dsTabela);
+  if oBairroModel.ListarBairros(frmBairro.dsTabela) then
+  begin
+    frmBairro.BtnAlterar.Enabled := False;
+    frmBairro.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmBairro.BtnAlterar.Enabled := True;
+    frmBairro.btnExcluir.Enabled := True;
+  end;
+end;
+
+procedure TBairroControler.OnChangeEdtPesquisa(Sender: TObject);
+begin
+  if oBairroModel.Localizar(frmBairro.edtPesquisa.Text) then
+  begin
+    frmBairro.btnExcluir.Enabled := False;
+    frmBairro.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmBairro.btnExcluir.Enabled := True;
+    frmBairro.BtnAlterar.Enabled := True;
+  end;
 end;
 
 procedure TBairroControler.OnKeyDownForm(Sender: TObject; var Key: Word;
@@ -215,33 +253,10 @@ begin
     ListarBairros;
 end;
 
-procedure TBairroControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #8 then
-  begin
-    if Length(Trim(frmBairro.edtPesquisa.Text)) = 1 then
-      ListarBairros
-    else if Length(Trim(frmBairro.edtPesquisa.Text)) = 0 then
-      ListarBairros;
-
-  end;
-end;
-
 procedure TBairroControler.OnSelectCbEstado(Sender: TObject);
 begin
   PopularComboBoxMunicipio(oListaEstados.Items[frmBairro.cbEstado.Items
     [frmBairro.cbEstado.ItemIndex]].IdUF);
-end;
-
-procedure TBairroControler.Pesquisar(Sender: TObject);
-begin
-  try
-    oBairroRegra.Localizar(oBairroModel, frmBairro.edtPesquisa.Text);
-  except
-    on E: Exception do
-      ShowMessage(E.Message);
-  end;
 end;
 
 procedure TBairroControler.PopularComboBoxMunicipio(AID: Integer);
@@ -292,15 +307,7 @@ begin
     oBairroRegra.Limpar(oBairroDto);
     frmBairro.edtNome.Text := EmptyStr;
     frmBairro.cbEstado.ItemIndex := -1;
-    frmBairro.PageControl1.ActivePage := frmBairro.tsTabela;
-    frmBairro.tsTabela.Enabled := True;
-    frmBairro.btnInserir.Enabled := True;
-    frmBairro.BtnAlterar.Enabled := True;
-    frmBairro.btnExcluir.Enabled := True;
-    frmBairro.BtnSalvar.Enabled := False;
-    frmBairro.BtnCancelar.Enabled := False;
-    frmBairro.Caption := 'Listagem de Municipios';
-    ListarBairros;
+    frmBairro.cbMunicipio.Clear;
   end
   else
     ShowMessage('Prencha todos os campos');

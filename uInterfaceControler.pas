@@ -13,7 +13,6 @@ type
     procedure Inserir(Sender: TObject);
     procedure Cancelar(Sender: TObject);
     procedure Alterar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
   end;
 

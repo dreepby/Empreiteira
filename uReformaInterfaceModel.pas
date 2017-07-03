@@ -10,12 +10,10 @@ type
     function BuscarID: Integer;
     function Alterar(var AReforma: TReformaDto): Boolean;
     function Inserir(var AReforma: TReformaDto): Boolean;
-    procedure ListarReformas(var DsTabela: TDataSource);
+    function ListarReformas(var DsTabela: TDataSource): Boolean;
     function Deletar(const AID: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function VerificarExcluir(AID: Integer): Boolean;
-    function ADDListaHash(var oReforma: TObjectDictionary<string, TReformaDto>;
-      const AID: Integer): Boolean;
+    function BuscarRegistro(var AReforma: TReformaDto): Boolean;
   end;
 
 implementation

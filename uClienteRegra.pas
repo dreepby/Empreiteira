@@ -14,9 +14,6 @@ type
     function VerificarExcluir(const AModel: IModelClienteInterface;
       AId: Integer): Boolean;
     function Deletar(var AModel: IModelClienteInterface; AId: Integer): Boolean;
-    function Localizar(const AModel: IModelClienteInterface;
-      ATexto, ACampo: String): Boolean;
-    procedure DesativarFiltro(const AModel: IModelClienteInterface);
     function Salvar(var AModel: IModelClienteInterface;
       ACliente: TClienteDto): Boolean;
     function PopularListaMunicipios(const AModel: IModelMunicipioInterface;
@@ -47,11 +44,6 @@ begin
   Result := AModel.Deletar(AId);
 end;
 
-procedure TClienteRegra.DesativarFiltro(const AModel: IModelClienteInterface);
-begin
-  AModel.DesativarFiltro;
-end;
-
 procedure TClienteRegra.Limpar(ACliente: TClienteDto);
 begin
   ACliente.idCliente := 0;
@@ -70,12 +62,6 @@ begin
   ACliente.oMunicipio.Nome := EmptyStr;
   ACliente.oEstado.IdUF := 0;
   ACliente.oEstado.Nome := EmptyStr;
-end;
-
-function TClienteRegra.Localizar(const AModel: IModelClienteInterface;
-  ATexto, ACampo: String): Boolean;
-begin
-  Result := AModel.Localizar(ATexto, ACampo);
 end;
 
 function TClienteRegra.PopularListaBairros(const AModel: IModelBairroInterface;

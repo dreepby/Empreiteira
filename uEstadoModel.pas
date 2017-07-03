@@ -23,8 +23,9 @@ type
     function Ler(var AEstado: TEstadoDto): Boolean;
     procedure ListarEstados(var DsEstado: TDataSource);
     function VerificarUF(AUF: TEstadoDto; out AId: integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function Buscar(ANome: String): integer;
+    function Localizar(ATexto: String): Boolean;
+    function IsEmpty: Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -150,6 +151,11 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
+function TEstadoModel.IsEmpty: Boolean;
+begin
+  Result := oQueryListarEstados.IsEmpty;
+end;
+
 function TEstadoModel.Ler(var AEstado: TEstadoDto): Boolean;
 var
   oQuery: TFDQuery;
@@ -175,23 +181,17 @@ end;
 procedure TEstadoModel.ListarEstados(var DsEstado: TDataSource);
 begin
   oQueryListarEstados.Connection := TSingletonConexao.GetInstancia;
+  oQueryListarEstados.Filtered := False;
   oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
   DsEstado.DataSet := oQueryListarEstados;
 end;
 
-function TEstadoModel.Pesquisar(ANome: String): Boolean;
+function TEstadoModel.Localizar(ATexto: String): Boolean;
 begin
-  oQueryListarEstados.Open('select iduf, Nome, uf from uf WHERE Nome LIKE "%' +
-    ANome + '%"');
-  if (not(oQueryListarEstados.IsEmpty)) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-    oQueryListarEstados.Open('select iduf, Nome, uf  from uf');
-  end;
+  oQueryListarEstados.Filter := 'UPPER(Nome) LIKE ''%' +
+    UpperCase(ATexto.Trim) + '%''';
+  oQueryListarEstados.Filtered := True;
+  Result := oQueryListarEstados.IsEmpty;
 end;
 
 function TEstadoModel.VerificarExcluir(AId: integer): Boolean;

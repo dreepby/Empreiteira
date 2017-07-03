@@ -9,10 +9,12 @@ uses
 
 type
   TfrmUsuario = class(TfrmCadastroBase)
-    edtNome: TLabeledEdit;
+    cbPesquisa: TComboBox;
     edtCPF: TMaskEdit;
     Label2: TLabel;
-    cbPesquisa: TComboBox;
+    edtNome: TLabeledEdit;
+    procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
+    procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -23,5 +25,19 @@ type
 implementation
 
 {$R *.dfm}
+
+procedure TfrmUsuario.edtCPFKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = #13 then
+    edtNome.SetFocus;
+end;
+
+procedure TfrmUsuario.edtNomeKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = #13 then
+    BtnSalvar.Click;
+end;
 
 end.

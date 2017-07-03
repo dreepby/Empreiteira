@@ -10,7 +10,6 @@ type
   public
     procedure Limpar(ABairro: TBairroDto);
     function VerificarExcluir(var AModel: IModelBairroInterface; AId: Integer): Boolean;
-    function Localizar(const AModel: IModelBairroInterface; ATexto: String): Boolean;
     function Deletar(var AModel: IModelBairroInterface; AId: Integer): Boolean;
     function Salvar(var AModel: IModelBairroInterface; ABairro: TBairroDto): String;
 
@@ -32,15 +31,6 @@ begin
   ABairro.oMunicipio.idMunicipio := 0;
   ABairro.oMunicipio.Nome := EmptyStr;
 end;
-
-function TBairroRegra.Localizar(const AModel: IModelBairroInterface; ATexto: String): Boolean;
-begin
-  Result := AModel.Localizar(ATexto);
-  if not(Result) then
-    raise Exception.Create('Nenhum registro encontrado.');
-end;
-
-
 
 function TBairroRegra.Salvar(var AModel: IModelBairroInterface;
   ABairro: TBairroDto): String;

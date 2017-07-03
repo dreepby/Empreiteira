@@ -66,7 +66,11 @@ uses
   uProdutoAmbienteModel in 'uProdutoAmbienteModel.pas',
   uProdutoAmbienteInterfaceModel in 'uProdutoAmbienteInterfaceModel.pas',
   uListagemClientes in 'uListagemClientes.pas' {frmListagemClientes},
-  uListagemClientesController in 'uListagemClientesController.pas';
+  uListagemClientesController in 'uListagemClientesController.pas',
+  uProdutoReformaDto in 'uProdutoReformaDto.pas',
+  uProdutoReformaModel in 'uProdutoReformaModel.pas',
+  uProdutoReformaInterfaceModel in 'uProdutoReformaInterfaceModel.pas',
+  uArrayDinamicoInteger in 'uArrayDinamicoInteger.pas';
 
 {$R *.res}
 

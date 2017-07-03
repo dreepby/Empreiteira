@@ -6,7 +6,7 @@ uses
   System.SysUtils, FireDAC.Comp.Client, Data.DB, FireDAC.DApt, FireDAC.Comp.UI,
   FireDAC.Comp.DataSet, System.Generics.Collections,
   uAmbienteReformaDto, uClassSingletonConexao, uAmbienteReformaInterfaceModel,
-  uAmbienteDto;
+  uAmbienteDto, uArrayDinamicoInteger;
 
 type
   TAmbienteReformaModel = class(TInterfacedObject,
@@ -19,11 +19,46 @@ type
     function VerificarExcluir(AId: Integer): Boolean;
     function BuscarRegistrosReforma(var oLista
       : TObjectDictionary<string, TAmbienteDto>; AidReforma: Integer): Boolean;
+    function BuscarArrayAmbientesReforma(const ACodigoReforma: Integer;
+      var oArray: TArrayDinamico): Boolean;
   end;
 
 implementation
 
 { TAmbienteReformaModel }
+
+function TAmbienteReformaModel.BuscarArrayAmbientesReforma(const ACodigoReforma
+  : Integer; var oArray: TArrayDinamico): Boolean;
+var
+  oQuery: TFDQuery;
+  i: Integer;
+begin
+  i := 0;
+  Result := False;
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    oQuery.Open
+      ('select IdAmbienteReforma as ID from AmbienteReforma where Ambiente_idReforma = '
+      + IntToStr(ACodigoReforma));
+    if (not(oQuery.IsEmpty)) then
+    begin
+      Result := True;
+      SetLength(oArray, oQuery.RecordCount);
+      oQuery.First;
+      while not(oQuery.Eof) do
+      begin
+        oArray[i] := oQuery.FieldByName('ID').AsInteger;
+        oQuery.Next;
+        if not(oQuery.IsEmpty) then
+          i := i + 1;
+      end;
+    end;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
 
 function TAmbienteReformaModel.BuscarID: Integer;
 var
@@ -43,7 +78,8 @@ begin
 end;
 
 function TAmbienteReformaModel.BuscarRegistrosReforma
-  (var oLista: TObjectDictionary<string, TAmbienteDto>; AidReforma: Integer): Boolean;
+  (var oLista: TObjectDictionary<string, TAmbienteDto>;
+  AidReforma: Integer): Boolean;
 var
   oAmbienteDTO: TAmbienteDto;
   oQuery: TFDQuery;
@@ -55,7 +91,7 @@ begin
     oQuery.Open
       ('SELECT a.idAmbientes, a.Descricao FROM ambienteReforma ar INNER' +
       ' JOIN Ambiente a ON ar.Ambiente_idAmbientes = a.idAmbientes WHERE ' +
-      'Ambiente_idReforma = '+IntToStr(AidReforma));
+      'Ambiente_idReforma = ' + IntToStr(AidReforma));
 
     if (not(oQuery.IsEmpty)) then
     begin

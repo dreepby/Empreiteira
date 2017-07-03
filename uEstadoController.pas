@@ -1,5 +1,5 @@
 unit uEstadoController;
-
+
 interface
 
 uses
@@ -22,9 +22,10 @@ type
     procedure ListarEstados;
     procedure Alterar(Sender: TObject);
     procedure fecharEstado(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
+    procedure OnChangeEdtPesquisa(Sender: TObject);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormActivate(Sender: TObject);
+    procedure OnExitEdtUf(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -42,28 +43,34 @@ implementation
 procedure TEstadoControler.abrirForm;
 begin
   if (not(Assigned(frmEstados))) then
+  begin
     frmEstados := TfrmEstados.Create(nil);
 
-  frmEstados.tsDados.Enabled := False;
-  frmEstados.BtnSalvar.Enabled := False;
-  frmEstados.BtnCancelar.Enabled := False;
-  frmEstados.BtnFechar.OnClick := fecharEstado;
-  frmEstados.BtnSalvar.OnClick := Salvar;
-  frmEstados.btnInserir.OnClick := Inserir;
-  frmEstados.BtnAlterar.OnClick := Alterar;
-  frmEstados.BtnCancelar.OnClick := Cancelar;
-  frmEstados.btnExcluir.OnClick := Excluir;
-  ListarEstados;
-  frmEstados.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
-  frmEstados.OnKeyDown := OnKeyDownForm;
-  frmEstados.Show;
+    frmEstados.tsDados.Enabled := False;
+    frmEstados.BtnSalvar.Enabled := False;
+    frmEstados.BtnCancelar.Enabled := False;
+    frmEstados.BtnFechar.OnClick := fecharEstado;
+    frmEstados.BtnSalvar.OnClick := Salvar;
+    frmEstados.btnInserir.OnClick := Inserir;
+    frmEstados.BtnAlterar.OnClick := Alterar;
+    frmEstados.BtnCancelar.OnClick := Cancelar;
+    frmEstados.btnExcluir.OnClick := Excluir;
+    ListarEstados;
+    frmEstados.OnActivate := FormActivate;
+    frmEstados.OnKeyDown := OnKeyDownForm;
+    frmEstados.edtPesquisa.OnChange := OnChangeEdtPesquisa;
+    frmEstados.edtUF.OnExit := OnExitEdtUf;
+    frmEstados.Show;
+  end
+  else
+    frmEstados.Show;
 end;
 
 procedure TEstadoControler.Alterar(Sender: TObject);
 begin
 
   oEstadoDto.IdUF := frmEstados.DBGrid1.Fields[0].AsInteger;
-
+  frmEstados.edtPesquisa.Enabled := False;
   frmEstados.tsDados.Enabled := True;
   frmEstados.Caption := 'Alteração de Estado';
   frmEstados.edtNome.Text := frmEstados.DBGrid1.Fields[2].AsString;
@@ -75,6 +82,7 @@ begin
   frmEstados.btnExcluir.Enabled := False;
   frmEstados.BtnSalvar.Enabled := True;
   frmEstados.BtnCancelar.Enabled := True;
+  frmEstados.BtnAlterar.Enabled := False;
 
 end;
 
@@ -92,6 +100,8 @@ begin
   frmEstados.edtUF.Text := EmptyStr;
   frmEstados.Caption := 'Listagem de Estados';
   oRegraEstado.Limpar(oEstadoDto);
+  frmEstados.edtPesquisa.Enabled := True;
+  ListarEstados;
 end;
 
 constructor TEstadoControler.Create;
@@ -150,59 +160,86 @@ begin
   FreeAndNil(frmEstados);
 end;
 
+procedure TEstadoControler.FormActivate(Sender: TObject);
+begin
+  frmEstados.btnInserir.Enabled := False;
+  ListarEstados;
+end;
+
 procedure TEstadoControler.Inserir(Sender: TObject);
 begin
   frmEstados.tsDados.Enabled := True;
   frmEstados.Caption := 'Cadastro de Estado';
   frmEstados.PageControl1.ActivePage := frmEstados.tsDados;
   frmEstados.tsTabela.Enabled := False;
-  frmEstados.btnInserir.Enabled := False;
   frmEstados.BtnAlterar.Enabled := False;
   frmEstados.btnExcluir.Enabled := False;
   frmEstados.BtnSalvar.Enabled := True;
   frmEstados.BtnCancelar.Enabled := True;
+  frmEstados.edtPesquisa.Enabled := False;
   frmEstados.edtUF.SetFocus;
 end;
 
 procedure TEstadoControler.ListarEstados;
 begin
   oModelEstado.ListarEstados(frmEstados.dsTabela);
+  if oModelEstado.IsEmpty then
+  begin
+    frmEstados.BtnAlterar.Enabled := False;
+    frmEstados.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmEstados.BtnAlterar.Enabled := True;
+    frmEstados.btnExcluir.Enabled := True;
+  end;
+end;
+
+procedure TEstadoControler.OnChangeEdtPesquisa(Sender: TObject);
+begin
+  if oModelEstado.Localizar(frmEstados.edtPesquisa.Text) then
+  begin
+    frmEstados.btnExcluir.Enabled := False;
+    frmEstados.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmEstados.btnExcluir.Enabled := True;
+    frmEstados.BtnAlterar.Enabled := True;
+  end;
+end;
+
+procedure TEstadoControler.OnExitEdtUf(Sender: TObject);
+var
+  iCodigo: Integer;
+begin
+  oEstadoDto.UF := frmEstados.edtUF.Text;
+  if oModelEstado.VerificarUF(oEstadoDto, iCodigo) then
+  begin
+    if not(oEstadoDto.IdUF = iCodigo) then
+    begin
+      frmEstados.edtUF.SetFocus;
+      ShowMessage('UF já cadastrada.');
+    end;
+  end;
 end;
 
 procedure TEstadoControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_F2 then
-    frmEstados.edtPesquisa.SetFocus;
-
-  if Key = VK_F5 then
-    ListarEstados;
-end;
-
-procedure TEstadoControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #8 then
+  if frmEstados.edtPesquisa.Enabled then
   begin
-    if Length(Trim(frmEstados.edtPesquisa.Text)) = 1 then
+    if Key = VK_F2 then
+      frmEstados.edtPesquisa.SetFocus;
+
+    if Key = VK_F5 then
       ListarEstados;
   end;
 end;
 
-procedure TEstadoControler.Pesquisar(Sender: TObject);
-begin
-  if (Trim(frmEstados.edtPesquisa.Text) <> EmptyStr) then
-  begin
-    if (oRegraEstado.Pesquisar(oModelEstado, frmEstados.edtPesquisa.Text)
-      = False) then
-      ShowMessage('Nenhum registro encontrado.');
-  end
-  else
-    ShowMessage('Campo pesquisa vazio.');
-end;
-
 procedure TEstadoControler.Salvar(Sender: TObject);
 begin
+  frmEstados.BtnSalvar.Enabled := False;
   oEstadoDto.UF := Trim(frmEstados.edtUF.Text);
   oEstadoDto.Nome := Trim(frmEstados.edtNome.Text);
 
@@ -214,19 +251,12 @@ begin
     oRegraEstado.Limpar(oEstadoDto);
     frmEstados.edtNome.Text := EmptyStr;
     frmEstados.edtUF.Text := EmptyStr;
-    frmEstados.PageControl1.ActivePage := frmEstados.tsTabela;
-    frmEstados.tsTabela.Enabled := True;
-    frmEstados.btnInserir.Enabled := True;
-    frmEstados.BtnAlterar.Enabled := True;
-    frmEstados.btnExcluir.Enabled := True;
-    frmEstados.BtnSalvar.Enabled := False;
-    frmEstados.BtnCancelar.Enabled := False;
-    frmEstados.Caption := 'Listagem de Estados';
-    ListarEstados;
+    frmEstados.edtUF.SetFocus;
+
   end
   else
     ShowMessage('Prencha todos os campos');
-
+  frmEstados.BtnSalvar.Enabled := True;
 end;
 
 initialization
@@ -237,3 +267,4 @@ if Assigned(oEstadoControler) then
   FreeAndNil(oEstadoControler);
 
 end.
+

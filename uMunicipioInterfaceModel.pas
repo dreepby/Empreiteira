@@ -10,14 +10,15 @@ type
     function BuscarID: Integer;
     function Alterar(var AMunicipio: TMunicipioDto): Boolean;
     function Inserir(var AMunicipio: TMunicipioDto): Boolean;
-    procedure ListarMunicipios(var DsEstado: TDataSource);
+    function ListarMunicipios(var DsEstado: TDataSource): Boolean;
     function Deletar(const AIDMunicipio: Integer): Boolean;
-    function Pesquisar(ANome: String): Boolean;
     function VerificarMunicipio(AMunicipio: TMunicipioDto;
       out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function ADDListaHash(var oMunicipio: TObjectDictionary<string,
       TMunicipioDto>; const AId: Integer): Boolean;
+    function Localizar(ATexto: String): Boolean;
+    function BuscarRegistro(AMunicipio: TMunicipioDto): Boolean;
   end;
 
 implementation

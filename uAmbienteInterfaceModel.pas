@@ -18,6 +18,7 @@ type
     function Localizar(ATexto: String): Boolean;
     function ADDListaHash(var oLista: TObjectDictionary<string,
       TAmbienteDto>): Boolean;
+    function IsEmpty:Boolean;
   
   end;
 

@@ -13,9 +13,9 @@ type
     Fobservacao: String;
     FoAtendente: TUsuarioDto;
     FidReforma: Integer;
-    Ftotal: double;
     FoCliente: TClienteDto;
     FdataDoPedido: TDate;
+    FTotal: String;
     procedure SetdataDeEntrega(const Value: TDate);
     procedure SetdataDoPedido(const Value: TDate);
     procedure SetidReforma(const Value: Integer);
@@ -23,18 +23,17 @@ type
     procedure Setobservacao(const Value: String);
     procedure SetoCliente(const Value: TClienteDto);
     procedure SetoEscritor(const Value: TUsuarioDto);
-    procedure Settotal(const Value: double);
+
+    procedure SetTotal(const Value: String);
   public
     property idReforma: Integer read FidReforma write SetidReforma;
     property observacao: String read Fobservacao write Setobservacao;
     property dataDoPedido: TDate read FdataDoPedido write SetdataDoPedido;
-    property dataDeEntrega: TDate read FdataDeEntrega
-      write SetdataDeEntrega;
+    property dataDeEntrega: TDate read FdataDeEntrega write SetdataDeEntrega;
     property oCliente: TClienteDto read FoCliente write SetoCliente;
     property oEscritor: TUsuarioDto read FoEscritor write SetoEscritor;
     property oAtendente: TUsuarioDto read FoAtendente write SetoAtendente;
-    property total: double read Ftotal write Settotal;
-
+    property Total: String read FTotal write SetTotal;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -99,9 +98,9 @@ begin
   FoEscritor := Value;
 end;
 
-procedure TReformaDto.Settotal(const Value: double);
+procedure TReformaDto.SetTotal(const Value: String);
 begin
-  Ftotal := Value;
+  FTotal := Value;
 end;
 
 end.

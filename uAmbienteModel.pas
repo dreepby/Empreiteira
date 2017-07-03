@@ -23,6 +23,7 @@ type
     function Localizar(ATexto: String): Boolean;
     function ADDListaHash(var oLista: TObjectDictionary<string,
       TAmbienteDto>): Boolean;
+    function IsEmpty: Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -128,6 +129,11 @@ begin
   Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
 end;
 
+function TAmbienteModel.IsEmpty: Boolean;
+begin
+  Result := oQueryListaAmbientes.IsEmpty;
+end;
+
 procedure TAmbienteModel.ListarAmbientes(var DsTabela: TDataSource);
 begin
   oQueryListaAmbientes.Filtered := False;
@@ -138,17 +144,10 @@ end;
 
 function TAmbienteModel.Localizar(ATexto: String): Boolean;
 begin
-  Result := True;
-  oQueryListaAmbientes.Filtered := False;
-  if ATexto.Trim <> EmptyStr then
-  begin
-    oQueryListaAmbientes.Filter := 'UPPER(DESCRICAO) LIKE ''%' +
-      UpperCase(ATexto.Trim) + '%''';
-    oQueryListaAmbientes.Filtered := True;
-    Result := oQueryListaAmbientes.RecordCount > 0;
-    if (not(Result)) then
-      oQueryListaAmbientes.Filtered := False;
-  end;
+  oQueryListaAmbientes.Filter := 'UPPER(DESCRICAO) LIKE ''%' +
+    UpperCase(ATexto.Trim) + '%''';
+  oQueryListaAmbientes.Filtered := True;
+  Result := oQueryListaAmbientes.IsEmpty;
 end;
 
 function TAmbienteModel.VerificarAmbiente(AAmbiente: TAmbienteDto;
