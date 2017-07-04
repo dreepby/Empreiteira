@@ -87,6 +87,7 @@ var
   VerificarID, iCount, i, iContadorFor2: Integer;
   ArrayAmbientesBanco: TAmbientesReformaArray;
   bVerifica: Boolean;
+  id: Integer;
 begin
   if AProduto.idProduto = 0 then
   begin
@@ -108,7 +109,7 @@ begin
         end;
       end
       else
-        raise Exception.Create('Ocorreu algum erro! 1')
+        raise Exception.Create('Ocorreu algum erro! ')
     end
     else
       raise Exception.Create('Produto já cadastrado.')
@@ -128,12 +129,17 @@ begin
             for iContadorFor2 := 0 to (Length(AAmbientes) - 1) do
             begin
               if ArrayAmbientesBanco[i] = AAmbientes[iContadorFor2] then
-                bVerifica := True;
-              if iContadorFor2 = (Length(AAmbientes) - 1) then
               begin
-                if not(bVerifica) then
-                  AModelProdutoAmbiente.Deletar(ArrayAmbientesBanco[i]);
-              end;
+                id := AModelProdutoAmbiente.CompararAmbientesTabela
+                  (AProduto.idProduto, ArrayAmbientesBanco[i]);
+                bVerifica := True
+              end
+              else
+                bVerifica := False;
+              if (bVerifica) then
+                AModelProdutoAmbiente.Deletar
+                  (ArrayAmbientesBanco[iContadorFor2]);
+              // end;
 
             end;
           end;
@@ -144,7 +150,7 @@ begin
             raise Exception.Create('Selecione ao menos um ambiente')
         end
         else
-          raise Exception.Create('Ocorreu algum erro!3')
+          raise Exception.Create('Ocorreu algum erro!')
       else
       begin
         raise Exception.Create('Produto já cadastrado.');
@@ -155,7 +161,7 @@ begin
       If AModel.Alterar(AProduto) then
         Result := True
       else
-        raise Exception.Create('Ocorreu algum erro!4')
+        raise Exception.Create('Ocorreu algum erro!')
     end;
   end;
 

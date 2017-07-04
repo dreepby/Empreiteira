@@ -258,10 +258,10 @@ end;
 procedure TProdutoControler.Salvar(Sender: TObject);
 var
   sTeste: String;
-  i, iV: integer;
-  iCount: integer;
-  iCountArray: integer;
+  i, i2, id, iCount, iCountArray: integer;
   AmbientesReforma: TAmbientesReformaArray;
+  AmbientesRegistrados: TAmbientesReformaArray;
+  Deleta: Boolean;
 begin
   iCount := frmProduto.clbAmbientes.Items.count - 1;
   iCountArray := 0;
@@ -277,20 +277,22 @@ begin
       iCountArray := iCountArray + 1;
     end;
   end;
+
   begin
     oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
     oProdutoDto.Preco := StringReplace((frmProduto.edtPreco.Text), ',', '.',
       [rfReplaceAll]);
     if (frmProduto.edtDescricao.Text <> EmptyStr) then
-
       try
         if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) then
-        // Arruma isso ae parça
-
         begin
           try
-            if (oProdutoRegra.Salvar(oProdutoModel, oProdutoAmbienteModel,
-              oProdutoDto, AmbientesReforma)) then
+            oProdutoAmbienteModel.BuscarAmbientesArray(AmbientesRegistrados,
+              oProdutoDto.idProduto);
+
+            if (oProdutoRegra.Salvar(oProdutoModel,
+              // Salva o conteudo se não estiver registrado na tabela
+              oProdutoAmbienteModel, oProdutoDto, AmbientesReforma)) then
             begin
               oProdutoRegra.Limpar(oProdutoDto);
               frmProduto.edtDescricao.Text := EmptyStr;
@@ -305,20 +307,23 @@ begin
               frmProduto.Caption := 'Listagem de Produtos';
               ListarProdutos;
             end;
-          except
-            on E: Exception do
-              ShowMessage(E.Message);
 
-          end
-        end
+  
+
       except
-        ShowMessage('Insira um valor válido.')
-      end
+        on E: Exception do
+          ShowMessage(E.Message);
 
-    else
-      ShowMessage('Prencha o campo Descrição.');
-  end;
-  oProdutoRegra.Limpar(oProdutoDto);
+      end
+  end
+except
+  ShowMessage('Insira um valor válido.')
+end
+
+else
+  ShowMessage('Prencha o campo Descrição.');
+end;
+oProdutoRegra.Limpar(oProdutoDto);
 end;
 
 initialization
