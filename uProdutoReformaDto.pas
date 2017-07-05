@@ -14,12 +14,14 @@ type
     Fid: Integer;
     FQuantidade: Integer;
     FoAmbienteReforma: TAmbienteReformaDto;
+    FPrecoUni: String;
     procedure Setid(const Value: Integer);
     procedure SetObservacao(const Value: String);
     procedure SetoProduto(const Value: TProdutoDto);
     procedure SetQuantidade(const Value: Integer);
     procedure SetTotal(const Value: String);
     procedure SetoAmbienteReforma(const Value: TAmbienteReformaDto);
+    procedure SetPrecoUni(const Value: String);
   public
     property id: Integer read Fid write Setid;
     property Quantidade: Integer read FQuantidade write SetQuantidade;
@@ -28,6 +30,7 @@ type
     property oProduto: TProdutoDto read FoProduto write SetoProduto;
     property oAmbienteReforma: TAmbienteReformaDto read FoAmbienteReforma
       write SetoAmbienteReforma;
+    property PrecoUni: String read FPrecoUni write SetPrecoUni;
 
     constructor Create;
     destructor Destroy; override;
@@ -72,6 +75,11 @@ end;
 procedure TProdutoReformaDto.SetoProduto(const Value: TProdutoDto);
 begin
   FoProduto := Value;
+end;
+
+procedure TProdutoReformaDto.SetPrecoUni(const Value: String);
+begin
+  FPrecoUni := Value;
 end;
 
 procedure TProdutoReformaDto.SetQuantidade(const Value: Integer);

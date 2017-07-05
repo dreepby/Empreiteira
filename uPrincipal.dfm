@@ -20,8 +20,8 @@ object frmPrincipal: TfrmPrincipal
   PixelsPerInch = 96
   TextHeight = 13
   object MainMenu1: TMainMenu
-    Left = 232
-    Top = 48
+    Left = 168
+    Top = 112
     object Cadastros1: TMenuItem
       Caption = 'Cadastros'
       object Estados1: TMenuItem
@@ -50,7 +50,7 @@ object frmPrincipal: TfrmPrincipal
       end
     end
     object Sobre1: TMenuItem
-      Caption = 'Sobre'
+      Caption = 'Relat'#243'rio'
     end
   end
   object ActionList1: TActionList
@@ -87,6 +87,9 @@ object frmPrincipal: TfrmPrincipal
     object actReforma: TAction
       Caption = 'Reformas'
       OnExecute = actReformaExecute
+    end
+    object actRelatorio: TAction
+      Caption = 'Relat'#243'rio'
     end
   end
 end

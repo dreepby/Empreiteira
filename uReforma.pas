@@ -12,7 +12,6 @@ uses
 
 type
   TfrmReforma = class(TfrmCadastroBase)
-    btnDetalhes: TBitBtn;
     pageControl2: TPageControl;
     tsPedido: TTabSheet;
     tsProdutos: TTabSheet;

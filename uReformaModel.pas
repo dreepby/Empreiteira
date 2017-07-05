@@ -19,6 +19,7 @@ type
     function Deletar(const AID: Integer): Boolean;
     function VerificarExcluir(AID: Integer): Boolean;
     function BuscarRegistro(var AReforma: TReformaDto): Boolean;
+    function Localizar(ATexto: String):Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -68,7 +69,7 @@ begin
       AReforma.oCliente.CpfCnpj := oQuery.FieldByName('cpfcnpj').AsString;
       AReforma.oEscritor.idUsuario := oQuery.FieldByName('Escritor_idusuario').AsInteger;
       AReforma.oAtendente.idUsuario := oQuery.FieldByName('atendente_idusuario').AsInteger;
-      AReforma.Total := oQuery.FieldByName('Total').AsString;
+      AReforma.Total :=  CurrToStr(Round(oQuery.FieldByName('Total').AsCurrency * 100) / 100);
     end;
   finally
     if Assigned(oQuery) then
@@ -120,6 +121,14 @@ begin
   oQueryListarReformas.Open
     ('SELECT r.idReforma , r.DataDoPedido , r.DataDeEntrega, c.nome as cliente, CONCAT("R$ ", r.Total) as total, r.observacao  from reforma r INNER JOIN cliente c ON pedinte_idcliente = c.idCliente ');
   DsTabela.DataSet := oQueryListarReformas;
+  Result := oQueryListarReformas.IsEmpty;
+end;
+
+function TReformaModel.Localizar(ATexto: String): Boolean;
+begin
+    oQueryListarReformas.Filter := 'UPPER(cliente) LIKE ''%' +
+    UpperCase(ATexto.Trim) + '%''';
+  oQueryListarReformas.Filtered := True;
   Result := oQueryListarReformas.IsEmpty;
 end;
 

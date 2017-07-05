@@ -52,7 +52,6 @@ uses
   uReformaModel in 'uReformaModel.pas',
   uReformaRegra in 'uReformaRegra.pas',
   uReformaInterfaceModel in 'uReformaInterfaceModel.pas',
-  uDetalhesReforma in 'uDetalhesReforma.pas' {frmDetalhesReforma},
   uAmbienteReformaModel in 'uAmbienteReformaModel.pas',
   uAmbienteReformaInterfaceModel in 'uAmbienteReformaInterfaceModel.pas',
   uAmbienteReformaDto in 'uAmbienteReformaDto.pas',

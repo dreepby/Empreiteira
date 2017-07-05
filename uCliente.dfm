@@ -2,28 +2,22 @@ inherited frmCliente: TfrmCliente
   Caption = 'Listagem de Clientes'
   ClientHeight = 553
   ClientWidth = 940
+  OnKeyPress = FormKeyPress
   ExplicitWidth = 946
   ExplicitHeight = 582
   PixelsPerInch = 96
   TextHeight = 13
-  object Label5: TLabel [0]
-    Left = 408
-    Top = 360
-    Width = 31
-    Height = 13
-    Caption = 'Label5'
-  end
   inherited Panel1: TPanel
     Width = 940
     ExplicitWidth = 940
     inherited Label1: TLabel
       Left = 10
       Top = 17
-      Width = 96
+      Width = 80
       Caption = 'Buscar por '
       ExplicitLeft = 10
       ExplicitTop = 17
-      ExplicitWidth = 96
+      ExplicitWidth = 80
     end
     inherited edtPesquisa: TEdit
       Left = 254
@@ -64,6 +58,8 @@ inherited frmCliente: TfrmCliente
       ExplicitWidth = 930
       ExplicitHeight = 431
       inherited tsTabela: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 922
         ExplicitHeight = 403
         inherited DBGrid1: TDBGrid
@@ -143,10 +139,17 @@ inherited frmCliente: TfrmCliente
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
+        ExplicitLeft = 5
+        ExplicitTop = 27
         ExplicitWidth = 922
         ExplicitHeight = 403
+        object Label7: TLabel
+          Left = 777
+          Top = 120
+          Width = 28
+          Height = 13
+          Caption = 'CEP *'
+        end
         object Label2: TLabel
           Left = 23
           Top = 172
@@ -178,7 +181,7 @@ inherited frmCliente: TfrmCliente
         object edtCpfCnpj: TLabeledEdit
           Left = 21
           Top = 37
-          Width = 154
+          Width = 153
           Height = 27
           EditLabel.Width = 57
           EditLabel.Height = 13
@@ -190,12 +193,11 @@ inherited frmCliente: TfrmCliente
           Font.Style = []
           ParentFont = False
           TabOrder = 0
-          OnKeyPress = edtCpfCnpjKeyPress
         end
         object edtNome: TLabeledEdit
           Left = 181
           Top = 37
-          Width = 714
+          Width = 713
           Height = 27
           EditLabel.Width = 85
           EditLabel.Height = 13
@@ -208,12 +210,11 @@ inherited frmCliente: TfrmCliente
           MaxLength = 60
           ParentFont = False
           TabOrder = 1
-          OnKeyPress = edtNomeKeyPress
         end
         object edtRua: TLabeledEdit
           Left = 21
           Top = 87
-          Width = 740
+          Width = 739
           Height = 27
           EditLabel.Width = 28
           EditLabel.Height = 13
@@ -226,12 +227,11 @@ inherited frmCliente: TfrmCliente
           MaxLength = 255
           ParentFont = False
           TabOrder = 2
-          OnKeyPress = edtRuaKeyPress
         end
         object edtNumero: TLabeledEdit
           Left = 775
           Top = 87
-          Width = 122
+          Width = 121
           Height = 27
           EditLabel.Width = 86
           EditLabel.Height = 13
@@ -241,15 +241,13 @@ inherited frmCliente: TfrmCliente
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
-          NumbersOnly = True
           ParentFont = False
           TabOrder = 3
-          OnKeyPress = edtNumeroKeyPress
         end
         object edtComplemento: TLabeledEdit
           Left = 21
           Top = 139
-          Width = 740
+          Width = 739
           Height = 27
           EditLabel.Width = 65
           EditLabel.Height = 13
@@ -261,25 +259,22 @@ inherited frmCliente: TfrmCliente
           Font.Style = []
           ParentFont = False
           TabOrder = 4
-          OnKeyPress = edtComplementoKeyPress
         end
-        object edtCep: TLabeledEdit
-          Left = 775
+        object edtCep: TMaskEdit
+          Left = 777
           Top = 139
-          Width = 122
+          Width = 114
           Height = 27
-          EditLabel.Width = 28
-          EditLabel.Height = 13
-          EditLabel.Caption = 'CEP *'
+          EditMask = '00000\-999;1;_'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
-          NumbersOnly = True
+          MaxLength = 9
           ParentFont = False
           TabOrder = 5
-          OnKeyPress = edtCepKeyPress
+          Text = '     -   '
         end
         object cbEstado: TComboBox
           Left = 21
@@ -293,10 +288,9 @@ inherited frmCliente: TfrmCliente
           Font.Style = []
           ParentFont = False
           TabOrder = 6
-          OnKeyPress = cbEstadoKeyPress
         end
         object cbMunicipio: TComboBox
-          Left = 467
+          Left = 465
           Top = 189
           Width = 430
           Height = 27
@@ -307,7 +301,6 @@ inherited frmCliente: TfrmCliente
           Font.Style = []
           ParentFont = False
           TabOrder = 7
-          OnKeyPress = cbMunicipioKeyPress
         end
         object cbBairro: TComboBox
           Left = 21
@@ -321,7 +314,6 @@ inherited frmCliente: TfrmCliente
           Font.Style = []
           ParentFont = False
           TabOrder = 8
-          OnKeyPress = cbBairroKeyPress
         end
         object edtTelefone: TLabeledEdit
           Left = 467
@@ -336,9 +328,9 @@ inherited frmCliente: TfrmCliente
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
+          NumbersOnly = True
           ParentFont = False
           TabOrder = 9
-          OnKeyPress = edtTelefoneKeyPress
         end
         object edtCelular: TLabeledEdit
           Left = 688
@@ -353,9 +345,9 @@ inherited frmCliente: TfrmCliente
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
+          NumbersOnly = True
           ParentFont = False
           TabOrder = 10
-          OnKeyPress = edtCelularKeyPress
         end
         object moObservacao: TMemo
           Left = 21
@@ -371,7 +363,6 @@ inherited frmCliente: TfrmCliente
           ParentFont = False
           TabOrder = 11
           WantReturns = False
-          OnKeyPress = moObservacaoKeyPress
         end
       end
     end

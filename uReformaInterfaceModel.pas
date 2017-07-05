@@ -14,6 +14,7 @@ type
     function Deletar(const AID: Integer): Boolean;
     function VerificarExcluir(AID: Integer): Boolean;
     function BuscarRegistro(var AReforma: TReformaDto): Boolean;
+    function Localizar(ATexto: String):Boolean;
   end;
 
 implementation

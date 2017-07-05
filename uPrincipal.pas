@@ -32,6 +32,7 @@ type
     Produtos1: TMenuItem;
     actReforma: TAction;
     Reformas1: TMenuItem;
+    actRelatorio: TAction;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
