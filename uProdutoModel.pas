@@ -224,7 +224,7 @@ begin
     oQuery.Connection := TSingletonConexao.GetInstancia;
     sSql := 'select idProduto from produto where descricao = ' + QuotedStr(Nome);
     oQuery.Open(sSql);
-    if not(oQuery.IsEmpty) then
+    if (oQuery.IsEmpty) then
       Result := True
     else
       Result := False;

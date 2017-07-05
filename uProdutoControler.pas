@@ -208,7 +208,7 @@ end;
 procedure TProdutoControler.onExitEdtNome(Sender: TObject);
 begin
 
-  if oProdutoModel.VerificarNome(frmProduto.edtDescricao.Text) then
+  if not(oProdutoModel.VerificarNome(frmProduto.edtDescricao.Text)) then
    raise Exception.Create('Já existe um produto com este nome!');
 end;
 
