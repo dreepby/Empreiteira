@@ -4,6 +4,7 @@ inherited frmProduto: TfrmProduto
   TextHeight = 13
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
+      ActivePage = tsDados
       inherited tsTabela: TTabSheet
         ExplicitLeft = 4
         ExplicitTop = 24
@@ -35,7 +36,7 @@ inherited frmProduto: TfrmProduto
       end
       inherited tsDados: TTabSheet
         ExplicitLeft = 4
-        ExplicitTop = 27
+        ExplicitTop = 24
         ExplicitWidth = 746
         ExplicitHeight = 239
         object Label2: TLabel
@@ -65,8 +66,8 @@ inherited frmProduto: TfrmProduto
           ParentFont = False
         end
         object edtDescricao: TLabeledEdit
-          Left = 264
-          Top = 78
+          Left = 265
+          Top = 77
           Width = 217
           Height = 27
           EditLabel.Width = 67
@@ -85,6 +86,7 @@ inherited frmProduto: TfrmProduto
           Font.Style = []
           ParentFont = False
           TabOrder = 0
+          OnKeyPress = edtDescricaoKeyPress
         end
         object CheckListBox1: TCheckListBox
           Left = 608

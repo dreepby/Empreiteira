@@ -23,6 +23,7 @@ type
     function BuscarProduto(AProduto: TProdutoDto): Boolean;
     function ADDListaHash(var oProduto: TObjectDictionary<string,
       TProdutoDto>): Boolean;
+    function VerificarNome(const Nome: string): Boolean;
     constructor Create;
     destructor Destroy; override;
 
@@ -55,7 +56,8 @@ begin
         // Atribui os valores
         oProdutoDTO.idProduto := oQuery.FieldByName('idProduto').AsInteger;
         oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
-        oProdutoDTO.Preco := oQuery.FieldByName('Preco').AsString;
+        oProdutoDTO.Preco :=
+          CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency * 100) / 100);
 
         // Adiciona o objeto na lista hash
         oProduto.Add(oProdutoDTO.Descricao, oProdutoDTO);
@@ -115,7 +117,8 @@ begin
     begin
       Result := True;
       AProduto.Descricao := oQuery.FieldByName('Descricao').AsString;
-      AProduto.Preco := oQuery.FieldByName('Preco').AsString;
+      AProduto.Preco := CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency *
+        100) / 100);
     end;
 
   finally
@@ -132,43 +135,14 @@ end;
 
 function TProdutoModel.Deletar(const AIDProduto: Integer): Boolean;
 var
-  i, iCount: Integer;
-  sSql: String;
-  iCodigos: Array of Integer;
-  oQuery: TFDQuery;
-  bValida: Boolean;
-begin
-  Result := False;
-  oQuery := TFDQuery.Create(nil);
-  try
-    oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open
-      ('SELECT idProduto_Ambiente FROM produto_ambiente WHERE Produto_idProduto = '
-      + IntToStr(AIDProduto));
-    if (not(oQuery.IsEmpty)) then
-    begin
-      SetLength(iCodigos, oQuery.RecordCount);
-      iCount := 0;
-      oQuery.First;
-      while (not(oQuery.Eof)) do
-      begin
-        iCodigos[iCount] := oQuery.FieldByName('idProduto_Ambiente').AsInteger;
-        oQuery.Next;
-        if not(oQuery.Eof) then
-        iCount := +1;
-      end;
-    end;
-  finally
-    if Assigned(oQuery) then
-      FreeAndNil(oQuery);
-  end;
 
-  if bValida then
-  begin
-    sSql := ('delete from produto where idProduto = ' + IntToStr(AIDProduto));
-    Result := TSingletonConexao.GetInstancia.ExecSQL
-      (sSql) > 0;
-  end;
+  sSql: String;
+
+begin
+
+  sSql := ('delete from produto where idProduto = ' + IntToStr(AIDProduto));
+  Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
+
 end;
 
 destructor TProdutoModel.Destroy;
@@ -231,6 +205,26 @@ begin
     oQuery.Open('select p.idproduto from produto p  ' +
       'inner join ProdutoReforma pr on pr.produto_idproduto = p.idproduto');
     if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
+function TProdutoModel.VerificarNome(const Nome: string): Boolean;
+var
+  oQuery: TFDQuery;
+  sSql: String;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    sSql := 'select idProduto from produto where descricao = ' + QuotedStr(Nome);
+    oQuery.Open(sSql);
+    if not(oQuery.IsEmpty) then
       Result := True
     else
       Result := False;

@@ -41,8 +41,12 @@ end;
 
 function TProdutoRegra.Deletar(const AModel: IModelProdutoInterface;
   AId: Integer): Boolean;
+var
+  AModelAmbiente: TProdutoAmbienteModel;
 begin
+  AModelAmbiente.Deletar(AId);
   Result := AModel.Deletar(AId);
+
 end;
 
 function TProdutoRegra.Filtrar(const AModel: IModelProdutoInterface;
@@ -93,6 +97,9 @@ begin
   begin
     if (AModel.VerificarProduto(AProduto, VerificarID) = False) then
     begin
+      if AModel.VerificarNome(AProduto.Descricao) then
+        raise Exception.Create('Já existe um produto com este nome!');
+
       AProduto.idProduto := AModel.BuscarID;
       if (AModel.Inserir(AProduto)) then
       begin
@@ -126,22 +133,9 @@ begin
           iCount := Length(ArrayAmbientesBanco) - 1;
           for i := 0 to iCount do
           begin
-            for iContadorFor2 := 0 to (Length(AAmbientes) - 1) do
-            begin
-              if ArrayAmbientesBanco[i] = AAmbientes[iContadorFor2] then
-              begin
-                id := AModelProdutoAmbiente.CompararAmbientesTabela
-                  (AProduto.idProduto, ArrayAmbientesBanco[i]);
-                bVerifica := True
-              end
-              else
-                bVerifica := False;
-              if (bVerifica) then
-                AModelProdutoAmbiente.Deletar
-                  (ArrayAmbientesBanco[iContadorFor2]);
-              // end;
-
-            end;
+            id := AModelProdutoAmbiente.CompararAmbientesTabela
+              (AProduto.idProduto, ArrayAmbientesBanco[i]);
+            AModelProdutoAmbiente.Deletar(id);
           end;
 
           if SalvarAmbientes(AAmbientes, AProduto) then

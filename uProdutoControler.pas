@@ -34,6 +34,7 @@ type
     procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure popularCheckListBox;
+    procedure onExitEdtNome(Sender: TObject);
   public
     procedure abrirForm;
 
@@ -62,6 +63,7 @@ begin
   frmProduto.BtnAlterar.OnClick := Alterar;
   frmProduto.BtnCancelar.OnClick := Cancelar;
   frmProduto.btnExcluir.OnClick := Excluir;
+  frmProduto.edtDescricao.OnExit := onExitEdtNome;
   ListarProdutos;
   frmProduto.btnPesquisa.OnClick := Pesquisar;
   frmProduto.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
@@ -203,6 +205,13 @@ begin
   oProdutoModel.ListarProdutos(frmProduto.dsTabela);
 end;
 
+procedure TProdutoControler.onExitEdtNome(Sender: TObject);
+begin
+
+  if oProdutoModel.VerificarNome(frmProduto.edtDescricao.Text) then
+   raise Exception.Create('Já existe um produto com este nome!');
+end;
+
 procedure TProdutoControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -296,6 +305,7 @@ begin
             begin
               oProdutoRegra.Limpar(oProdutoDto);
               frmProduto.edtDescricao.Text := EmptyStr;
+              frmProduto.edtPreco.Text := EmptyStr;
               frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
               frmProduto.tsTabela.Enabled := True;
               frmProduto.btnInserir.Enabled := True;
@@ -308,22 +318,20 @@ begin
               ListarProdutos;
             end;
 
-  
+          except
+            on E: Exception do
+              ShowMessage(E.Message);
 
+          end
+        end
       except
-        on E: Exception do
-          ShowMessage(E.Message);
-
+        ShowMessage('Insira um valor válido.')
       end
-  end
-except
-  ShowMessage('Insira um valor válido.')
-end
 
-else
-  ShowMessage('Prencha o campo Descrição.');
-end;
-oProdutoRegra.Limpar(oProdutoDto);
+    else
+      ShowMessage('Prencha o campo Descrição.');
+  end;
+  oProdutoRegra.Limpar(oProdutoDto);
 end;
 
 initialization

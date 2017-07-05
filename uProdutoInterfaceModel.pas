@@ -18,6 +18,7 @@ type
     function BuscarProduto(AProduto: TProdutoDto): Boolean;
     function ADDListaHash(var oProduto: TObjectDictionary<string,
       TProdutoDto>): Boolean;
+    function VerificarNome(const Nome: string): Boolean;
 
   end;
 

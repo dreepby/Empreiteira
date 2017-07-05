@@ -15,7 +15,7 @@ type
   public
     function Inserir(var AProdutoAmbiente: TProdutoAmbienteDto): Boolean;
     function VerificarExcluir(AId: integer): Boolean;
-    function Deletar(const AProdutoAmbiente: integer): Boolean;
+    function Deletar(const ID: integer): Boolean;
     function BuscarID: integer;
     function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto;
       out AId: integer): Boolean;
@@ -50,9 +50,8 @@ begin
       while (not(oQuery.Eof)) do
       begin
         oAmbientes[iCount] := oQuery.FieldByName('ID').AsInteger;
+        iCount := iCount + 1;
         oQuery.Next;
-        if not(oQuery.Eof) then
-          iCount := +1;
       end;
     end;
   finally
@@ -66,12 +65,13 @@ function TProdutoAmbienteModel.CompararAmbientesTabela(const IDP,
 
 var
   oQuery: TFDQuery;
+  sSql: String;
 begin
   oQuery := TFDQuery.Create(nil);
   oQuery.Connection := TSingletonConexao.GetInstancia;
-  oQuery.Open
-    ('select idProduto_Ambiente from Produto_Ambiente where Produto_idProduto = '
-    + IntToStr(IDP) + 'and ambientes_idAmbientes = ' + IntToStr(IDA));
+  sSql := 'select idProduto_Ambiente from Produto_Ambiente where Produto_idProduto = '
+    + IntToStr(IDP) + ' and ambientes_idAmbientes = ' + IntToStr(IDA);
+  oQuery.Open(sSql);
   if (not(oQuery.IsEmpty)) then
     Result := oQuery.FieldByName('idProduto_Ambiente').AsInteger
   else
@@ -101,6 +101,7 @@ begin
       begin
         AAmbientesArray[iCount] := oQuery.FieldByName('ID').AsInteger;
         oQuery.Next;
+        iCount := +1;
       end;
     end
   end
@@ -126,12 +127,35 @@ begin
   end;
 end;
 
-function TProdutoAmbienteModel.Deletar(const AProdutoAmbiente: integer)
-  : Boolean;
+function TProdutoAmbienteModel.Deletar(const ID: integer): Boolean;
+var
+  aIDsAmbientes: Array of integer;
+  AAmbientesArray: TAmbientesReformaArray;
+  iVerifica, i, iLength: integer;
+  sSql: String;
 begin
-  Result := TSingletonConexao.GetInstancia.ExecSQL
-    ('delete from Produto_Ambiente where idProduto_Ambiente = ' +
-    IntToStr(AProdutoAmbiente)) > 0;
+
+  if (BuscarAmbientesArray(AAmbientesArray, ID)) then
+  begin
+    iLength := Length(AAmbientesArray);
+    iVerifica := 0;
+    for i := 0 to iLength - 1 do
+    begin
+      try
+        sSql := 'delete from Produto_Ambiente where Produto_idProduto = ' +
+          IntToStr(ID) + ' and Ambientes_idAmbientes = ' +
+          IntToStr(AAmbientesArray[i]);
+        TSingletonConexao.GetInstancia.ExecSQL(sSql);
+        iVerifica := iVerifica + 1;
+      except
+        Result := False;
+      end;
+
+      if iLength = iVerifica then
+        Result := True;
+
+    end;
+  end;
 end;
 
 function TProdutoAmbienteModel.Inserir(var AProdutoAmbiente

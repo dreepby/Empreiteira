@@ -10,7 +10,7 @@ type
   IModelProdutoAmbienteInterface = interface
     function Inserir(var AProdutoAmbiente: TProdutoAmbienteDto): Boolean;
     function VerificarExcluir(AId: integer): Boolean;
-    function Deletar(const AProdutoAmbiente: integer): Boolean;
+    function Deletar(const ID: integer): Boolean;
     function BuscarID: integer;
     function VerificarProdutoAmbiente(AProdutoAmbiente: TProdutoAmbienteDto;
       out AId: integer): Boolean;
