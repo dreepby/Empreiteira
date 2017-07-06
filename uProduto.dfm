@@ -1,59 +1,64 @@
 inherited frmProduto: TfrmProduto
   Caption = 'Produtos'
+  ClientWidth = 757
+  ExplicitWidth = 763
   PixelsPerInch = 96
   TextHeight = 13
+  inherited Panel1: TPanel
+    Width = 757
+    ExplicitWidth = 757
+    inherited Label1: TLabel
+      Left = 9
+      Top = 17
+      ExplicitLeft = 9
+      ExplicitTop = 17
+    end
+    inherited edtPesquisa: TEdit
+      Left = 67
+      Width = 661
+      ExplicitLeft = 67
+      ExplicitWidth = 661
+    end
+  end
   inherited Panel2: TPanel
+    Width = 757
+    ExplicitWidth = 757
     inherited PageControl1: TPageControl
+      Width = 747
+      ExplicitWidth = 747
       inherited tsTabela: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
-        ExplicitWidth = 746
-        ExplicitHeight = 239
+        ExplicitWidth = 739
         inherited DBGrid1: TDBGrid
+          Width = 739
           Columns = <
             item
               Expanded = False
               FieldName = 'idProduto'
               Title.Caption = 'C'#243'digo'
+              Width = 90
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'Descricao'
               Title.Caption = 'Descri'#231#227'o'
-              Width = 564
+              Width = 380
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'Preco'
               Title.Caption = 'Pre'#231'o'
-              Width = 79
+              Width = 224
               Visible = True
             end>
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 27
-        ExplicitWidth = 746
-        ExplicitHeight = 239
-        object Label2: TLabel
-          Left = 264
-          Top = 110
-          Width = 39
-          Height = 19
-          Caption = 'Pre'#231'o'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
+        ExplicitWidth = 739
         object Label3: TLabel
-          Left = 488
-          Top = 0
+          Left = 80
+          Top = 3
           Width = 75
           Height = 19
           Caption = 'Ambientes'
@@ -64,10 +69,37 @@ inherited frmProduto: TfrmProduto
           Font.Style = []
           ParentFont = False
         end
-        object edtDescricao: TLabeledEdit
-          Left = 264
-          Top = 78
+        object Label2: TLabel
+          Left = 348
+          Top = 105
+          Width = 39
+          Height = 19
+          Caption = 'Pre'#231'o'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object clbAmbientes: TCheckListBox
+          Left = 80
+          Top = 24
           Width = 217
+          Height = 204
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemHeight = 19
+          ParentFont = False
+          TabOrder = 0
+        end
+        object edtDescricao: TLabeledEdit
+          Left = 347
+          Top = 72
+          Width = 289
           Height = 27
           EditLabel.Width = 67
           EditLabel.Height = 19
@@ -83,43 +115,15 @@ inherited frmProduto: TfrmProduto
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
+          MaxLength = 20
           ParentFont = False
-          TabOrder = 0
-        end
-        object CheckListBox1: TCheckListBox
-          Left = 608
-          Top = 0
-          Width = 135
-          Height = 236
-          BorderStyle = bsNone
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ItemHeight = 19
-          ParentFont = False
-          TabOrder = 2
-        end
-        object clbAmbientes: TCheckListBox
-          Left = 488
-          Top = 32
-          Width = 255
-          Height = 204
-          BorderStyle = bsNone
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ItemHeight = 19
-          ParentFont = False
-          TabOrder = 3
+          TabOrder = 1
+          OnKeyPress = edtDescricaoKeyPress
         end
         object edtPreco: TEdit
-          Left = 264
-          Top = 134
-          Width = 217
+          Left = 347
+          Top = 127
+          Width = 289
           Height = 27
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -127,9 +131,18 @@ inherited frmProduto: TfrmProduto
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 2
+          OnKeyPress = edtPrecoKeyPress
         end
       end
+    end
+  end
+  inherited Panel3: TPanel
+    Width = 757
+    ExplicitWidth = 757
+    inherited Panel4: TPanel
+      Left = 2
+      ExplicitLeft = 2
     end
   end
 end

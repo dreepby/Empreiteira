@@ -76,7 +76,6 @@ begin
   frmUsuario.Caption := 'Alteração de Usuario';
   frmUsuario.edtNome.Text := frmUsuario.DBGrid1.Fields[1].AsString;
   frmUsuario.edtCPF.Text := frmUsuario.DBGrid1.Fields[2].AsString;
-  frmUsuario.edtCPF.SetFocus;
   frmUsuario.PageControl1.ActivePage := frmUsuario.tsDados;
   frmUsuario.tsTabela.Enabled := False;
   frmUsuario.tsDados.Enabled := True;
@@ -86,6 +85,7 @@ begin
   frmUsuario.BtnSalvar.Enabled := True;
   frmUsuario.BtnCancelar.Enabled := True;
   frmUsuario.edtPesquisa.Enabled := False;
+  frmUsuario.edtCPF.SetFocus;
 end;
 
 procedure TUsuarioControler.Cancelar(Sender: TObject);

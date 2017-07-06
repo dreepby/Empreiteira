@@ -19,10 +19,6 @@ inherited frmEstados: TfrmEstados
   inherited Panel2: TPanel
     inherited PageControl1: TPageControl
       inherited tsTabela: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
-        ExplicitWidth = 746
-        ExplicitHeight = 239
         inherited DBGrid1: TDBGrid
           Columns = <
             item
@@ -34,6 +30,7 @@ inherited frmEstados: TfrmEstados
             item
               Expanded = False
               FieldName = 'UF'
+              Title.Caption = 'UF '
               Width = 86
               Visible = True
             end
@@ -46,10 +43,6 @@ inherited frmEstados: TfrmEstados
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
-        ExplicitWidth = 746
-        ExplicitHeight = 239
         object edtUF: TLabeledEdit
           Left = 115
           Top = 95

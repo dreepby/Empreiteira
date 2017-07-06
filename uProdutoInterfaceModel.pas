@@ -10,7 +10,7 @@ type
     function BuscarID: Integer;
     function Alterar(var AProduto: TProdutoDto): Boolean;
     function Inserir(var AProduto: TProdutoDto): Boolean;
-    procedure ListarProdutos(var DsTabela: TDataSource);
+    function ListarProdutos(var DsProduto: TDataSource): Boolean;
     function BuscarProdutosPorAmbiente(const AIdAmbiente: Integer;
       var ALista: TObjectDictionary<string, TProdutoDto>): Boolean;
     function Deletar(const AIDProduto: Integer): Boolean;
@@ -20,6 +20,7 @@ type
     function BuscarProduto(AProduto: TProdutoDto): Boolean;
     function ADDListaHash(var oProduto: TObjectDictionary<string,
       TProdutoDto>): Boolean;
+    function VerificarNome(const Nome: string): Boolean;
 
   end;
 

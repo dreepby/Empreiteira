@@ -4,24 +4,26 @@ interface
 
 uses
   uProdutoDto, System.SysUtils, uProdutoInterfaceModel,
-  uProdutoAmbienteInterfaceModel, uProdutoAmbienteModel, uProdutoAmbienteDto;
+  uProdutoAmbienteInterfaceModel, uProdutoAmbienteModel, uProdutoAmbienteDto,
+  uArrayAmbientes;
 
 type
   TProdutoRegra = class
+  private
+    function SalvarProduto(const AModel: IModelProdutoInterface;
+      const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
+      AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
   public
     procedure Limpar(AProduto: TProdutoDto);
-    function VerificarExcluir(var AModel: IModelProdutoInterface;
-      AId: Integer): Boolean;
-    function Filtrar(const AModel: IModelProdutoInterface;
-      ATexto: String): Boolean;
-    function Deletar(const AModel: IModelProdutoInterface;
-      AId: Integer): Boolean;
-    function Salvar(const AModel: IModelProdutoInterface; AProduto: TProdutoDto;
-      AAmbientes: array of Integer): Boolean;
+    function Salvar(const AModel: IModelProdutoInterface;
+      const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
+      AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
     function BuscarProduto(const AModel: IModelProdutoInterface;
       AProduto: TProdutoDto): Boolean;
     function SalvarAmbientes(AAmbientes: array of Integer;
       AProduto: TProdutoDto): Boolean;
+    function Deletar(const AModel: IModelProdutoInterface;
+      AProduto: Integer): Boolean;
 
   end;
 
@@ -36,24 +38,22 @@ begin
 end;
 
 function TProdutoRegra.Deletar(const AModel: IModelProdutoInterface;
-  AId: Integer): Boolean;
+  AProduto: Integer): Boolean;
+var
+  oProdutoAmbienteModel: IModelProdutoAmbienteInterface;
 begin
-  Result := AModel.Deletar(AId);
-end;
-
-function TProdutoRegra.Filtrar(const AModel: IModelProdutoInterface;
-  ATexto: String): Boolean;
-begin
+  oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
+  if oProdutoAmbienteModel.Deletar(AProduto) then
   begin
-    if Trim(ATexto) = EmptyStr then
-      raise Exception.Create('Campo de pesquisa vazio.')
-    else
+    if AModel.Deletar(AProduto) then
     begin
-      Result := AModel.Localizar(ATexto);
-    end;
-    if not(Result) then
-      raise Exception.Create('Nenhum registro encontrado.');
-  end;
+      Result := True;
+    end
+    else
+      Result := False;
+  end
+  else
+    Result := False;
 end;
 
 procedure TProdutoRegra.Limpar(AProduto: TProdutoDto);
@@ -64,26 +64,23 @@ begin
 end;
 
 function TProdutoRegra.Salvar(const AModel: IModelProdutoInterface;
+  const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
   AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
 var
-  VerificarID: Integer;
+  VerificarID, iCount, i, iContadorFor2: Integer;
+  ArrayAmbientesBanco: TAmbientesReformaArray;
+  bVerifica: Boolean;
+  id: Integer;
+  oProdutoAmbienteModel: IModelProdutoAmbienteInterface;
 begin
+  oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
   if AProduto.idProduto = 0 then
   begin
     if (AModel.VerificarProduto(AProduto, VerificarID) = False) then
     begin
       AProduto.idProduto := AModel.BuscarID;
-      if (AModel.Inserir(AProduto)) then
-      begin
-        begin
-          if SalvarAmbientes(AAmbientes, AProduto) then
-            Result := True
-          else
-            raise Exception.Create('Ocorreu algum erro!')
-        end;
-      end
-      else
-        raise Exception.Create('Ocorreu algum erro!')
+      Result := SalvarProduto(AModel, AModelProdutoAmbiente, AProduto,
+        AAmbientes);
     end
     else
       raise Exception.Create('Produto já cadastrado.')
@@ -93,12 +90,11 @@ begin
     if AModel.VerificarProduto(AProduto, VerificarID) then
     begin
       if VerificarID = AProduto.idProduto then
-        If AModel.Alterar(AProduto) then
+        If oProdutoAmbienteModel.Deletar(AProduto.idProduto) then
         begin
-          if SalvarAmbientes(AAmbientes, AProduto) then
-            Result := True
-          else
-            raise Exception.Create('Ocorreu algum erro!')
+          if AModel.Deletar(AProduto.idProduto) then
+            Result := SalvarProduto(AModel, AModelProdutoAmbiente, AProduto,
+              AAmbientes);
         end
         else
           raise Exception.Create('Ocorreu algum erro!')
@@ -107,15 +103,7 @@ begin
         raise Exception.Create('Produto já cadastrado.');
       end;
     end
-    else
-    begin
-      If AModel.Alterar(AProduto) then
-        Result := True
-      else
-        raise Exception.Create('Ocorreu algum erro!')
-    end;
   end;
-
 end;
 
 function TProdutoRegra.SalvarAmbientes(AAmbientes: array of Integer;
@@ -126,7 +114,7 @@ var
   oProdutoAmbienteDto: TProdutoAmbienteDto;
 begin
   oProdutoAmbienteDto := TProdutoAmbienteDto.Create;
-  count := Length(AAmbientes) - 2;
+  count := Length(AAmbientes) - 1;
   oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
   oProdutoAmbienteDto.oProduto.idProduto := AProduto.idProduto;
   for i := 0 to count do
@@ -145,10 +133,25 @@ begin
     FreeAndNil(oProdutoAmbienteDto);
 end;
 
-function TProdutoRegra.VerificarExcluir(var AModel: IModelProdutoInterface;
-  AId: Integer): Boolean;
+function TProdutoRegra.SalvarProduto(const AModel: IModelProdutoInterface;
+  const AModelProdutoAmbiente: IModelProdutoAmbienteInterface;
+  AProduto: TProdutoDto; AAmbientes: array of Integer): Boolean;
 begin
-  Result := AModel.VerificarExcluir(AId);
+  if (AModel.Inserir(AProduto)) then
+  begin
+    begin
+      if SalvarAmbientes(AAmbientes, AProduto) then
+        Result := True
+      else
+      begin
+        AModel.Deletar(AProduto.idProduto);
+        raise Exception.Create('Selecione algum ambiente!')
+      end;
+
+    end;
+  end
+  else
+    raise Exception.Create('Ocorreu algum erro! ')
 end;
 
 end.

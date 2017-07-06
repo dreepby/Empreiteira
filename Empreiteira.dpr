@@ -69,7 +69,11 @@ uses
   uProdutoReformaDto in 'uProdutoReformaDto.pas',
   uProdutoReformaModel in 'uProdutoReformaModel.pas',
   uProdutoReformaInterfaceModel in 'uProdutoReformaInterfaceModel.pas',
-  uArrayDinamicoInteger in 'uArrayDinamicoInteger.pas';
+  uArrayDinamicoInteger in 'uArrayDinamicoInteger.pas',
+  uArrayAmbientes in 'uArrayAmbientes.pas',
+  uRelatorio in 'uRelatorio.pas' {frmRelatorio},
+  uRelatorioControler in 'uRelatorioControler.pas',
+  uRelatorioModel in 'uRelatorioModel.pas';
 
 {$R *.res}
 

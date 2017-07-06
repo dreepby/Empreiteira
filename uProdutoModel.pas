@@ -17,7 +17,7 @@ type
     function BuscarID: Integer;
     function Alterar(var AProduto: TProdutoDto): Boolean;
     function Inserir(var AProduto: TProdutoDto): Boolean;
-    procedure ListarProdutos(var DsProduto: TDataSource);
+    function ListarProdutos(var DsProduto: TDataSource): Boolean;
     function Deletar(const AIDProduto: Integer): Boolean;
     function VerificarProduto(AProduto: TProdutoDto; out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
@@ -27,6 +27,7 @@ type
       TProdutoDto>): Boolean;
     function BuscarProdutosPorAmbiente(const AIdAmbiente: Integer;
       var ALista: TObjectDictionary<string, TProdutoDto>): Boolean;
+    function VerificarNome(const Nome: string): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -60,7 +61,8 @@ begin
         // Atribui os valores
         oProdutoDTO.idProduto := oQuery.FieldByName('idProduto').AsInteger;
         oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
-        oProdutoDTO.Preco := CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency*100)/100);
+        oProdutoDTO.Preco :=
+          CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency * 100) / 100);
 
         // Adiciona o objeto na lista hash
         oProduto.Add(oProdutoDTO.Descricao, oProdutoDTO);
@@ -119,7 +121,8 @@ begin
     begin
       Result := True;
       AProduto.Descricao := oQuery.FieldByName('Descricao').AsString;
-      AProduto.Preco := oQuery.FieldByName('Preco').AsString;
+      AProduto.Preco := CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency *
+        100) / 100);
     end;
 
   finally
@@ -154,7 +157,8 @@ begin
         // Atribui os valores
         oProdutoDTO.idProduto := oQuery.FieldByName('idProduto').AsInteger;
         oProdutoDTO.Descricao := oQuery.FieldByName('Descricao').AsString;
-        oProdutoDTO.Preco :=  CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency*100)/100);
+        oProdutoDTO.Preco :=
+          CurrToStr(Round(oQuery.FieldByName('Preco').AsCurrency * 100) / 100);
 
         // Adiciona o objeto na lista hash
         ALista.Add(oProdutoDTO.Descricao, oProdutoDTO);
@@ -177,50 +181,14 @@ end;
 
 function TProdutoModel.Deletar(const AIDProduto: Integer): Boolean;
 var
-  i, iCount: Integer;
-  sSql: String;
-  iCodigos: Array of Integer;
-  oQuery: TFDQuery;
-  bValida: Boolean;
-begin
-  Result := False;
-  oQuery := TFDQuery.Create(nil);
-  try
-    oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open
-      ('SELECT idProduto_Ambiente FROM produto_ambiente WHERE Produto_idProduto = '
-      + IntToStr(AIDProduto));
-    if (not(oQuery.IsEmpty)) then
-    begin
-      SetLength(iCodigos, oQuery.RecordCount);
-      iCount := 0;
-      oQuery.First;
-      while (not(oQuery.Eof)) do
-      begin
-        iCodigos[iCount] := oQuery.FieldByName('idProduto_Ambiente').AsInteger;
-        oQuery.Next;
-        if not(oQuery.Eof) then
-          iCount := +1;
-      end;
-    end;
-  finally
-    if Assigned(oQuery) then
-      FreeAndNil(oQuery);
-  end;
-  for i := 0 to iCount do
-  begin
-    bValida := TSingletonConexao.GetInstancia.ExecSQL
-      ('delete from produto_ambiente where idProduto_ambiente = ' +
-      IntToStr(iCodigos[i])) > 0;
 
-    if bValida = False then
-      exit;
-  end;
-  if bValida then
-  begin
-    Result := TSingletonConexao.GetInstancia.ExecSQL
-      ('delete from produto where idProduto = ' + IntToStr(AIDProduto)) > 0;
-  end;
+  sSql: String;
+
+begin
+
+  sSql := ('delete from produto where idProduto = ' + IntToStr(AIDProduto));
+  Result := TSingletonConexao.GetInstancia.ExecSQL(sSql) > 0;
+
 end;
 
 destructor TProdutoModel.Destroy;
@@ -247,12 +215,13 @@ begin
 
 end;
 
-procedure TProdutoModel.ListarProdutos(var DsProduto: TDataSource);
+function TProdutoModel.ListarProdutos(var DsProduto: TDataSource): Boolean;
 begin
   oQueryListarProdutos.Connection := TSingletonConexao.GetInstancia;
   oQueryListarProdutos.Open
     ('select idproduto, descricao, CONCAT("R$ ",Preco) as Preco from Produto');
   DsProduto.DataSet := oQueryListarProdutos;
+  Result := oQueryListarProdutos.IsEmpty;
 end;
 
 procedure TProdutoModel.ListarProdutosPorAmbiente(var DsTabela: TDataSource;
@@ -263,7 +232,19 @@ end;
 
 function TProdutoModel.Localizar(ATexto: String): Boolean;
 begin
-
+  oQueryListarProdutos.Open
+    ('select idproduto, descricao, CONCAT("R$ ",Preco) as Preco from Produto where descricao LIKE "%'
+    + ATexto + '%" or descricao LIKE "%' + ATexto + '"');
+  if (not(oQueryListarProdutos.IsEmpty)) then
+  begin
+    Result := True;
+  end
+  else
+  begin
+    Result := False;
+    oQueryListarProdutos.Open
+      ('select m.idMunicipio, m.Nome,u.nome as estado from municipio as m inner join uf as u on m.Municipio_idUF=u.iduf');
+  end;
 end;
 
 function TProdutoModel.VerificarExcluir(AId: Integer): Boolean;
@@ -275,7 +256,28 @@ begin
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
     oQuery.Open('select p.idproduto from produto p  ' +
-      'inner join ProdutoReforma pr on pr.produto_idproduto = p.idproduto');
+      'inner join ProdutoReforma pr on pr.produto_idproduto =' + IntToStr(AId));
+    if (oQuery.IsEmpty) then
+      Result := True
+    else
+      Result := False;
+  finally
+    if Assigned(oQuery) then
+      FreeAndNil(oQuery);
+  end;
+end;
+
+function TProdutoModel.VerificarNome(const Nome: string): Boolean;
+var
+  oQuery: TFDQuery;
+  sSql: String;
+begin
+  oQuery := TFDQuery.Create(nil);
+  try
+    oQuery.Connection := TSingletonConexao.GetInstancia;
+    sSql := 'select idProduto from produto where descricao = ' +
+      QuotedStr(Nome);
+    oQuery.Open(sSql);
     if (oQuery.IsEmpty) then
       Result := True
     else
@@ -294,8 +296,8 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select idProduto from Produto where idProduto=' +
-      (IntToStr(AProduto.idProduto)));
+    oQuery.Open('select idProduto from Produto where descricao=' +
+      (QuotedStr(AProduto.Descricao)));
     if (not(oQuery.IsEmpty)) then
     begin
       AId := oQuery.FieldByName('IdProduto').AsInteger;

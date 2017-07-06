@@ -19,7 +19,7 @@ type
     function Deletar(const AID: Integer): Boolean;
     function VerificarExcluir(AID: Integer): Boolean;
     function BuscarRegistro(var AReforma: TReformaDto): Boolean;
-    function Localizar(ATexto: String):Boolean;
+    function Localizar(ATexto: String): Boolean;
 
     constructor Create;
     destructor Destroy; override;
@@ -59,7 +59,9 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select r.observacao, r.datadopedido, r.datadeentrega, c.cpfcnpj, Escritor_idusuario, atendente_idusuario, total from Reforma r inner join cliente c on r.pedinte_idcliente = c.idcliente');
+    oQuery.Open
+      ('select r.observacao, r.datadopedido, r.datadeentrega, c.cpfcnpj, Escritor_idusuario, atendente_idusuario, total from Reforma r inner join cliente c on r.pedinte_idcliente = c.idcliente where idReforma = '
+      + IntToStr(AReforma.idReforma));
     if (not(oQuery.IsEmpty)) then
     begin
       Result := True;
@@ -67,9 +69,12 @@ begin
       AReforma.dataDoPedido := oQuery.FieldByName('datadopedido').AsDateTime;
       AReforma.dataDeEntrega := oQuery.FieldByName('datadeentrega').AsDateTime;
       AReforma.oCliente.CpfCnpj := oQuery.FieldByName('cpfcnpj').AsString;
-      AReforma.oEscritor.idUsuario := oQuery.FieldByName('Escritor_idusuario').AsInteger;
-      AReforma.oAtendente.idUsuario := oQuery.FieldByName('atendente_idusuario').AsInteger;
-      AReforma.Total :=  CurrToStr(Round(oQuery.FieldByName('Total').AsCurrency * 100) / 100);
+      AReforma.oEscritor.idUsuario := oQuery.FieldByName('Escritor_idusuario')
+        .AsInteger;
+      AReforma.oAtendente.idUsuario := oQuery.FieldByName('atendente_idusuario')
+        .AsInteger;
+      AReforma.Total := CurrToStr(Round(oQuery.FieldByName('Total').AsCurrency *
+        100) / 100);
     end;
   finally
     if Assigned(oQuery) then
@@ -126,7 +131,7 @@ end;
 
 function TReformaModel.Localizar(ATexto: String): Boolean;
 begin
-    oQueryListarReformas.Filter := 'UPPER(cliente) LIKE ''%' +
+  oQueryListarReformas.Filter := 'UPPER(cliente) LIKE ''%' +
     UpperCase(ATexto.Trim) + '%''';
   oQueryListarReformas.Filtered := True;
   Result := oQueryListarReformas.IsEmpty;

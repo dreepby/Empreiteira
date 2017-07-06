@@ -4,7 +4,7 @@ object frmListagemClientes: TfrmListagemClientes
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Selecione um cliente'
-  ClientHeight = 612
+  ClientHeight = 419
   ClientWidth = 700
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -80,13 +80,14 @@ object frmListagemClientes: TfrmListagemClientes
   end
   object Panel2: TPanel
     Left = 0
-    Top = 554
+    Top = 361
     Width = 700
     Height = 58
     Align = alBottom
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
+    ExplicitTop = 554
     object btnInserir: TBitBtn
       Left = 126
       Top = 6
@@ -808,7 +809,7 @@ object frmListagemClientes: TfrmListagemClientes
     Left = 0
     Top = 65
     Width = 700
-    Height = 489
+    Height = 296
     Align = alClient
     DataSource = dsTabela
     Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]

@@ -251,12 +251,16 @@ var
   iCount, i: Integer;
   oProdutoReformaFor: TObjectDictionary<Integer, TProdutoReformaDto>;
   oProdutoReformaDto: TProdutoReformaDto;
+  bValidaAmbiente: Boolean;
 begin
+  SetLength(AmbientesSelecionados, 0);
   frmReforma.FDMemTable1.EmptyDataSet;
+  oReformaRegra.Limpar(oReformaDto);
   oReformaDto.idReforma := frmReforma.DBGrid1.Fields[0].AsInteger;
   if oReformaRegra.BuscarDadosRegra(oReformaModel, oReformaDto,
     oListaAmbientesProdutosReformas, oArrayAmbientesReformas) then
   begin
+    i := 0;
     frmReforma.edtCpfCnpj.Text := oReformaDto.oCliente.CpfCnpj;
     frmReforma.dtpPedido.date := oReformaDto.dataDoPedido;
     frmReforma.dtpEntrega.date := oReformaDto.dataDeEntrega;
@@ -276,7 +280,7 @@ begin
       begin
         if frmReforma.cltAmbientes.Items.Count > 0 then
         begin
-
+          bValidaAmbiente := True;
           for oProdutoReformaFor in oListaAmbientesProdutosReformas.Values do
           begin
             for oProdutoReformaDto in oProdutoReformaFor.Values do
@@ -299,13 +303,10 @@ begin
               frmReforma.FDMemTable1idAmbiente.AsInteger :=
                 oProdutoReformaDto.oAmbienteReforma.oAmbiente.idAmbiente;
               frmReforma.FDMemTable1.Post;
-
-              SetLength(AmbientesSelecionados, 0);
-              for i := 0 to iCount - 1 do
+              if bValidaAmbiente then
               begin
-                if i = 0 then
-                  iCodigoAmbiente := oProdutoReformaDto.oAmbienteReforma.
-                    oAmbiente.idAmbiente;
+                iCodigoAmbiente := oProdutoReformaDto.oAmbienteReforma.
+                  oAmbiente.idAmbiente;
                 SetLength(AmbientesSelecionados,
                   (Length(AmbientesSelecionados) + 1));
                 AmbientesSelecionados[i] :=
@@ -314,43 +315,57 @@ begin
                   [frmReforma.cltAmbientes.Items.IndexOfObject
                   (TObject(oProdutoReformaDto.oAmbienteReforma.oAmbiente.
                   idAmbiente))] := True;
+                i := i + 1;
               end;
-
+              { SetLength(AmbientesSelecionados, 0);
+                for i := 0 to iCount - 1 do
+                begin
+                if i = 0 then
+                iCodigoAmbiente := oProdutoReformaDto.oAmbienteReforma.
+                oAmbiente.idAmbiente;
+                SetLength(AmbientesSelecionados,
+                (Length(AmbientesSelecionados) + 1));
+                AmbientesSelecionados[i] :=
+                oProdutoReformaDto.oAmbienteReforma.oAmbiente.idAmbiente;
+                frmReforma.cltAmbientes.Checked
+                [frmReforma.cltAmbientes.Items.IndexOfObject
+                (TObject(oProdutoReformaDto.oAmbienteReforma.oAmbiente.
+                idAmbiente))] := True; }
             end;
+
           end;
         end;
       end;
-      frmReforma.cltAmbientes.ItemIndex :=
-        frmReforma.cltAmbientes.Items.IndexOfObject(TObject(iCodigoAmbiente));
-
-      PrencherDadosDoProduto(iCodigoAmbiente);
-
-      frmReforma.FDMemTable1.Filter := 'idAmbiente = ' +
-        IntToStr(iCodigoAmbiente);
-      frmReforma.FDMemTable1.Filtered := True;
-
-      frmReforma.tsDados.Enabled := True;
-      frmReforma.Caption := 'Alteração do pedido';
-      frmReforma.PageControl1.ActivePage := frmReforma.tsDados;
-      frmReforma.tsTabela.Enabled := False;
-      frmReforma.btnInserir.Enabled := False;
-      frmReforma.BtnAlterar.Enabled := False;
-      frmReforma.btnExcluir.Enabled := False;
-      frmReforma.BtnSalvar.Enabled := True;
-      frmReforma.BtnCancelar.Enabled := True;
-      frmReforma.pageControl2.ActivePage := frmReforma.tsPedido;
-      frmReforma.edtPesquisa.Enabled := False;
-      frmReforma.edtCpfCnpj.SetFocus;
-      frmReforma.btnAlterarProdutos.Enabled := True;
-      frmReforma.btnExcluirProdutos.Enabled := True;
-      frmReforma.cbProduto.Enabled := True;
-    end
-    else
-    begin
-      ListarReformas;
-      ShowMessage('Registro não encontrado.');
     end;
+    frmReforma.cltAmbientes.ItemIndex :=
+      frmReforma.cltAmbientes.Items.IndexOfObject(TObject(iCodigoAmbiente));
 
+    PrencherDadosDoProduto(iCodigoAmbiente);
+
+    frmReforma.FDMemTable1.Filter := 'idAmbiente = ' +
+      IntToStr(iCodigoAmbiente);
+    frmReforma.FDMemTable1.Filtered := True;
+
+    frmReforma.tsDados.Enabled := True;
+    frmReforma.Caption := 'Alteração do pedido';
+    frmReforma.PageControl1.ActivePage := frmReforma.tsDados;
+    frmReforma.tsTabela.Enabled := False;
+    frmReforma.btnInserir.Enabled := False;
+    frmReforma.BtnAlterar.Enabled := False;
+    frmReforma.btnExcluir.Enabled := False;
+    frmReforma.BtnSalvar.Enabled := True;
+    frmReforma.BtnCancelar.Enabled := True;
+    frmReforma.pageControl2.ActivePage := frmReforma.tsPedido;
+    frmReforma.edtPesquisa.Enabled := False;
+    frmReforma.edtCpfCnpj.SetFocus;
+    frmReforma.btnAlterarProdutos.Enabled := True;
+    frmReforma.btnExcluirProdutos.Enabled := True;
+    frmReforma.cbProduto.Enabled := True;
+  end
+  else
+  begin
+    ListarReformas;
+    ShowMessage('Registro não encontrado.');
   end;
 end;
 

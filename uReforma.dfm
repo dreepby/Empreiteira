@@ -3,7 +3,7 @@ inherited frmReforma: TfrmReforma
   ClientHeight = 472
   ClientWidth = 977
   ExplicitWidth = 983
-  ExplicitHeight = 501
+  ExplicitHeight = 500
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -33,8 +33,6 @@ inherited frmReforma: TfrmReforma
       ExplicitWidth = 967
       ExplicitHeight = 350
       inherited tsTabela: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
         ExplicitWidth = 959
         ExplicitHeight = 322
         inherited DBGrid1: TDBGrid
@@ -85,8 +83,6 @@ inherited frmReforma: TfrmReforma
         end
       end
       inherited tsDados: TTabSheet
-        ExplicitLeft = 4
-        ExplicitTop = 24
         ExplicitWidth = 959
         ExplicitHeight = 322
         object pageControl2: TPageControl

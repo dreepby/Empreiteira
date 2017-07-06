@@ -7,9 +7,11 @@ uses
   uProdutoModel, uProduto, uProdutoRegra,
   Dialogs, System.UITypes, System.Classes, Winapi.Windows,
   uInterfaceControler, uProdutoInterfaceModel, uAmbienteModel, uAmbienteDto,
-  uAmbienteInterfaceModel;
+  uProdutoAmbienteInterfaceModel, uAmbienteInterfaceModel,
+  uProdutoAmbienteModel, uArrayAmbientes;
 
 type
+
   TProdutoControler = class(TInterfacedObject, IControlerInterface)
 
   private
@@ -17,7 +19,8 @@ type
     oProdutoModel: IModelProdutoInterface;
     oProdutoDto: TProdutoDto;
     oProdutoRegra: TProdutoRegra;
-    AmbientesReforma: Array of Integer;
+    oProdutoAmbienteModel: IModelProdutoAmbienteInterface;
+
     oListaAmbientes: TObjectDictionary<string, TAmbienteDto>;
 
     procedure Excluir(Sender: TObject);
@@ -27,10 +30,11 @@ type
     procedure ListarProdutos;
     procedure Alterar(Sender: TObject);
     procedure fecharProduto(Sender: TObject);
-    procedure Pesquisar(Sender: TObject);
-    procedure OnKeyPressEdtPesquisa(Sender: TObject; var Key: Char);
+    procedure OnChangeEdtPesquisa(Sender: TObject);
     procedure OnKeyDownForm(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure popularCheckListBox;
+    procedure onExitEdtNome(Sender: TObject);
+    procedure AtualizarDadosCadastro;
   public
     procedure abrirForm;
 
@@ -59,19 +63,24 @@ begin
   frmProduto.BtnAlterar.OnClick := Alterar;
   frmProduto.BtnCancelar.OnClick := Cancelar;
   frmProduto.btnExcluir.OnClick := Excluir;
+  frmProduto.edtDescricao.OnExit := onExitEdtNome;
+  frmProduto.edtPesquisa.OnChange := OnChangeEdtPesquisa;
   ListarProdutos;
-  frmProduto.edtPesquisa.OnKeyPress := OnKeyPressEdtPesquisa;
   frmProduto.OnKeyDown := OnKeyDownForm;
   frmProduto.Show;
 end;
 
 procedure TProdutoControler.Alterar(Sender: TObject);
+var
+  aCodigosAmbientes: TAmbientesReformaArray;
+  i: integer;
 begin
   popularCheckListBox;
   oProdutoDto.idProduto := frmProduto.DBGrid1.Fields[0].AsInteger;
 
   if oProdutoRegra.BuscarProduto(oProdutoModel, oProdutoDto) then
   begin
+    frmProduto.edtPesquisa.Enabled := False;
     frmProduto.tsDados.Enabled := True;
     frmProduto.Caption := 'Alteração de Produto';
     frmProduto.PageControl1.ActivePage := frmProduto.tsDados;
@@ -82,17 +91,28 @@ begin
     frmProduto.BtnSalvar.Enabled := True;
     frmProduto.BtnCancelar.Enabled := True;
     frmProduto.edtDescricao.Text := oProdutoDto.Descricao;
-    frmProduto.edtPreco.Text := (oProdutoDto.Preco)
-    // Buscar id dos ambientes por function :)
-    //frmProduto.clbAmbientes.ItemIndex := frmProduto.clbAmbientes.Items.IndexOfObject(oProdutoDto.)
+    frmProduto.edtPreco.Text := (oProdutoDto.Preco);
+    oProdutoAmbienteModel.BuscarAmbientes(oProdutoDto.idProduto,
+      aCodigosAmbientes);
+
+    for i := 0 to (Length(aCodigosAmbientes) - 1) do
+      frmProduto.clbAmbientes.Checked
+        [frmProduto.clbAmbientes.Items.IndexOfObject
+        (TObject(aCodigosAmbientes[i]))] := True;
   end
   else
     ShowMessage('Nenhum registro encontrado');
 
 end;
 
+procedure TProdutoControler.AtualizarDadosCadastro;
+begin
+
+end;
+
 procedure TProdutoControler.Cancelar(Sender: TObject);
 begin
+  frmProduto.edtPesquisa.Enabled := True;
   frmProduto.tsTabela.Enabled := True;
   frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
   frmProduto.tsDados.Enabled := False;
@@ -103,7 +123,10 @@ begin
   frmProduto.BtnCancelar.Enabled := False;
   frmProduto.edtDescricao.Text := EmptyStr;
   frmProduto.edtPreco.Text := EmptyStr;
+  frmProduto.clbAmbientes.Clear;
   frmProduto.Caption := 'Listagem de Produtos';
+  oProdutoRegra.Limpar(oProdutoDto);
+  ListarProdutos;
 end;
 
 constructor TProdutoControler.Create;
@@ -113,6 +136,7 @@ begin
   oProdutoDto := TProdutoDto.Create;
   oListaAmbientes := TObjectDictionary<string, TAmbienteDto>.Create
     ([doOwnsValues]);
+  oProdutoAmbienteModel := TProdutoAmbienteModel.Create;
 end;
 
 destructor TProdutoControler.Destroy;
@@ -142,8 +166,8 @@ begin
   if MessageDlg('Você deseja realmente excluir o registro?', mtinformation,
     [mbyes, mbno], 0) = mryes then
   begin
-    if oProdutoRegra.VerificarExcluir(oProdutoModel,
-      frmProduto.DBGrid1.Fields[0].AsInteger) then
+    if oProdutoModel.VerificarExcluir(frmProduto.DBGrid1.Fields[0].AsInteger)
+    then
     begin
       if oProdutoRegra.Deletar(oProdutoModel,
         frmProduto.DBGrid1.Fields[0].AsInteger) then
@@ -156,7 +180,7 @@ begin
     end
     else
       ShowMessage
-        ('Impossível excluir, pois existe um ou mais registros vinculados com esse!');
+        ('Impossível excluir, pois existe uma ou mais reformas vinculadas com esse produto!');
   end;
 end;
 
@@ -173,6 +197,7 @@ end;
 procedure TProdutoControler.Inserir(Sender: TObject);
 begin
   popularCheckListBox;
+  frmProduto.edtPesquisa.Enabled := False;
   frmProduto.tsDados.Enabled := True;
   frmProduto.Caption := 'Cadastro de Produto';
   frmProduto.PageControl1.ActivePage := frmProduto.tsDados;
@@ -187,31 +212,54 @@ end;
 
 procedure TProdutoControler.ListarProdutos;
 begin
-  oProdutoModel.ListarProdutos(frmProduto.dsTabela);
+  if oProdutoModel.ListarProdutos(frmProduto.dsTabela) then
+  begin
+    frmProduto.BtnAlterar.Enabled := False;
+    frmProduto.btnExcluir.Enabled := False;
+  end
+  else
+  begin
+    frmProduto.BtnAlterar.Enabled := True;
+    frmProduto.btnExcluir.Enabled := True;
+  end;
+end;
+
+procedure TProdutoControler.OnChangeEdtPesquisa(Sender: TObject);
+begin
+  if oProdutoModel.Localizar(frmProduto.edtPesquisa.Text) then
+  begin
+    frmProduto.btnExcluir.Enabled := False;
+    frmProduto.BtnAlterar.Enabled := False;
+  end
+  else
+  begin
+    frmProduto.btnExcluir.Enabled := True;
+    frmProduto.BtnAlterar.Enabled := True;
+  end;
+end;
+
+procedure TProdutoControler.onExitEdtNome(Sender: TObject);
+begin
+  if oProdutoDto.idProduto <> 0 then
+  begin
+    if not(oProdutoModel.VerificarNome(frmProduto.edtDescricao.Text)) then
+      raise Exception.Create('Já existe um produto com este nome!');
+  end;
 end;
 
 procedure TProdutoControler.OnKeyDownForm(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-
-end;
-
-procedure TProdutoControler.OnKeyPressEdtPesquisa(Sender: TObject;
-  var Key: Char);
-begin
-
-end;
-
-procedure TProdutoControler.Pesquisar(Sender: TObject);
-begin
- {{ if (Trim(frmProduto.edtPesquisa.Text) <> EmptyStr) then
+  if frmProduto.edtPesquisa.Enabled then
   begin
-    if (oRegraMunicipio.Pesquisar(oModelMunicipio,
-      frmMunicipio.edtPesquisa.Text) = False) then
-      ShowMessage('Nenhum registro encontrado.');
+    if Key = VK_F2 then
+      frmProduto.edtPesquisa.SetFocus;
+
+    if Key = VK_F5 then
+      ListarProdutos;
   end
   else
-    ShowMessage('Campo pesquisa vazio.');}
+    AtualizarDadosCadastro;
 end;
 
 procedure TProdutoControler.popularCheckListBox;
@@ -225,7 +273,8 @@ begin
   if (oAmbienteModel.ADDListaHash(oListaAmbientes)) then
   begin
     for oIndice in oListaAmbientes.Values do
-      frmProduto.clbAmbientes.AddItem(oIndice.Descricao, TObject(oIndice.idAmbiente));
+      frmProduto.clbAmbientes.AddItem(oIndice.Descricao,
+        TObject(oIndice.idAmbiente));
   end;
 
 end;
@@ -233,69 +282,62 @@ end;
 procedure TProdutoControler.Salvar(Sender: TObject);
 var
   sTeste: String;
-  i, iV: Integer;
-  iCount: Integer;
-  iCountArray: Integer;
+  i, iCount, iCountArray: integer;
+  AmbientesReforma: TAmbientesReformaArray;
 begin
   iCount := frmProduto.clbAmbientes.Items.count - 1;
   iCountArray := 0;
   SetLength(AmbientesReforma, 0);
-
   for i := 0 to iCount do
   begin
     if frmProduto.clbAmbientes.Checked[i] = True then
     begin
       sTeste := sTeste + frmProduto.clbAmbientes.Items[i];
-      SetLength(AmbientesReforma, iCountArray + 2);
+      SetLength(AmbientesReforma, iCountArray + 1);
       AmbientesReforma[iCountArray] := oListaAmbientes.Items
         [frmProduto.clbAmbientes.Items[i]].idAmbiente;
       iCountArray := iCountArray + 1;
     end;
   end;
-  if sTeste = EmptyStr then
-    ShowMessage('Selecione um ambiente.')
-  else
+  if Length(AmbientesReforma) > 0 then
   begin
-    oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
-    oProdutoDto.Preco := StringReplace((frmProduto.edtPreco.Text), ',', '.',
-      [rfReplaceAll]);
-    if (frmProduto.edtDescricao.Text <> EmptyStr) then
-
-      try
-        if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) and
-          (TryStrToInt(frmProduto.edtPreco.Text, iV)) then
-
-        begin
-          try
-            if (oProdutoRegra.Salvar(oProdutoModel, oProdutoDto,
-              AmbientesReforma)) then
-            begin
-              oProdutoRegra.Limpar(oProdutoDto);
-              frmProduto.edtDescricao.Text := EmptyStr;
-              frmProduto.PageControl1.ActivePage := frmProduto.tsTabela;
-              frmProduto.tsTabela.Enabled := True;
-              frmProduto.btnInserir.Enabled := True;
-              frmProduto.BtnAlterar.Enabled := True;
-              frmProduto.btnExcluir.Enabled := True;
-              oProdutoRegra.Limpar(oProdutoDto);
-              frmProduto.BtnSalvar.Enabled := False;
-              frmProduto.BtnCancelar.Enabled := False;
-              frmProduto.Caption := 'Listagem de Produtos';
-              ListarProdutos;
-            end;
-          except
-            on E: Exception do
-              ShowMessage(E.Message);
-
+    if frmProduto.edtPreco.Text <> EmptyStr then
+    begin
+      oProdutoDto.Descricao := frmProduto.edtDescricao.Text;
+      oProdutoDto.Preco := StringReplace((frmProduto.edtPreco.Text), ',', '.',
+        [rfReplaceAll]);
+      if (frmProduto.edtDescricao.Text <> EmptyStr) then
+      begin
+        try
+          if not(StrToCurr(frmProduto.edtPreco.Text) <= 0) then
+          begin
+            try
+              if (oProdutoRegra.Salvar(oProdutoModel, oProdutoAmbienteModel,
+                oProdutoDto, AmbientesReforma)) then
+              begin
+                frmProduto.edtDescricao.Text := EmptyStr;
+                frmProduto.edtPreco.Text := EmptyStr;
+                oProdutoRegra.Limpar(oProdutoDto);
+                popularCheckListBox;
+                ShowMessage('Salvo com sucesso');
+              end;
+            except
+              on E: Exception do
+                ShowMessage(E.Message);
+            end
           end
+        except
+          ShowMessage('Insira um valor válido.')
         end
-      except
-        ShowMessage('Insira um valor válido.')
       end
-
+      else
+        ShowMessage('Prencha o campo preço.');
+    end
     else
-      ShowMessage('Prencha o campo Descrição.');
-  end;
+      ShowMessage('Prencha o campo preço.');
+  end
+  else
+    ShowMessage('Selecione ao menos um ambiente.');
 end;
 
 initialization

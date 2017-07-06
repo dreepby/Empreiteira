@@ -8,7 +8,9 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uClassSingletonConexao, System.Actions,
   Vcl.ActnList, Vcl.Menus, System.UITypes, uEstadoController,
   Vcl.ExtCtrls, uMunicipioControler, uBairroControler, uUsuarioControler,
-  uClienteControler, uAmbienteControler, uReformaControler, uProdutoControler;
+  uClienteControler, uAmbienteControler, uReformaControler, uProdutoControler, uRelatorioControler,
+  System.ImageList, Vcl.ImgList, Vcl.ComCtrls, Vcl.ToolWin, Vcl.StdCtrls,
+  Vcl.Buttons;
 
 type
   TfrmPrincipal = class(TForm)
@@ -33,6 +35,11 @@ type
     actReforma: TAction;
     Reformas1: TMenuItem;
     actRelatorio: TAction;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
@@ -42,6 +49,7 @@ type
     procedure actAmbienteExecute(Sender: TObject);
     procedure actReformaExecute(Sender: TObject);
     procedure actProdutoExecute(Sender: TObject);
+    procedure actRelatorioExecute(Sender: TObject);
   private
     { Private declarations }
     procedure WMClose(var Message: TWMClose); message WM_Close;
@@ -103,6 +111,13 @@ begin
   if not(Assigned(oReformaControler)) then
     oReformaControler := TReformaControler.Create;
   oReformaControler.abrirForm;
+end;
+
+procedure TfrmPrincipal.actRelatorioExecute(Sender: TObject);
+begin
+    if not(Assigned(oRelatorioControler)) then
+    oRelatorioControler := TRelatorioControler.Create;
+  oRelatorioControler.abrirForm;
 end;
 
 procedure TfrmPrincipal.actProdutoExecute(Sender: TObject);

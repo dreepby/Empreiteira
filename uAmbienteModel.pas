@@ -21,10 +21,10 @@ type
       out AId: Integer): Boolean;
     function VerificarExcluir(AId: Integer): Boolean;
     function Localizar(ATexto: String): Boolean;
-    function ADDListaHash(var oLista: TObjectDictionary<string,
+      function ADDListaHash(var oLista: TObjectDictionary<string,
       TAmbienteDto>): Boolean;
     function IsEmpty: Boolean;
-
+    
     constructor Create;
     destructor Destroy; override;
   end;
