@@ -17,6 +17,8 @@ USE `Empreiteira` ;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`UF`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`UF` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`UF` (
   `idUF` INT NOT NULL,
   `Nome` VARCHAR(45) NULL,
@@ -28,6 +30,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Municipio`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Municipio` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Municipio` (
   `idMunicipio` INT NOT NULL,
   `Nome` VARCHAR(255) NULL,
@@ -45,6 +49,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Bairro`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Bairro` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Bairro` (
   `idBairro` INT NOT NULL,
   `Nome` VARCHAR(255) NULL,
@@ -62,10 +68,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Cliente`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Cliente` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Cliente` (
   `idCliente` INT NOT NULL,
   `Nome` VARCHAR(255) NULL,
-  `CPF/CNPJ` VARCHAR(14) NULL,
+  `CPFCNPJ` VARCHAR(14) NULL,
   `Telefone` VARCHAR(10) NULL,
   `Celular` VARCHAR(12) NULL,
   `Observacao` VARCHAR(255) NULL,
@@ -87,6 +95,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Produto`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Produto` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Produto` (
   `idProduto` INT NOT NULL,
   `Descricao` VARCHAR(255) NULL,
@@ -98,6 +108,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Usuario`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Usuario` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Usuario` (
   `idUsuario` INT NOT NULL,
   `Nome` VARCHAR(255) NULL,
@@ -109,6 +121,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Reforma`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Reforma` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Reforma` (
   `idReforma` INT NOT NULL,
   `Observacao` VARCHAR(255) NULL,
@@ -143,6 +157,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Ambiente`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Ambiente` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Ambiente` (
   `idAmbientes` INT NOT NULL,
   `Descricao` VARCHAR(45) NULL,
@@ -153,6 +169,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`AmbienteReforma`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`AmbienteReforma` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`AmbienteReforma` (
   `idAmbienteReforma` INT NOT NULL,
   `Ambiente_idReforma` INT NOT NULL,
@@ -176,9 +194,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`ProdutoReforma`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`ProdutoReforma` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`ProdutoReforma` (
   `idProdutoReforma` INT NOT NULL,
   `Quantidade` INT NULL,
+  `PrecoUni` FLOAT NULL,
   `Total` FLOAT NULL,
   `Observacao` VARCHAR(45) NULL,
   `Produto_idProduto` INT NOT NULL,
@@ -202,6 +223,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Empreiteira`.`Produto_Ambiente`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `Empreiteira`.`Produto_Ambiente` ;
+
 CREATE TABLE IF NOT EXISTS `Empreiteira`.`Produto_Ambiente` (
   `idProduto_Ambiente` INT NOT NULL AUTO_INCREMENT,
   `Produto_idProduto` INT NOT NULL,

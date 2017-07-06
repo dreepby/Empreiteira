@@ -40,6 +40,8 @@ type
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     Image1: TImage;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure actEstadosExecute(Sender: TObject);
     procedure actMunicipioExecute(Sender: TObject);
@@ -137,7 +139,7 @@ end;
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 
 begin
-  ReportMemoryLeaksOnShutdown := True;
+  ReportMemoryLeaksOnShutdown := False;
   // Quando True verifica se ocorreu vazamento de memória ao fechar o programa
   // Cria a conexão com o banco de dados
   try

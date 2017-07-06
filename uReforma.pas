@@ -34,15 +34,8 @@ type
     FDMemTable1idAmbiente: TIntegerField;
     FDMemTable1Produto: TStringField;
     FDMemTable1idProduto: TIntegerField;
-    Label11: TLabel;
-    cbProduto: TComboBox;
-    edtQuantidade: TLabeledEdit;
-    moObservacaoProduto: TMemo;
-    Label12: TLabel;
     btnAdicionar: TBitBtn;
     btnCancelarProduto: TBitBtn;
-    edtPreco: TLabeledEdit;
-    edtTotalProduto: TLabeledEdit;
     Panel6: TPanel;
     Panel7: TPanel;
     Label10: TLabel;
@@ -61,6 +54,13 @@ type
     Label5: TLabel;
     moObservacao: TMemo;
     Label7: TLabel;
+    cbProduto: TComboBox;
+    Label11: TLabel;
+    edtQuantidade: TLabeledEdit;
+    edtPreco: TLabeledEdit;
+    edtTotalProduto: TLabeledEdit;
+    moObservacaoProduto: TMemo;
+    Label12: TLabel;
   private
     { Private declarations }
   public

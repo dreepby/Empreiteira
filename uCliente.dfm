@@ -4,7 +4,7 @@ inherited frmCliente: TfrmCliente
   ClientWidth = 940
   OnKeyPress = FormKeyPress
   ExplicitWidth = 946
-  ExplicitHeight = 581
+  ExplicitHeight = 582
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -58,6 +58,8 @@ inherited frmCliente: TfrmCliente
       ExplicitWidth = 930
       ExplicitHeight = 431
       inherited tsTabela: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 922
         ExplicitHeight = 403
         inherited DBGrid1: TDBGrid
@@ -137,6 +139,8 @@ inherited frmCliente: TfrmCliente
         end
       end
       inherited tsDados: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 922
         ExplicitHeight = 403
         object Label7: TLabel
@@ -325,6 +329,7 @@ inherited frmCliente: TfrmCliente
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
+          MaxLength = 10
           NumbersOnly = True
           ParentFont = False
           TabOrder = 9
@@ -342,6 +347,7 @@ inherited frmCliente: TfrmCliente
           Font.Height = -16
           Font.Name = 'Tahoma'
           Font.Style = []
+          MaxLength = 11
           NumbersOnly = True
           ParentFont = False
           TabOrder = 10

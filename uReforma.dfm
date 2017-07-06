@@ -3,7 +3,7 @@ inherited frmReforma: TfrmReforma
   ClientHeight = 472
   ClientWidth = 977
   ExplicitWidth = 983
-  ExplicitHeight = 500
+  ExplicitHeight = 501
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -30,9 +30,13 @@ inherited frmReforma: TfrmReforma
     inherited PageControl1: TPageControl
       Width = 967
       Height = 350
+      ExplicitLeft = 0
+      ExplicitTop = 4
       ExplicitWidth = 967
       ExplicitHeight = 350
       inherited tsTabela: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 959
         ExplicitHeight = 322
         inherited DBGrid1: TDBGrid
@@ -83,6 +87,8 @@ inherited frmReforma: TfrmReforma
         end
       end
       inherited tsDados: TTabSheet
+        ExplicitLeft = 4
+        ExplicitTop = 24
         ExplicitWidth = 959
         ExplicitHeight = 322
         object pageControl2: TPageControl
@@ -266,6 +272,22 @@ inherited frmReforma: TfrmReforma
                 Height = 13
                 Caption = 'Observa'#231#227'o'
               end
+              object btnAdicionar: TBitBtn
+                Left = 167
+                Top = 262
+                Width = 75
+                Height = 25
+                Caption = 'Adicionar'
+                TabOrder = 0
+              end
+              object btnCancelarProduto: TBitBtn
+                Left = 248
+                Top = 262
+                Width = 74
+                Height = 24
+                Caption = 'Cancelar'
+                TabOrder = 1
+              end
               object cbProduto: TComboBox
                 Left = 0
                 Top = 43
@@ -277,7 +299,7 @@ inherited frmReforma: TfrmReforma
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 0
+                TabOrder = 2
               end
               object edtQuantidade: TLabeledEdit
                 Left = 0
@@ -295,40 +317,7 @@ inherited frmReforma: TfrmReforma
                 MaxLength = 10
                 NumbersOnly = True
                 ParentFont = False
-                TabOrder = 1
-              end
-              object moObservacaoProduto: TMemo
-                Left = 0
-                Top = 150
-                Width = 321
-                Height = 104
-                Font.Charset = DEFAULT_CHARSET
-                Font.Color = clWindowText
-                Font.Height = -16
-                Font.Name = 'Tahoma'
-                Font.Style = []
-                Lines.Strings = (
-                  '')
-                MaxLength = 255
-                ParentFont = False
-                TabOrder = 2
-                WantReturns = False
-              end
-              object btnAdicionar: TBitBtn
-                Left = 167
-                Top = 262
-                Width = 75
-                Height = 25
-                Caption = 'Adicionar'
                 TabOrder = 3
-              end
-              object btnCancelarProduto: TBitBtn
-                Left = 248
-                Top = 262
-                Width = 74
-                Height = 24
-                Caption = 'Cancelar'
-                TabOrder = 4
               end
               object edtPreco: TLabeledEdit
                 Left = 112
@@ -344,7 +333,7 @@ inherited frmReforma: TfrmReforma
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 5
+                TabOrder = 4
               end
               object edtTotalProduto: TLabeledEdit
                 Left = 192
@@ -362,7 +351,24 @@ inherited frmReforma: TfrmReforma
                 NumbersOnly = True
                 ParentFont = False
                 ReadOnly = True
+                TabOrder = 5
+              end
+              object moObservacaoProduto: TMemo
+                Left = 0
+                Top = 150
+                Width = 321
+                Height = 104
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -16
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                Lines.Strings = (
+                  '')
+                MaxLength = 255
+                ParentFont = False
                 TabOrder = 6
+                WantReturns = False
               end
             end
             object Panel5: TPanel

@@ -41,7 +41,7 @@ begin
   oQuery := TFDQuery.Create(nil);
   try
     oQuery.Connection := TSingletonConexao.GetInstancia;
-    oQuery.Open('select idUsuario, nome, cpf from usuario');
+    oQuery.Open('select idUsuario, CONCAT(nome," - ", cpf) as nome from usuario');
 
     if (not(oQuery.IsEmpty)) then
     begin
@@ -53,7 +53,6 @@ begin
 
         // Atribui os valores
         oUsuarioDTO.idUsuario := oQuery.FieldByName('idUsuario').AsInteger;
-        oUsuarioDTO.CPF := oQuery.FieldByName('cpf').AsString;
         oUsuarioDTO.Nome := oQuery.FieldByName('nome').AsString;
 
         // Adiciona o objeto na lista hash

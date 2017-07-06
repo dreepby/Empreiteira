@@ -2,16 +2,16 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2017/07/05 20:19:57.000.745,=G:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/07/05 20:20:04.000.679,G:\Empreiteira\uRelatorio.pas=G:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/07/05 20:20:04.000.679,G:\Empreiteira\Unit1.pas=G:\Empreiteira\uRelatorio.pas</Transaction>
     <Transaction>2017/07/05 20:20:15.000.473,G:\Empreiteira\uRelatorio.pas=</Transaction>
     <Transaction>2017/07/05 20:20:21.000.387,=G:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/07/05 20:20:27.000.036,G:\Empreiteira\uRelatorio.dfm=G:\Empreiteira\Unit1.dfm</Transaction>
-    <Transaction>2017/07/05 20:20:27.000.036,G:\Empreiteira\uRelatorio.pas=G:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/07/05 20:20:27.000.036,G:\Empreiteira\Unit1.dfm=G:\Empreiteira\uRelatorio.dfm</Transaction>
+    <Transaction>2017/07/05 20:20:27.000.036,G:\Empreiteira\Unit1.pas=G:\Empreiteira\uRelatorio.pas</Transaction>
     <Transaction>2017/07/05 20:28:33.000.263,=G:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/07/05 20:28:54.000.583,G:\Empreiteira\uControlerRelatorio.pas=G:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/07/05 20:28:54.000.583,G:\Empreiteira\Unit1.pas=G:\Empreiteira\uControlerRelatorio.pas</Transaction>
     <Transaction>2017/07/05 22:12:31.000.847,=G:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/07/06 03:16:36.145,E:\Empreiteira\uRelatorioControler.pas=E:\Empreiteira\uControlerRelatorio.pas</Transaction>
-    <Transaction>2017/07/06 03:17:51.049,=E:\Empreiteira\Unit1.pas</Transaction>
-    <Transaction>2017/07/06 03:17:58.985,E:\Empreiteira\uRelatorioModel.pas=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/07/06 03:16:36.000.145,E:\Empreiteira\uControlerRelatorio.pas=E:\Empreiteira\uRelatorioControler.pas</Transaction>
+    <Transaction>2017/07/06 03:17:51.000.049,=E:\Empreiteira\Unit1.pas</Transaction>
+    <Transaction>2017/07/06 03:17:58.000.985,E:\Empreiteira\Unit1.pas=E:\Empreiteira\uRelatorioModel.pas</Transaction>
   </Transactions>
 </BorlandProject>

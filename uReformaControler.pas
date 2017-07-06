@@ -933,7 +933,6 @@ end;
 
 procedure TReformaControler.OnKeyPressEdtPreco(Sender: TObject; var Key: Char);
 begin
-
   if not(CharInSet(Key, ['0' .. '9', #8, ',', '-'])) then
     Key := #0;
 
@@ -1006,7 +1005,7 @@ procedure TReformaControler.OnKeyPressEdtQuantidade(Sender: TObject;
   var Key: Char);
 begin
   if Key = #13 then
-    frmReforma.moObservacaoProduto.SetFocus;
+    frmReforma.edtPreco.SetFocus;
 end;
 
 procedure TReformaControler.OnKeyPressEdtTotalProduto(Sender: TObject;
@@ -1078,10 +1077,8 @@ begin
     Result := True;
     for oIndice in oListaUsuarios.Values do
     begin
-      frmReforma.cbAtendente.AddItem(oIndice.Nome + ' - ' + oIndice.Cpf,
-        TObject(oIndice.idUsuario));
-      frmReforma.cbUsuario.AddItem(oIndice.Nome + ' - ' + oIndice.Cpf,
-        TObject(oIndice.idUsuario));
+      frmReforma.cbAtendente.AddItem(oIndice.Nome, TObject(oIndice.idUsuario));
+      frmReforma.cbUsuario.AddItem(oIndice.Nome, TObject(oIndice.idUsuario));
     end;
   end;
 end;
@@ -1193,7 +1190,8 @@ begin
         frmReforma.btnAlterarProdutos.Enabled := False;
         frmReforma.btnExcluirProdutos.Enabled := False;
         iClickSalvar := 1;
-        Break;
+        frmReforma.BtnSalvar.Enabled := True;
+        Exit;
       end
       else
       begin
